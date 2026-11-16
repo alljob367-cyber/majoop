@@ -89,8 +89,8 @@ Vérification rapide : complète une leçon → recharge → l'XP est conservé 
 
 Le fichier `app/index.html` est autonome (aucun build). Trois options gratuites :
 
+- **GitHub Pages (recommandée — le dépôt livré est prêt)** : le dossier `majoop/` est déjà un dépôt Git avec le workflow de publication automatique (`.github/workflows/pages.yml`). Suis les 4 manipulations exactes de **[DEPLOIEMENT_GITHUB.md](DEPLOIEMENT_GITHUB.md)** : création du dépôt → `git push` → Settings → Pages → « GitHub Actions » → en ligne à `https://ton-pseudo.github.io/majoop/`. Une voie « sans installer git » (upload web du seul `index.html`) y est aussi décrite.
 - **Netlify Drop** : [app.netlify.com/drop](https://app.netlify.com/drop) → glisse le fichier → URL `https://xxxx.netlify.app` immédiate.
-- **GitHub Pages** : dépôt → Settings → Pages → branche `main`, dossier racine → le site est servi à `https://ton-compte.github.io/ton-depot/`.
 - **Cloudflare Pages** : upload direct du fichier.
 
 Ajoute ensuite le domaine autorisé : `supabase secrets set ALLOWED_ORIGIN=https://ton-domaine` (sinon la valeur `*` par défaut autorise tous les origines — acceptable pour un lancement, à restreindre ensuite).

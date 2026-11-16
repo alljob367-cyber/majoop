@@ -8,10 +8,12 @@ Plateforme d'apprentissage des langues : leçons structurées, jeux éducatifs, 
 ## Contenu du livrable
 
 ```
-majoop/
+majoop/                            ← dépôt Git PRÊT À POUSSER (branche main)
 ├── README.md                       ← ce fichier
+├── DEPLOIEMENT_GITHUB.md          ← mise en ligne GitHub Pages en 4 manipulations (voie web ou git)
 ├── DIAGNOSTIC.md                   ← diagnostic environnement + architecture + sécurité
 ├── GUIDE_INSTALLATION.md           ← les étapes manuelles exactes (Supabase, IA Gemini/OpenRouter/Mistral, hébergement)
+├── .github/workflows/pages.yml    ← publication automatique sur GitHub Pages à chaque push
 ├── database/
 │   ├── 001_schema.sql              ← 19 tables, index, FK, triggers (syntaxe vérifiée)
 │   ├── 002_rls.sql                 ← RLS stricte, politiques, verrou anti-escalade is_admin
