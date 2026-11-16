@@ -530,6 +530,50 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 .flex { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .grow { flex: 1; }
 @media print { .tabbar, .app-header { display: none !important; } }
+
+/* --- Logo MAJOOP (maquettes officielles : M + toque de diplômé) --- */
+.logo-badge-m {
+  position: relative;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--brand) 45%, var(--brand-deep) 100%);
+  font-weight: 900; font-size: 1.1rem; letter-spacing: 0;
+}
+.logo-badge-m b {
+  position: absolute; top: -8px; right: -7px; font-size: .82rem; line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(20, 20, 60, .35));
+}
+
+/* --- Œil afficher/masquer le mot de passe (maquette écran 2) --- */
+.pwd-wrap { display: block; position: relative; }
+.pwd-wrap .input { padding-right: 44px; }
+.pwd-eye {
+  position: absolute; right: 5px; top: 5px; bottom: 5px; width: 36px;
+  border: 0; background: transparent; font-size: 1.05rem; cursor: pointer;
+  opacity: .55; border-radius: 8px;
+}
+.pwd-eye:hover { opacity: 1; }
+
+/* --- Connexion Google / GitHub (maquette écran 2) --- */
+.oauth-sep { display: flex; align-items: center; gap: 10px; color: var(--ink-3); font-size: .8rem; margin: 14px 0 10px; }
+.oauth-sep::before, .oauth-sep::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.oauth-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+.oauth-btn + .oauth-btn { margin-top: 8px; }
+
+/* --- Suggestions rapides du Professeur IA (maquette écran 9) --- */
+.chat-suggest { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.chip-suggest {
+  cursor: pointer; border: 1px solid var(--line); background: var(--bg-card);
+  border-radius: 999px; padding: 6px 13px; font-size: .8rem; color: var(--ink-2);
+  transition: border-color .15s, color .15s;
+}
+.chip-suggest:hover { border-color: var(--brand); color: var(--brand); }
+
+/* --- Onglets progression : Statistiques / Badges / Historique (maquette écran 10) --- */
+.prog-tabs { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.prog-tabs button {
+  border: 1px solid var(--line); background: var(--bg-card); border-radius: 999px;
+  padding: 8px 18px; font-weight: 700; color: var(--ink-2); cursor: pointer; font-size: .88rem;
+}
+.prog-tabs button.active { background: var(--brand); border-color: var(--brand); color: #fff; }
 </style>
 </head>
 <body>
@@ -542,7 +586,7 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
      ============================================================ -->
 <div id="landing-root">
   <header class="app-header" style="background: color-mix(in srgb, var(--bg-card) 90%, transparent);">
-    <a class="logo" href="#/"><span class="logo-badge">🗣️</span>MAJOOP</a>
+    <a class="logo" href="#/"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a>
     <span class="header-spacer"></span>
     <button class="icon-btn" id="landing-theme" title="Thème" aria-label="Changer de thème">🌙</button>
     <a class="btn btn-ghost btn-sm" href="#/login" data-i18n="nav.login">Se connecter</a>
@@ -641,7 +685,7 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 
   <footer class="landing-footer">
     <div class="flex" style="justify-content: center;">
-      <span class="logo" style="font-size: 1rem;"><span class="logo-badge">🗣️</span>MAJOOP</span>
+      <span class="logo" style="font-size: 1rem;"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</span>
     </div>
     <div class="f-links">
       <a href="#/register" data-i18n="nav.register">S'inscrire</a>
@@ -662,9 +706,9 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
      ============================================================ -->
 <div id="app-root" style="display:none;">
   <header class="app-header">
-    <a class="logo" href="#/dashboard"><span class="logo-badge">🗣️</span>MAJOOP</a>
+    <a class="logo" href="#/dashboard"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a>
     <span class="header-spacer"></span>
-    <span class="header-stat" title="XP"><span class="ico">⚡</span><span id="hd-xp">0</span></span>
+    <span class="header-stat" title="XP"><span class="ico">🪙</span><span id="hd-xp">0</span></span>
     <span class="header-stat" title="Série de jours"><span class="ico streak-flame">🔥</span><span id="hd-streak">0</span></span>
     <button class="icon-btn" id="theme-toggle" title="Thème" aria-label="Changer de thème">🌙</button>
     <button class="icon-btn" id="btn-profile" title="Profil" aria-label="Profil">👤</button>
@@ -739,6 +783,22 @@ const I18N = {
     "auth.forgotTitle": "Récupération du mot de passe",
     "auth.sent": "Si l'adresse existe, un e-mail de réinitialisation a été envoyé.",
     "auth.demoNote": "Mode démo : le compte reste sur cet appareil (localStorage), aucune donnée n'est envoyée.",
+    "auth.or": "ou",
+    "auth.oauth.google": "Continuer avec Google",
+    "auth.oauth.github": "Continuer avec GitHub",
+    "auth.oauth.err": "Ce fournisseur n'est pas activé sur ton projet Supabase : active-le dans Authentication → Providers, puis réessaie. La connexion par e-mail reste disponible.",
+    "ai.chip.grammar": "📐 Explique la grammaire",
+    "ai.chip.conversation": "🗣️ Simule une conversation",
+    "ai.chip.correct": "✏️ Corrige ma phrase",
+    "ai.chip.translate": "🌍 Traduis pour moi",
+    "ai.chipMsg.grammar": "Explique-moi une règle de grammaire utile avec 2 exemples, puis propose un mini-exercice.",
+    "ai.chipMsg.conversation": "Simulons une conversation : tu joues un personnage de la vie réelle, je réponds, tu me corriges doucement.",
+    "ai.chipMsg.correct": "Corrige cette phrase et explique mes erreurs : « … »",
+    "ai.chipMsg.translate": "Traduis ces mots utiles avec un exemple chacun : bonjour, merci, combien ça coûte ?",
+    "prog.tab.stats": "📊 Statistiques",
+    "prog.tab.badges": "🏅 Badges",
+    "prog.tab.history": "🕘 Historique",
+    "prof.notifs.sub": "Rappels quotidiens et alertes de série — dans Réglages",
     "onb.title": "Bienvenue sur MAJOOP !", "onb.s1": "Ta langue d'interface", "onb.s1sub": "Dans quelle langue veux-tu utiliser l'application ?",
     "onb.s2": "Langue à apprendre", "onb.s2sub": "Quelle langue veux-tu apprendre ?",
     "onb.s3": "Ton niveau actuel", "onb.s3sub": "Sois honnête : le parcours s'adaptera à ta réponse.",
@@ -865,6 +925,22 @@ const I18N = {
     "auth.forgot": "Forgot password?", "auth.forgotBtn": "Send reset link", "auth.forgotTitle": "Password recovery",
     "auth.sent": "If the address exists, a reset email has been sent.",
     "auth.demoNote": "Demo mode: the account stays on this device (localStorage), nothing is sent anywhere.",
+    "auth.or": "or",
+    "auth.oauth.google": "Continue with Google",
+    "auth.oauth.github": "Continue with GitHub",
+    "auth.oauth.err": "This provider is not enabled on your Supabase project: turn it on under Authentication → Providers, then try again. Email sign-in remains available.",
+    "ai.chip.grammar": "📐 Explain the grammar",
+    "ai.chip.conversation": "🗣️ Simulate a conversation",
+    "ai.chip.correct": "✏️ Correct my sentence",
+    "ai.chip.translate": "🌍 Translate for me",
+    "ai.chipMsg.grammar": "Explain a useful grammar rule with 2 examples, then give me a mini-exercise.",
+    "ai.chipMsg.conversation": "Let's simulate a conversation: you play a real-life character, I answer, you gently correct me.",
+    "ai.chipMsg.correct": "Correct this sentence and explain my mistakes: \"…\"",
+    "ai.chipMsg.translate": "Translate these useful words with one example each: hello, thank you, how much is it?",
+    "prog.tab.stats": "📊 Statistics",
+    "prog.tab.badges": "🏅 Badges",
+    "prog.tab.history": "🕘 History",
+    "prof.notifs.sub": "Daily reminders and streak alerts — in Settings",
     "onb.title": "Welcome to MAJOOP!", "onb.s1": "Your interface language", "onb.s1sub": "In which language do you want to use the app?",
     "onb.s2": "Language to learn", "onb.s2sub": "Which language do you want to learn?",
     "onb.s3": "Your current level", "onb.s3sub": "Be honest: the path will adapt to your answer.",
@@ -983,6 +1059,33 @@ const I18N = {
     "t.back": "Zurück", "err.generic": "Ein Fehler ist aufgetreten. Versuche es erneut.",
   },
 };
+
+/* Œil afficher/masquer le mot de passe (écran 2 des maquettes) */
+function bindPwdEyes(root) {
+  $all("[data-eye]", root).forEach((b) => b.addEventListener("click", () => {
+    const input = $("#" + b.dataset.eye, root);
+    if (!input) return;
+    const hide = input.type === "password";
+    input.type = hide ? "text" : "password";
+    b.textContent = hide ? "🙈" : "👁️";
+  }));
+}
+
+/* Boutons Google / GitHub (écran 2 des maquettes) — Supabase OAuth */
+function bindOAuth(root, errBox) {
+  const doOAuth = async (provider) => {
+    if (errBox) { errBox.classList.remove("show"); errBox.textContent = ""; }
+    try {
+      await APP_STATE.backend.signInWithOAuth(provider);
+    } catch (e) {
+      if (errBox) { errBox.textContent = t("auth.oauth.err"); errBox.classList.add("show"); }
+      else toast(t("auth.oauth.err"), "error");
+    }
+  };
+  const g = $("#oa-google", root), h = $("#oa-github", root);
+  if (g) g.addEventListener("click", () => doOAuth("google"));
+  if (h) h.addEventListener("click", () => doOAuth("github"));
+}
 
 function t(key, vars) {
   const lang = (window.APP_STATE && window.APP_STATE.uiLang) || "fr";
@@ -1541,6 +1644,14 @@ class SupabaseBackend {
     return { user: data.user, profile: null };
   }
   async signOut() { await this.client.auth.signOut(); APP_STATE.session = null; }
+  async signInWithOAuth(provider) {
+    const { data, error } = await this.client.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: location.origin + location.pathname },
+    });
+    if (error) throw new Error(error.message);
+    return data;
+  }
   async resetPassword(email) {
     const { error } = await this.client.auth.resetPasswordForEmail(email);
     if (error) throw new Error(error.message);
@@ -1588,6 +1699,11 @@ class SupabaseBackend {
   getDashboard() { return this.rpc("get_dashboard"); }
   getLeaderboard(limit) { return this.rpc("get_leaderboard", { p_limit: limit || 20 }); }
   getAchievements() { return this.client.from("achievements").select("*").order("sort_order"); }
+  async getMyAchievements() {
+    const { data, error } = await this.client.from("user_achievements").select("achievement_code");
+    if (error) throw new Error(error.message);
+    return data || [];
+  }
   async getProgressData() {
     const [att, xp, prog] = await Promise.all([
       this.client.from("exercise_attempts").select("*").order("created_at", { ascending: true }),
@@ -1790,6 +1906,11 @@ async function boot() {
   if (APP_STATE.mode === "supabase") {
     APP_STATE.session = await APP_STATE.backend.restoreSession();
     if (APP_STATE.session) await APP_STATE.backend.ensureProfile();
+    // Retour OAuth (Google/GitHub) : le jeton a été consommé par supabase-js
+    // dans l'URL → on nettoie le hash et on atterrit sur le dashboard.
+    if (APP_STATE.session && (location.hash.includes("access_token") || ["#/login", "#/register", "#/forgot"].includes(location.hash))) {
+      history.replaceState(null, "", location.pathname + location.search + "#/dashboard");
+    }
   } else {
     APP_STATE.session = await APP_STATE.backend.restoreSession();
   }
@@ -1835,7 +1956,7 @@ function renderBare(hash) {
 
 function authShell(inner) {
   return `<div class="auth-wrap"><div class="auth-card">
-    <div class="auth-logo"><a class="logo" href="#/"><span class="logo-badge">🗣️</span>MAJOOP</a></div>
+    <div class="auth-logo"><a class="logo" href="#/"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a></div>
     ${inner}
   </div></div>`;
 }
@@ -1852,8 +1973,13 @@ function pageLogin(root) {
       ${demoBanner()}
       <div class="form-error" id="auth-err"></div>
       <label class="field"><span>${t("auth.email")}</span><input class="input" type="email" id="lg-email" autocomplete="email"></label>
-      <label class="field"><span>${t("auth.password")}</span><input class="input" type="password" id="lg-pass" autocomplete="current-password"></label>
+      <label class="field"><span>${t("auth.password")}</span>
+        <span class="pwd-wrap"><input class="input" type="password" id="lg-pass" autocomplete="current-password"><button type="button" class="pwd-eye" data-eye="lg-pass" aria-label="Afficher / masquer le mot de passe">👁️</button></span></label>
       <button class="btn btn-primary" style="width:100%" id="lg-btn">${t("auth.loginBtn")}</button>
+      ${APP_STATE.mode === "supabase" ? `
+      <div class="oauth-sep">${t("auth.or")}</div>
+      <button class="btn btn-soft oauth-btn" id="oa-google"><b style="color:#1a73e8;font-weight:900;">G</b> ${t("auth.oauth.google")}</button>
+      <button class="btn btn-soft oauth-btn" id="oa-github"><b>🐙</b> ${t("auth.oauth.github")}</button>` : ""}
       <div class="auth-alt">
         <a href="#/forgot">${t("auth.forgot")}</a><br><br>
         ${t("auth.toRegister")} <a href="#/register">${t("auth.register")}</a>
@@ -1877,6 +2003,8 @@ function pageLogin(root) {
   };
   $("#lg-btn").addEventListener("click", doLogin);
   root.addEventListener("keydown", (e) => { if (e.key === "Enter" && $("#lg-pass")) doLogin(); }, { once: true });
+  bindPwdEyes(root);
+  bindOAuth(root, $("#auth-err"));
 }
 
 function pageRegister(root) {
@@ -1889,8 +2017,13 @@ function pageRegister(root) {
       <label class="field"><span>${t("auth.firstName")}</span><input class="input" id="rg-first"></label>
       <label class="field"><span>${t("auth.lastName")}</span><input class="input" id="rg-last"></label>
       <label class="field"><span>${t("auth.email")}</span><input class="input" type="email" id="rg-email" autocomplete="email"></label>
-      <label class="field"><span>${t("auth.password")}</span><input class="input" type="password" id="rg-pass" autocomplete="new-password" placeholder="≥ 6 caractères"></label>
+      <label class="field"><span>${t("auth.password")}</span>
+        <span class="pwd-wrap"><input class="input" type="password" id="rg-pass" autocomplete="new-password" placeholder="≥ 6 caractères"><button type="button" class="pwd-eye" data-eye="rg-pass" aria-label="Afficher / masquer le mot de passe">👁️</button></span></label>
       <button class="btn btn-primary" style="width:100%" id="rg-btn">${t("auth.registerBtn")}</button>
+      ${APP_STATE.mode === "supabase" ? `
+      <div class="oauth-sep">${t("auth.or")}</div>
+      <button class="btn btn-soft oauth-btn" id="oa-google"><b style="color:#1a73e8;font-weight:900;">G</b> ${t("auth.oauth.google")}</button>
+      <button class="btn btn-soft oauth-btn" id="oa-github"><b>🐙</b> ${t("auth.oauth.github")}</button>` : ""}
       <div class="auth-alt">${t("auth.toLogin")} <a href="#/login">${t("auth.login")}</a></div>
     </div>`);
   $("#rg-btn").addEventListener("click", async () => {
@@ -1916,6 +2049,8 @@ function pageRegister(root) {
       err.classList.add("show");
     }
   });
+  bindPwdEyes(root);
+  bindOAuth(root, $("#auth-err"));
 }
 
 function pageForgot(root) {
@@ -3176,6 +3311,7 @@ function renderAiShell(main, isConversation) {
       </div>
       <div class="card">
         <div class="chat-box" id="chat-box"></div>
+        <div class="chat-suggest">${["grammar", "conversation", "correct", "translate"].map((k) => `<button type="button" class="chip-suggest" data-suggest="${k}">${t("ai.chip." + k)}</button>`).join("")}</div>
         <div class="chat-input-row">
           <input class="input grow" id="chat-input" placeholder="${t("ai.placeholder")}" autocomplete="off">
           <button class="btn btn-primary" id="chat-send">${t("ai.send")}</button>
@@ -3269,39 +3405,60 @@ function wireChat(main) {
   };
   send.addEventListener("click", doSend);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") doSend(); });
+  $all("[data-suggest]", main).forEach((b) => b.addEventListener("click", () => {
+    if (input.disabled) return;
+    input.value = t("ai.chipMsg." + b.dataset.suggest);
+    doSend();
+  }));
 }
 
 /* ============================================================
    PROGRESSION (graphiques canvas maison)
    ============================================================ */
+const PROG_STATE = { tab: "stats" };
 async function pageProgress(main) {
   await ensureDashboard();
-  main.innerHTML = `<div class="page-title">📈 ${t("prog.title")}</div><div class="page-sub">${t("prog.sub")}</div><div class="skeleton" style="height:200px"></div>`;
+  main.innerHTML = `<div class="page-title">📈 ${t("prog.title")}</div><div class="page-sub">${t("prog.sub")}</div>
+    <div class="prog-tabs">
+      ${["stats", "badges", "history"].map((k) => `<button type="button" data-ptab="${k}" class="${PROG_STATE.tab === k ? "active" : ""}">${t("prog.tab." + k)}</button>`).join("")}
+    </div>
+    <div id="prog-body"><div class="skeleton" style="height:200px"></div></div>`;
+  $all("[data-ptab]", main).forEach((b) => b.addEventListener("click", () => {
+    PROG_STATE.tab = b.dataset.ptab;
+    $all("[data-ptab]", main).forEach((x) => x.classList.toggle("active", x.dataset.ptab === PROG_STATE.tab));
+    renderProgTab(main);
+  }));
+  await renderProgTab(main);
+}
+
+async function renderProgTab(main) {
+  const body = $("#prog-body", main);
+  if (!body) return;
+  if (PROG_STATE.tab === "badges") return renderProgBadges(body);
   const data = await APP_STATE.backend.getProgressData();
   const attempts = data.attempts || [];
   const xpEvents = data.xpEvents || [];
+  if (PROG_STATE.tab === "history") return renderProgHistory(body, xpEvents);
+
+  // Onglet STATISTIQUES : données réelles uniquement
   const correct = attempts.filter((a) => a.is_correct).length;
   const accuracy = attempts.length ? Math.round(100 * correct / attempts.length) : 0;
   const minutes = Math.round((attempts.length * 30 + xpEvents.filter((e) => e.source === "game").reduce((s, e) => s + ((e.meta && e.meta.duration) || 0), 0)) / 60);
-
-  // XP des 14 derniers jours
   const days = [];
   for (let i = 13; i >= 0; i--) {
     const dt = new Date(Date.now() - i * 86400000);
     const key = dt.toISOString().slice(0, 10);
     days.push({ key, label: dt.getDate() + "/" + (dt.getMonth() + 1), xp: xpEvents.filter((e) => (e.created_at || "").slice(0, 10) === key).reduce((s, e) => s + e.xp, 0) });
   }
-  // Précision par type
   const byType = {};
   attempts.forEach((a) => {
-    const k = a.type || (APP_STATE.mode === "supabase" ? "exercise" : "exercise");
+    const k = a.type || "exercise";
     byType[k] = byType[k] || { n: 0, ok: 0 };
     byType[k].n++; if (a.is_correct) byType[k].ok++;
   });
-  const hist = (data.xpEvents || []).slice().reverse().slice(0, 12);
 
-  main.innerHTML = `
-    <div class="grid grid-4 mt-2">
+  body.innerHTML = `
+    <div class="grid grid-4">
       <div class="card stat-card"><div class="s-ico">📚</div><div class="s-val">${(data.progress || []).filter((p) => p.status === "completed").length}</div><div class="s-lbl">${t("prog.stat.lessons")}</div></div>
       <div class="card stat-card"><div class="s-ico">✅</div><div class="s-val">${correct}</div><div class="s-lbl">${t("prog.stat.correct")}</div></div>
       <div class="card stat-card"><div class="s-ico">🎯</div><div class="s-val">${accuracy}%</div><div class="s-lbl">${t("prog.stat.accuracy")}</div></div>
@@ -3311,23 +3468,47 @@ async function pageProgress(main) {
       <div class="card chart-card"><div class="chart-title">⚡ ${t("prog.chart.xp")}</div><canvas id="ch-xp" width="460" height="220"></canvas></div>
       <div class="card chart-card"><div class="chart-title">🎯 ${t("prog.chart.accuracy")}</div><canvas id="ch-acc" width="460" height="220"></canvas></div>
       <div class="card chart-card"><div class="chart-title">📚 ${t("prog.chart.lessons")}</div><canvas id="ch-les" width="460" height="220"></canvas></div>
-      <div class="card"><div class="chart-title">🕘 ${t("prog.history")}</div>
-        ${hist.length === 0 ? `<p class="muted">—</p>` : hist.map((e) => {
-          const ico = { exercise: "✏️", lesson: "📚", game: "🎮", mission: "🎯", streak: "🔥", achievement: "🏅", admin: "⚙️" }[e.source] || "⭐";
-          const label = e.ref ? String(e.ref).slice(0, 22) : e.source;
-          return `<div class="hist-row"><span class="h-ico">${ico}</span>
-            <div class="h-main">${ico} ${esc(e.source)} <span class="muted" style="font-size:.8rem;">${esc(label)}</span>
-              <div class="muted" style="font-size:.74rem;">${(e.created_at || "").slice(0, 16).replace("T", " ")}</div></div>
-            <span class="h-xp">+${e.xp}</span></div>`;
-        }).join("")}
-      </div>
-    </div>
-    <div class="card mt-3"><b>🗂️ ${t("prog.vocab")} : ${data.vocabCount || 0}</b>
-      <span class="muted" style="font-size:.85rem;"> (${APP_STATE.uiLang === "fr" ? "mots vus dans les leçons terminées" : "words from completed lessons"})</span></div>`;
+      <div class="card"><div class="chart-title">🗂️ ${t("prog.vocab")} : ${data.vocabCount || 0}</div>
+        <p class="muted" style="font-size:.85rem;">${APP_STATE.uiLang === "fr" ? "Mots vus dans les leçons terminées." : "Words seen in completed lessons."}</p></div>
+    </div>`;
+  drawXpChart($("#ch-xp", body), days);
+  drawAccChart($("#ch-acc", body), byType);
+  drawLessonsChart($("#ch-les", body), data.progress || []);
+}
 
-  drawXpChart($("#ch-xp", main), days);
-  drawAccChart($("#ch-acc", main), byType);
-  drawLessonsChart($("#ch-les", main), data.progress || []);
+function renderProgHistory(body, xpEvents) {
+  const events = (xpEvents || []).slice().reverse().slice(0, 50);
+  body.innerHTML = `<div class="card"><div class="chart-title">🕘 ${t("prog.history")}</div>
+    ${events.length === 0 ? `<p class="muted">—</p>` : events.map((e) => {
+      const ico = { exercise: "✏️", lesson: "📚", game: "🎮", mission: "🎯", streak: "🔥", achievement: "🏅", admin: "⚙️" }[e.source] || "⭐";
+      const label = e.ref ? String(e.ref).slice(0, 30) : e.source;
+      return `<div class="hist-row"><span class="h-ico">${ico}</span>
+        <div class="h-main">${ico} ${esc(e.source)} <span class="muted" style="font-size:.8rem;">${esc(label)}</span>
+          <div class="muted" style="font-size:.74rem;">${(e.created_at || "").slice(0, 16).replace("T", " ")}</div></div>
+        <span class="h-xp">+${e.xp}</span></div>`;
+    }).join("")}</div>`;
+}
+
+async function renderProgBadges(body) {
+  body.innerHTML = `<div class="card"><div class="skeleton" style="height:120px"></div></div>`;
+  const rows = await APP_STATE.backend.getAchievements();
+  const list = Array.isArray(rows) ? rows : (rows.data || []);
+  let earned = new Set();
+  try {
+    if (APP_STATE.mode === "demo") {
+      const mine = (await APP_STATE.backend.getProgressData()).badges || [];
+      earned = new Set(mine.map((b) => b.code));
+    } else {
+      const mine = await APP_STATE.backend.getMyAchievements();
+      earned = new Set(mine.map((b) => b.achievement_code));
+    }
+  } catch (e) { /* affichage neutre si la table n'est pas encore remplie */ }
+  body.innerHTML = `<div class="grid grid-2">
+    ${list.map((b) => `<div class="card badge-cell ${earned.has(b.code) ? "" : "locked"}">
+      <span class="b-ico">${b.icon}</span>
+      <div style="flex:1;"><b>${esc(b.name)}</b><small>${esc(b.description)}</small></div>
+      ${earned.has(b.code) ? `<span class="chip chip-green">✓</span>` : `<span class="chip">🔒</span>`}
+    </div>`).join("")}</div>`;
 }
 
 function chartColors() {
@@ -3437,6 +3618,13 @@ async function pageProfile(main) {
         </div>
       </div>
       <button class="btn btn-ghost" id="pf-logout">🚪 ${APP_STATE.uiLang === "fr" ? "Se déconnecter" : "Log out"}</button>
+    </div>
+
+    <div class="card mt-2 mission-row">
+      <span class="m-ico">🔔</span>
+      <div class="m-body"><b>${APP_STATE.uiLang === "fr" ? "Notifications" : "Notifications"}</b>
+        <small class="muted" style="display:block;">${t("prof.notifs.sub")}</small></div>
+      <a class="btn btn-soft btn-sm" href="#/settings">${APP_STATE.uiLang === "fr" ? "Gérer" : "Manage"}</a>
     </div>
 
     <div class="grid grid-2 mt-3">

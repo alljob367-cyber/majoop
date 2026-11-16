@@ -10,10 +10,12 @@ Plateforme d'apprentissage des langues : leçons structurées, jeux éducatifs, 
 ```
 majoop/                            ← dépôt Git PRÊT À POUSSER (branche main)
 ├── README.md                       ← ce fichier
+├── AUDIT_CONFORMITE.md            ← conformité aux maquettes officielles : 12 écrans, identité, tests
 ├── DEPLOIEMENT_GITHUB.md          ← mise en ligne GitHub Pages en 4 manipulations (voie web ou git)
 ├── DIAGNOSTIC.md                   ← diagnostic environnement + architecture + sécurité
 ├── GUIDE_INSTALLATION.md           ← les étapes manuelles exactes (Supabase, IA Gemini/OpenRouter/Mistral, hébergement)
 ├── .github/workflows/pages.yml    ← publication automatique sur GitHub Pages à chaque push
+├── captures/                       ← 7 captures d'écran à jour de l'application
 ├── database/
 │   ├── 001_schema.sql              ← 19 tables, index, FK, triggers (syntaxe vérifiée)
 │   ├── 002_rls.sql                 ← RLS stricte, politiques, verrou anti-escalade is_admin
@@ -54,6 +56,7 @@ L'application démarre en **mode démo** : données locales simulées, clairemen
 - **Syntaxe SQL des 6 migrations** validée par le parseur officiel PostgreSQL (libpg_query / pglast).
 - **Edge Function multi-fournisseurs** : vérification de types Deno (`deno check`) OK **+ 13 tests hors-ligne** (`scripts/ai_tutor_test.ts`, fetch simulé) couvrant auth, propriété de la conversation, quotas, façonnage exact des requêtes de chaque fournisseur (URL, en-têtes, corps), repli automatique Gemini→OpenRouter sur 429, erreurs de configuration claires (501) et échec agrégé (502).
 - **Application** : parcours complets testés au navigateur headless (inscription → onboarding 5 étapes → dashboard → cours → leçon → 7 types d'exercices → résultat → 8 jeux → tuteur IA → scénarios → progression → profil → réglages → admin → thème clair/sombre → responsive 390 px). **9 défauts trouvés et corrigés** (voir historique ci-dessous) ; balayage final de toutes les routes **sans erreur JS**.
+- **Conformité visuelle** : maquettes officielles (12 écrans) auditées écran par écran → 6 écarts corrigés (logo M+🎓, œil mot de passe, OAuth Google/GitHub, chips IA, onglets Progression, puce XP 🪙) + 1 défaut CSS de build détecté et corrigé — détail dans **[AUDIT_CONFORMITE.md](AUDIT_CONFORMITE.md)**.
 - Contenu pédagogique validé programmatiquement : cohérence énoncé ↔ clé de correction des 192 exercices.
 
 Historique des corrections pendant les tests : étape 0 de l'onboarding bloquée ; variables d'énoncé hors de portée dans le moteur d'exercices (4 types muets) ; badges démo jamais attribués ; missions non persistées ; durcissement XP contre NaN ; emoji introuvable pour les termes composés (jeu mot-image) ; coque app visible par-dessus la landing ; leçon recommandée fautive (break imbriqué) ; compteur XP non rafraîchi.
