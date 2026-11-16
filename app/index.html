@@ -778,11 +778,14 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 "use strict";
 
 /* ---------- Configuration ----------
-   Renseignez vos identifiants Supabase ICI, ou via Réglages dans l'app
-   (clé anon = clé publique protégée par RLS, jamais de clé secrète ici). */
+   Projet Supabase branché (réf. noqseajlpogutoneexnf, 2026-11-16).
+   La clé anon est PUBLIQUE par conception (protégée par RLS côté serveur) —
+   jamais de clé service_role ni de secret ici. Le mode réel ne s'active que
+   lorsque le schéma est déployé (sonde schemaReady) ; sinon l'app reste en
+   démo. Pour changer de projet : ici, ou Réglages → Connexion dans l'app. */
 window.MAJOOP_CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://noqseajlpogutoneexnf.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vcXNlYWpscG9ndXRvbmVleG5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4NTgwNTEsImV4cCI6MjExMDQzNDA1MX0.hnpJ3WPQ7q3ReiGAThzL_ifM0NENbKeEfK9iLEUVyns",
 };
 
 /* ============================================================
@@ -968,6 +971,8 @@ const I18N = {
     "admin.tab.money": "Monétisation",
     "ai.quotaChip": "IA : {u}/{l} ce mois", "ai.quotaReset": "reset le {d}",
     "pricing.title": "Tarifs MAJOOP", "pricing.sub": "Commence gratuitement. Passe à Premium quand tu veux aller plus loin — annulable à tout moment.",
+    "pricing.fallback": "Grille officielle affichée : les tarifs en ligne et les paiements s'activent dès que l'administrateur exécute les migrations de monétisation (007) sur le serveur.",
+    "pricing.fallbackToast": "Paiements pas encore actifs : l'administrateur doit exécuter les migrations de monétisation (007) sur Supabase.",
     "price.faq.q1": "Comment souscrire à Premium ?",
     "price.faq.a1": "Choisis la formule mensuelle ou annuelle : tu paies par Mobile Money ou virement (instructions affichées à l'écran), tu saisis ta référence de transaction, puis un administrateur vérifie ton paiement. Ton accès Premium est activé dès la validation — généralement sous 24 à 48 heures.",
     "price.faq.q2": "Quand commence et se termine mon accès ?",
@@ -1154,6 +1159,8 @@ const I18N = {
     "admin.tab.money": "Monetization",
     "ai.quotaChip": "AI: {u}/{l} this month", "ai.quotaReset": "resets on {d}",
     "pricing.title": "MAJOOP Pricing", "pricing.sub": "Start for free. Upgrade whenever you want to go further — cancel anytime.",
+    "pricing.fallback": "Official grid shown: online pricing and payments activate as soon as the administrator runs the monetization migrations (007) on the server.",
+    "pricing.fallbackToast": "Payments not active yet: the administrator must run the monetization migrations (007) on Supabase.",
     "price.faq.q1": "How do I subscribe to Premium?",
     "price.faq.a1": "Pick the monthly or yearly plan: pay by Mobile Money or bank transfer (instructions shown on screen), enter your transaction reference, then an administrator verifies your payment. Premium activates as soon as it is confirmed — usually within 24 to 48 hours.",
     "price.faq.q2": "When does my access start and end?",
@@ -1817,6 +1824,19 @@ class SupabaseBackend {
     this.client = window.supabase.createClient(url, key);
     this.url = url;
   }
+  /* Vrai si le schéma nécessaire est déployé (migrations 001→007 appliquées) :
+     sonde en lecture seule sur une table noyau et une table monétisation.
+     NB : select simple + limit(1) — l'option head:true fait perdre l'erreur
+     PGRST205 côté supabase-js (table absente ressemblerait à un succès). */
+  async schemaReady() {
+    for (const t of ["languages", "subscription_plans"]) {
+      try {
+        const { error } = await this.client.from(t).select("id").limit(1);
+        if (error) return false;
+      } catch (e) { return false; }
+    }
+    return true;
+  }
   async signUp(email, password, firstName) {
     const { data, error } = await this.client.auth.signUp({
       email, password,
@@ -2101,9 +2121,16 @@ async function initBackend() {
   if (cfg.supabaseUrl && cfg.supabaseAnonKey) {
     try {
       await loadSupabaseJs();
-      APP_STATE.backend = new SupabaseBackend(cfg.supabaseUrl, cfg.supabaseAnonKey);
-      APP_STATE.mode = "supabase";
-      return;
+      const be = new SupabaseBackend(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      // Mode réel UNIQUEMENT si le schéma est déployé : tant que les migrations
+      // 001→007 ne sont pas exécutées côté serveur, l'app reste en mode démo.
+      if (await be.schemaReady()) {
+        APP_STATE.backend = be;
+        APP_STATE.mode = "supabase";
+        return;
+      }
+      console.warn("MAJOOP : schéma Supabase incomplet — mode démo actif. "
+        + "Exécute les migrations 001→007 puis recharge (voir GUIDE_INSTALLATION.md).");
     } catch (e) {
       console.error("Supabase indisponible, bascule en démo", e);
     }
@@ -4039,10 +4066,28 @@ async function openPaymentModal(plan, pricingRow) {
   });
 }
 
+function officialFallbackPricing() {
+  const cur = (currency, amount, interval, region) => ({ currency, amount, billing_interval: interval, region });
+  const arr = [
+    { code: "free", name: "Free", id: null, is_active: true,
+      description: "Gratuit : 4 langues, leçons gratuites, exercices de base, jeux de base, XP, badges, séries, 10 interactions IA/mois.",
+      pricing: [cur("XAF", 0, "monthly", "zone_fcfa")] },
+    { code: "premium_monthly", name: "Premium Mensuel", id: null, is_active: true,
+      description: "1 500 FCFA par mois : tous les cours, tous les niveaux, tous les exercices, tous les jeux, 100 interactions IA/mois, statistiques avancées, sans publicité.",
+      pricing: [cur("XAF", 1500, "monthly", "zone_fcfa"), cur("XOF", 1500, "monthly", "zone_fcfa"), cur("USD", 3, "monthly", "international")] },
+    { code: "premium_yearly", name: "Premium Annuel", id: null, is_active: true,
+      description: "12 000 FCFA par an (12 mois, ≈ 1 000 FCFA/mois, économie de 6 000 FCFA) : mêmes avantages que le mensuel.",
+      pricing: [cur("XAF", 12000, "yearly", "zone_fcfa"), cur("XOF", 12000, "yearly", "zone_fcfa"), cur("USD", 24, "yearly", "international")] },
+  ];
+  arr.fallback = true;
+  return arr;
+}
+
 async function pagePricing(root, opts) {
   const standalone = !!(opts && opts.standalone);
   let plans = null;
   try { plans = await APP_STATE.backend.getPricing(); } catch (e) { plans = null; }
+  if (!plans || !plans.length) plans = officialFallbackPricing();
   let currentPlan = null;
   if (APP_STATE.session) {
     try { const sub = await APP_STATE.backend.getMySubscription(); currentPlan = sub ? sub.plan : null; } catch (e) { currentPlan = null; }
@@ -4062,6 +4107,7 @@ function renderPricingInto(body, plans, currentPlan) {
       <a class="btn btn-soft" href="#/settings">⚙️ ${t("set.conn")}</a></div>`;
     return;
   }
+  const isFallback = !!plans.fallback;
   const currencies = [];
   plans.forEach((p) => (p.pricing || []).forEach((pr) => {
     if (pr.amount > 0 && !currencies.includes(pr.currency)) currencies.push(pr.currency);
@@ -4098,6 +4144,7 @@ function renderPricingInto(body, plans, currentPlan) {
         ${currencies.map((c) => `<button class="cur-chip ${c === cur ? "active" : ""}" data-cur="${c}">${c}</button>`).join("")}
       </div>
     </div>
+    ${isFallback ? `<div class="demo-banner" style="background:var(--amber-soft);color:#8a5b00;">⚙️ ${t("pricing.fallback")}</div>` : ""}
     <div class="pricing-grid mt-2">
       ${card(free, priceOf("free"), { cls: "free-card", note: t("price.freeNote"),
         button: `<button class="btn btn-soft" data-act="free">🚀 ${t("price.ctaFree")}</button>` })}
@@ -4152,7 +4199,7 @@ function renderPricingInto(body, plans, currentPlan) {
     const p = byCode(act);
     const pr = priceOf(act);
     if (!p) return;
-    if (!pr || !pr.id) { toast(t("price.unavailable"), "error"); return; }
+    if (!pr || !pr.id) { toast(isFallback ? t("pricing.fallbackToast") : t("price.unavailable"), "error"); return; }
     openPaymentModal(p, pr);
   }));
 }
