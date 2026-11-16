@@ -574,6 +574,48 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
   padding: 8px 18px; font-weight: 700; color: var(--ink-2); cursor: pointer; font-size: .88rem;
 }
 .prog-tabs button.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+/* ============================================================
+   MONÉTISATION — tarifs, abonnement, paywall
+   ============================================================ */
+.pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:stretch; }
+@media (max-width: 900px){ .pricing-grid { grid-template-columns:1fr; } .price-card.best { transform:none; } }
+.price-card { position:relative; display:flex; flex-direction:column; gap:10px; padding:22px; border-radius:var(--radius-lg);
+  background:var(--bg-card); border:2px solid var(--line); box-shadow:var(--shadow-1); }
+.price-card.best { border-color:var(--brand); box-shadow:var(--shadow-2); transform:scale(1.02); z-index:1; }
+.price-card.free-card { border-color:var(--green); }
+.price-flag { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  color:#fff; font-weight:800; font-size:.75rem; padding:5px 14px; border-radius:999px; white-space:nowrap; box-shadow:var(--shadow-1); }
+.price-name { font-weight:800; font-size:1.05rem; }
+.price-amount { font-size:2rem; font-weight:900; color:var(--brand-deep); line-height:1.05; }
+.price-amount small { font-size:.85rem; font-weight:600; color:var(--ink-3); }
+.price-note { font-size:.8rem; color:var(--coral); font-weight:700; }
+.price-feats { list-style:none; margin:4px 0; padding:0; font-size:.86rem; display:grid; gap:6px; }
+.price-feats li::before { content:"✓"; color:var(--green); font-weight:900; margin-right:8px; }
+.price-feats li.off::before { content:"—"; color:var(--ink-3); font-weight:400; }
+.price-card .btn { width:100%; }
+.cmp-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+.cmp-table th, .cmp-table td { padding:10px 12px; border-bottom:1px solid var(--line); text-align:center; }
+.cmp-table td:first-child, .cmp-table th:first-child { text-align:left; }
+.cmp-table .on { color:var(--green); font-weight:800; } .cmp-table .off { color:var(--ink-3); }
+.paywall-backdrop { position:fixed; inset:0; background:rgba(25,26,46,.55); backdrop-filter:blur(3px);
+  z-index:1200; display:flex; align-items:center; justify-content:center; padding:18px; }
+.paywall-card { background:var(--bg-card); border-radius:var(--radius-lg); max-width:470px; width:100%;
+  padding:26px; box-shadow:var(--shadow-2); position:relative; max-height:92vh; overflow:auto; }
+.quota-chip { display:inline-flex; align-items:center; gap:6px; font-size:.8rem; font-weight:700;
+  background:color-mix(in srgb, var(--brand) 10%, transparent); color:var(--brand-deep);
+  padding:6px 12px; border-radius:999px; }
+.quota-chip.warn { background:var(--coral-soft); color:#B33A2B; }
+.sub-status { font-weight:800; padding:4px 12px; border-radius:999px; font-size:.78rem; white-space:nowrap; }
+.st-free{background:var(--bg-sunken);color:var(--ink-2);} .st-pending{background:var(--amber-soft);color:#8a5b00;}
+.st-active{background:var(--green-soft);color:#0e7a45;} .st-expired,.st-cancelled,.st-rejected,.st-failed,.st-payment_failed{background:var(--coral-soft);color:#B33A2B;}
+.st-confirmed{background:var(--green-soft);color:#0e7a45;}
+.usage-bar { background:var(--bg-sunken); height:10px; border-radius:999px; overflow:hidden; }
+.usage-bar i { display:block; height:100%; background:linear-gradient(90deg,var(--brand),var(--brand-2)); border-radius:999px; }
+.money-table th, .money-table td { font-size:.83rem; }
+.add-pricing-row { display:flex; gap:8px; flex-wrap:wrap; align-items:end; }
+.add-pricing-row label { font-size:.72rem; color:var(--ink-3); display:flex; flex-direction:column; gap:4px; }
+.cur-chip { border:2px solid var(--line); background:var(--bg-card); border-radius:999px; padding:6px 14px; font-weight:700; font-size:.85rem; cursor:pointer; }
+.cur-chip.active { border-color:var(--brand); color:var(--brand); background:rgba(91,79,233,.08); }
 </style>
 </head>
 <body>
@@ -589,6 +631,7 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
     <a class="logo" href="#/"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a>
     <span class="header-spacer"></span>
     <button class="icon-btn" id="landing-theme" title="Thème" aria-label="Changer de thème">🌙</button>
+    <a class="btn btn-ghost btn-sm" href="#/pricing" data-i18n="nav.tarifs">Tarifs</a>
     <a class="btn btn-ghost btn-sm" href="#/login" data-i18n="nav.login">Se connecter</a>
     <a class="btn btn-primary btn-sm" href="#/register" data-i18n="nav.register">S'inscrire</a>
   </header>
@@ -690,6 +733,7 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
     <div class="f-links">
       <a href="#/register" data-i18n="nav.register">S'inscrire</a>
       <a href="#/login" data-i18n="nav.login">Se connecter</a>
+      <a href="#/pricing" data-i18n="nav.tarifs">Tarifs</a>
       <a href="#/dashboard" data-i18n="nav.demo">Mode démo</a>
     </div>
     <p data-i18n="footer.line">© 2026 MAJOOP — Apprends une langue. Joue. Progresse. Parle.</p>
@@ -711,6 +755,7 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
     <span class="header-stat" title="XP"><span class="ico">🪙</span><span id="hd-xp">0</span></span>
     <span class="header-stat" title="Série de jours"><span class="ico streak-flame">🔥</span><span id="hd-streak">0</span></span>
     <button class="icon-btn" id="theme-toggle" title="Thème" aria-label="Changer de thème">🌙</button>
+    <a class="icon-btn" href="#/subscription" title="Mon abonnement" aria-label="Mon abonnement">💎</a>
     <button class="icon-btn" id="btn-profile" title="Profil" aria-label="Profil">👤</button>
   </header>
   <main id="app-main" class="page"></main>
@@ -887,6 +932,52 @@ const I18N = {
     "mod.levelUp": "Niveau {n} atteint ! 🎉", "mod.badge": "Badge débloqué : {b} {i}",
     "mod.streak": "Série de {n} jours ! 🔥",
     "speaking.soon": "L'expression orale arrive dans une prochaine version.",
+    "nav.tarifs": "Tarifs",
+    "price.month": "/ mois", "price.year": "/ an", "price.best": "MEILLEURE VALEUR",
+    "price.freeNote": "Gratuit à vie — aucune carte bancaire",
+    "price.yearNote": "≈ 1 000 FCFA/mois · Économise 6 000 FCFA",
+    "price.ctaFree": "Commencer gratuitement", "price.ctaPremium": "Choisir Premium", "price.ctaYearly": "Choisir Premium Annuel",
+    "price.current": "Ta formule actuelle", "price.unavailable": "Tarif non configuré pour cette devise",
+    "price.cmpTitle": "Comparaison des formules", "price.faqTitle": "FAQ des abonnements",
+    "price.termsTitle": "Conditions de renouvellement et de résiliation",
+    "price.termsBody": "Renouvellement : ton accès Premium couvre exactement la période payée (1 mois ou 12 mois). Il se prolonge uniquement quand tu effectues un nouveau paiement — jamais automatiquement en mode paiement manuel. Résiliation : tu peux arrêter à tout moment depuis « Mon abonnement » — aucune nouvelle période ne sera facturée, et tu conserves l'intégralité de ton accès jusqu'à la fin de la période déjà payée. Aucun prix ne t'est rétroappliqué : le tarif de ton abonnement reste celui de ta souscription.",
+    "pay.title": "Paiement — {plan}", "pay.refLabel": "Référence de ta transaction (preuve de paiement)",
+    "pay.refPlaceholder": "ex. OM-20261116-8472", "pay.noteLabel": "Note pour l'administrateur (optionnel)",
+    "pay.submit": "Soumettre ma demande", "pay.validateNote": "Ton accès Premium est activé dès la vérification de ton paiement par un administrateur (statut : en attente).",
+    "pay.pendingMsg": "Demande enregistrée ! Statut : en attente de validation. Suis ton abonnement ici :", "pay.minRef": "Référence trop courte (4 caractères minimum).",
+    "pay.demoNote": "MODE DÉMO : connecte Supabase (⚙️ Réglages) pour activer les paiements.",
+    "pay.manualDefault": "Paiement manuel", "pay.manualTBD": "Instructions à configurer par l'administrateur (Administration → Monétisation).",
+    "pay.date": "Date", "pay.planCol": "Fournisseur", "pay.amountCol": "Montant", "pay.refCol": "Référence", "pay.statusCol": "Statut",
+    "sub.title": "Mon abonnement", "sub.sub": "Ta formule, ton usage IA et tes paiements.", "sub.open": "Ouvrir",
+    "sub.profSub": "Formule, date d'expiration, renouvellement et historique de paiements.",
+    "sub.usage": "Interactions IA ce mois", "sub.resets": "Réinitialisation le", "sub.started": "Début",
+    "sub.expires": "Expiration", "sub.daysLeft": "{n} jours restants", "sub.noExpiry": "Accès gratuit, sans expiration",
+    "sub.payment": "Dernier paiement", "sub.history": "Historique des paiements", "sub.noPayments": "Aucun paiement pour le moment.",
+    "sub.cancel": "Annuler le renouvellement", "sub.cancelOk": "Renouvellement annulé — accès conservé jusqu'à la fin payée.",
+    "sub.cancelConfirm": "Annuler le renouvellement ? Ton accès restera actif jusqu'à la fin de la période déjà payée.",
+    "sub.renew": "Renouveler / Passer Premium", "sub.pendingBanner": "Ton paiement est en attente de validation par un administrateur — ton accès Premium sera actif dès validation.",
+    "sub.expiryBanner": "Ton abonnement expire dans {n} jours ({d}).", "sub.demoNote": "MODE DÉMO : compteur local.",
+    "payw.title": "Passe à Premium ! 🚀",
+    "payw.used": "{u}/{l} interactions IA utilisées ce mois-ci",
+    "payw.reset": "Ton compteur se réinitialise le {d}.",
+    "payw.sub2": "Débloque tous les cours, tous les jeux et 100 interactions IA par mois.",
+    "payw.cta": "Voir les formules Premium", "payw.keep": "Continuer gratuitement",
+    "st.free": "Gratuit", "st.pending": "En attente", "st.active": "Actif", "st.expired": "Expiré",
+    "st.cancelled": "Annulé", "st.payment_failed": "Paiement échoué", "st.confirmed": "Confirmé",
+    "st.rejected": "Rejeté", "st.failed": "Échoué",
+    "admin.tab.money": "Monétisation",
+    "ai.quotaChip": "IA : {u}/{l} ce mois", "ai.quotaReset": "reset le {d}",
+    "pricing.title": "Tarifs MAJOOP", "pricing.sub": "Commence gratuitement. Passe à Premium quand tu veux aller plus loin — annulable à tout moment.",
+    "price.faq.q1": "Comment souscrire à Premium ?",
+    "price.faq.a1": "Choisis la formule mensuelle ou annuelle : tu paies par Mobile Money ou virement (instructions affichées à l'écran), tu saisis ta référence de transaction, puis un administrateur vérifie ton paiement. Ton accès Premium est activé dès la validation — généralement sous 24 à 48 heures.",
+    "price.faq.q2": "Quand commence et se termine mon accès ?",
+    "price.faq.a2": "L'accès démarre à la validation de ton paiement et couvre exactement la période payée : 1 mois ou 12 mois. La date d'expiration exacte est toujours visible dans « Mon abonnement ».",
+    "price.faq.q3": "Puis-je annuler ? Que deviennent mes droits ?",
+    "price.faq.a3": "Oui, à tout moment depuis « Mon abonnement ». Tu conserves TOUS tes droits jusqu'à la fin de la période déjà payée — l'annulation empêche seulement la prolongation, elle ne coupe jamais un accès payé.",
+    "price.faq.q4": "Que se passe-t-il quand mes interactions IA sont épuisées ?",
+    "price.faq.a4": "Le compteur se remplit au fil de tes messages et se réinitialise automatiquement le 1er de chaque mois. Free : 10 interactions par mois. Premium : 100 interactions par mois. Aucune formule n'est présentée comme illimitée.",
+    "price.faq.q5": "Comment mes paiements sont-ils protégés ?",
+    "price.faq.a5": "Le montant provient toujours de la grille officielle vérifiée côté serveur — jamais du navigateur. Chaque paiement est enregistré avec une référence unique, et une validation humaine (administrateur) précède toute activation de Premium.",
   },
   en: {
     "nav.login": "Log in", "nav.register": "Sign up", "nav.demo": "Demo mode",
@@ -1027,6 +1118,52 @@ const I18N = {
     "mod.levelUp": "Level {n} reached! 🎉", "mod.badge": "Badge unlocked: {b} {i}",
     "mod.streak": "{n}-day streak! 🔥",
     "speaking.soon": "Speaking practice is coming in a future version.",
+    "nav.tarifs": "Pricing",
+    "price.month": "/ month", "price.year": "/ year", "price.best": "BEST VALUE",
+    "price.freeNote": "Free forever — no credit card",
+    "price.yearNote": "≈ $1.2/month · Save 6,000 FCFA",
+    "price.ctaFree": "Start for free", "price.ctaPremium": "Choose Premium", "price.ctaYearly": "Choose Annual Premium",
+    "price.current": "Your current plan", "price.unavailable": "Price not configured for this currency",
+    "price.cmpTitle": "Plan comparison", "price.faqTitle": "Subscription FAQ",
+    "price.termsTitle": "Renewal and cancellation terms",
+    "price.termsBody": "Renewal: your Premium access covers exactly the paid period (1 month or 12 months). It only extends when you make a new payment — never automatically in manual payment mode. Cancellation: stop anytime from “My subscription” — no new period will be charged, and you keep full access until the end of the period you already paid for. No retroactive pricing: your subscription keeps the price of your purchase.",
+    "pay.title": "Payment — {plan}", "pay.refLabel": "Your transaction reference (proof of payment)",
+    "pay.refPlaceholder": "e.g. OM-20261116-8472", "pay.noteLabel": "Note for the administrator (optional)",
+    "pay.submit": "Submit my request", "pay.validateNote": "Your Premium access is activated as soon as an administrator verifies your payment (status: pending).",
+    "pay.pendingMsg": "Request received! Status: pending validation. Track your subscription here:", "pay.minRef": "Reference too short (4 characters minimum).",
+    "pay.demoNote": "DEMO MODE: connect Supabase (⚙️ Settings) to enable payments.",
+    "pay.manualDefault": "Manual payment", "pay.manualTBD": "Instructions to be configured by the administrator (Administration → Monetization).",
+    "pay.date": "Date", "pay.planCol": "Provider", "pay.amountCol": "Amount", "pay.refCol": "Reference", "pay.statusCol": "Status",
+    "sub.title": "My subscription", "sub.sub": "Your plan, AI usage and payments.", "sub.open": "Open",
+    "sub.profSub": "Plan, expiry date, renewal and payment history.",
+    "sub.usage": "AI interactions this month", "sub.resets": "Resets on", "sub.started": "Start",
+    "sub.expires": "Expiry", "sub.daysLeft": "{n} days left", "sub.noExpiry": "Free access, no expiry",
+    "sub.payment": "Last payment", "sub.history": "Payment history", "sub.noPayments": "No payments yet.",
+    "sub.cancel": "Cancel renewal", "sub.cancelOk": "Renewal cancelled — access kept until the paid period ends.",
+    "sub.cancelConfirm": "Cancel renewal? Your access stays active until the end of the period already paid.",
+    "sub.renew": "Renew / Get Premium", "sub.pendingBanner": "Your payment is awaiting administrator validation — Premium activates as soon as it is confirmed.",
+    "sub.expiryBanner": "Your subscription expires in {n} days ({d}).", "sub.demoNote": "DEMO MODE: local counter.",
+    "payw.title": "Go Premium! 🚀",
+    "payw.used": "{u}/{l} AI interactions used this month",
+    "payw.reset": "Your counter resets on {d}.",
+    "payw.sub2": "Unlock all courses, all games and 100 AI interactions per month.",
+    "payw.cta": "See Premium plans", "payw.keep": "Continue for free",
+    "st.free": "Free", "st.pending": "Pending", "st.active": "Active", "st.expired": "Expired",
+    "st.cancelled": "Cancelled", "st.payment_failed": "Payment failed", "st.confirmed": "Confirmed",
+    "st.rejected": "Rejected", "st.failed": "Failed",
+    "admin.tab.money": "Monetization",
+    "ai.quotaChip": "AI: {u}/{l} this month", "ai.quotaReset": "resets on {d}",
+    "pricing.title": "MAJOOP Pricing", "pricing.sub": "Start for free. Upgrade whenever you want to go further — cancel anytime.",
+    "price.faq.q1": "How do I subscribe to Premium?",
+    "price.faq.a1": "Pick the monthly or yearly plan: pay by Mobile Money or bank transfer (instructions shown on screen), enter your transaction reference, then an administrator verifies your payment. Premium activates as soon as it is confirmed — usually within 24 to 48 hours.",
+    "price.faq.q2": "When does my access start and end?",
+    "price.faq.a2": "Access starts when your payment is validated and covers exactly the paid period: 1 month or 12 months. The exact expiry date is always visible in “My subscription”.",
+    "price.faq.q3": "Can I cancel? What happens to my rights?",
+    "price.faq.a3": "Yes, anytime from “My subscription”. You keep ALL your rights until the end of the period you already paid for — cancelling only prevents the next extension, it never cuts paid access.",
+    "price.faq.q4": "What happens when I run out of AI interactions?",
+    "price.faq.a4": "The counter fills as you chat and resets automatically on the 1st of each month. Free: 10 interactions per month. Premium: 100 interactions per month. No plan is advertised as unlimited.",
+    "price.faq.q5": "How are my payments protected?",
+    "price.faq.a5": "The amount always comes from the official grid verified server-side — never from the browser. Every payment is stored with a unique reference, and a human validation (administrator) precedes any Premium activation.",
   },
   es: {
     "nav.login": "Iniciar sesión", "nav.register": "Registrarse", "nav.demo": "Modo demo",
@@ -1591,18 +1728,69 @@ class DemoBackend {
     DEMO.load();
     const uid = APP_STATE.session.user.id;
     const u = DEMO.db.users[uid];
+    // Quota mensuel LOCAL, identique au plan Free (10/mois) — MODE DÉMO
+    const q = this.demoUsage(u);
+    if (q.used >= 10) {
+      const err = new Error("Tu as utilisé tes 10 interactions IA de ce mois (formule Free). Passe à Premium pour 100 interactions par mois !");
+      err.reason = "quota";
+      err.quota = { used: q.used, limit: 10, reset_at: this.demoPeriodEnd(), upgrade: true, reason: "quota" };
+      throw err;
+    }
     u.messages.push({ conv: conv.id, role: "user", content: message, at: new Date().toISOString() });
     DEMO.save();
     const reply = demoTutorReply(message, conv, u);
     u.messages.push({ conv: conv.id, role: "tutor", content: reply, at: new Date().toISOString() });
+    q.used += 1;
     DEMO.save();
-    return { reply };
+    return { reply, usage: { used: q.used, limit: 10, reset_at: this.demoPeriodEnd(), plan: "free" } };
+  }
+  demoPeriod() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); }
+  demoPeriodEnd() { const d = new Date(); return new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().slice(0, 10); }
+  demoUsage(u) {
+    if (!u.aiUsage || u.aiUsage.period !== this.demoPeriod()) { u.aiUsage = { period: this.demoPeriod(), used: 0 }; DEMO.save(); }
+    return u.aiUsage;
   }
   async getMessages(convId) {
     DEMO.load();
     const uid = APP_STATE.session.user.id;
     return DEMO.db.users[uid].messages.filter((m) => m.conv === convId);
   }
+  /* ---- monétisation (démo : grille officielle affichée, paiements désactivés) ---- */
+  demoAiUsage() {
+    DEMO.load();
+    const u = DEMO.db.users[APP_STATE.session.user.id];
+    const q = this.demoUsage(u);
+    return { plan: "free", used: q.used, limit: 10, remaining: Math.max(0, 10 - q.used),
+             reset_at: this.demoPeriodEnd(), period_start: this.demoPeriod() + "-01" };
+  }
+  async getPricing() {
+    const cur = (currency, amount, interval, region) => ({ currency, amount, billing_interval: interval, region });
+    return [
+      { code: "free", name: "Free", id: null, is_active: true,
+        description: "Gratuit : 4 langues, leçons gratuites, exercices de base, jeux de base, XP, badges, séries, 10 interactions IA/mois.",
+        pricing: [cur("XAF", 0, "monthly", "zone_fcfa")] },
+      { code: "premium_monthly", name: "Premium Mensuel", id: null, is_active: true,
+        description: "1 500 FCFA par mois : tous les cours, tous les niveaux, tous les exercices, tous les jeux, 100 interactions IA/mois, statistiques avancées, sans publicité.",
+        pricing: [cur("XAF", 1500, "monthly", "zone_fcfa"), cur("XOF", 1500, "monthly", "zone_fcfa"), cur("USD", 3, "monthly", "international")] },
+      { code: "premium_yearly", name: "Premium Annuel", id: null, is_active: true,
+        description: "12 000 FCFA par an (12 mois, ≈ 1 000 FCFA/mois, économie de 6 000 FCFA) : mêmes avantages que le mensuel.",
+        pricing: [cur("XAF", 12000, "yearly", "zone_fcfa"), cur("XOF", 12000, "yearly", "zone_fcfa"), cur("USD", 24, "yearly", "international")] },
+    ];
+  }
+  async getMySubscription() {
+    const q = await this.demoAiUsage();
+    return { plan: "free", plan_name: "Free", status: "free", started_at: null, expires_at: null,
+             auto_renew: false, days_left: null, pricing: null, payment: null, expiry_warning: false, usage: q };
+  }
+  async getAiQuota() { return this.demoAiUsage(); }
+  async getPaymentInstructions() {
+    return { XAF: { method: "Mobile Money ou dépôt bancaire", details: "MODE DÉMO — configure Supabase pour recevoir des paiements réels." } };
+  }
+  async submitManualPayment() {
+    throw new Error("MODE DÉMO : connecte Supabase (⚙️ Réglages) pour activer les paiements et l'administration de la monétisation.");
+  }
+  async cancelRenewal() { return { ok: false, message: "MODE DÉMO : aucun abonnement actif." }; }
+  async getPaymentHistory() { return []; }
 }
 
 /* Bot de démonstration : réponses simulées, clairement identifiées. */
@@ -1762,6 +1950,42 @@ class SupabaseBackend {
   adminAiUsage(days) { return this.rpc("admin_ai_usage", { p_days: days }); }
   adminSetPublish(kind, id, pub) { return this.rpc("admin_set_publish", { p_kind: kind, p_id: id, p_published: pub }); }
   adminUpsertContent(kind, payload) { return this.rpc("admin_upsert_content", { p_kind: kind, p_payload: payload }); }
+  /* ---- monétisation (Free / Premium) ---- */
+  async getPricing() {
+    const { data, error } = await this.client.from("subscription_plans")
+      .select("id, code, name, description, is_active, pricing(*)")
+      .eq("is_active", true).order("code");
+    if (error) throw new Error(error.message);
+    return data || [];
+  }
+  getMySubscription() { return this.rpc("my_subscription"); }
+  getAiQuota() { return this.rpc("my_ai_quota"); }
+  getPaymentInstructions() { return this.rpc("get_payment_instructions"); }
+  submitManualPayment(pricingId, reference, note) {
+    return this.rpc("submit_manual_payment", { p_pricing_id: pricingId, p_reference: reference, p_note: note || null });
+  }
+  cancelRenewal() { return this.rpc("user_cancel_renewal"); }
+  async getPaymentHistory() {
+    const { data, error } = await this.client.from("payments")
+      .select("*").order("created_at", { ascending: false }).limit(24);
+    if (error) throw new Error(error.message);
+    return data || [];
+  }
+  adminMonetizationStats() { return this.rpc("admin_monetization_stats"); }
+  adminListPlans() { return this.rpc("admin_list_plans"); }
+  adminSetPlanActive(id, active) { return this.rpc("admin_set_plan_active", { p_plan_id: id, p_active: active }); }
+  adminAddPricing(planId, currency, amount, interval, region) {
+    return this.rpc("admin_add_pricing", { p_plan_id: planId, p_currency: currency, p_amount: amount, p_interval: interval, p_region: region });
+  }
+  adminDeactivatePricing(id) { return this.rpc("admin_deactivate_pricing", { p_pricing_id: id }); }
+  adminListSubscriptions(limit, offset, status) {
+    return this.rpc("admin_list_subscriptions", { p_limit: limit || 100, p_offset: offset || 0, p_status: status || null });
+  }
+  adminListPayments(status, limit) { return this.rpc("admin_list_payments", { p_status: status || null, p_limit: limit || 100 }); }
+  adminConfirmPayment(id) { return this.rpc("admin_confirm_payment", { p_payment_id: id }); }
+  adminRejectPayment(id, reason) { return this.rpc("admin_reject_payment", { p_payment_id: id, p_reason: reason || "" }); }
+  adminSetAiQuota(free, premium) { return this.rpc("admin_set_ai_quota", { p_free: free, p_premium: premium }); }
+  adminExportMonetization(kind) { return this.rpc("admin_export_monetization", { p_kind: kind }); }
 }
 
 /* ============================================================
@@ -1848,7 +2072,7 @@ function route() {
   APP_STATE.route = hash;
   const landing = $("#landing-root"), app = $("#app-root"), bare = $("#bare-root");
   const publicRoutes = ["#/", "#/login", "#/register", "#/forgot"];
-  const bareRoutes = ["#/login", "#/register", "#/forgot", "#/onboarding", "#/result"];
+  const bareRoutes = ["#/login", "#/register", "#/forgot", "#/onboarding", "#/result", "#/pricing"];
 
   const inApp = APP_STATE.session;
   const isLanding = hash === "#/" || hash === "" || hash === "#";
@@ -1857,7 +2081,7 @@ function route() {
   bare.style.display = bareRoutes.includes(hash) ? "block" : "none";
 
   // Route protégée : renvoyer vers login si non connecté
-  const protectedPrefix = ["#/dashboard", "#/courses", "#/lesson", "#/games", "#/game", "#/ai", "#/conversation", "#/progress", "#/profile", "#/settings", "#/admin", "#/languages"];
+  const protectedPrefix = ["#/dashboard", "#/courses", "#/lesson", "#/games", "#/game", "#/ai", "#/conversation", "#/progress", "#/profile", "#/settings", "#/admin", "#/languages", "#/subscription"];
   const isProtected = protectedPrefix.some((p) => hash.startsWith(p));
   if (isProtected && !inApp) { go("#/login"); return; }
   if (hash === "#/onboarding" && !inApp) { go("#/login"); return; }
@@ -1952,6 +2176,7 @@ function renderBare(hash) {
   if (hash === "#/forgot") return pageForgot(root);
   if (hash === "#/onboarding") return pageOnboarding(root);
   if (hash === "#/result") return pageResult(root);
+  if (hash === "#/pricing") return pagePricing(root, { standalone: true });
 }
 
 function authShell(inner) {
@@ -2214,6 +2439,8 @@ async function renderApp(hash) {
     else if (page === "profile") await pageProfile(main);
     else if (page === "settings") await pageSettings(main);
     else if (page === "admin") await pageAdmin(main);
+    else if (page === "pricing") await pagePricing(main, { standalone: false });
+    else if (page === "subscription") await pageMySubscription(main);
     else main.innerHTML = `<div class="card center">404 · <a href="#/dashboard">${t("t.back")}</a></div>`;
   } catch (e) {
     console.error(e);
@@ -3310,6 +3537,7 @@ function renderAiShell(main, isConversation) {
         ${APP_STATE.mode === "supabase" ? `<div class="card mt-2 muted" style="font-size:.8rem;">${t("set.aiInfo")}</div>` : ""}
       </div>
       <div class="card">
+        <div id="ai-quota"></div>
         <div class="chat-box" id="chat-box"></div>
         <div class="chat-suggest">${["grammar", "conversation", "correct", "translate"].map((k) => `<button type="button" class="chip-suggest" data-suggest="${k}">${t("ai.chip." + k)}</button>`).join("")}</div>
         <div class="chat-input-row">
@@ -3331,6 +3559,7 @@ function renderAiShell(main, isConversation) {
   }
 
   wireChat(main);
+  refreshAiQuotaChip(main);
   if (AI_STATE.messages.length === 0) {
     const intro = aiIntroMessage();
     AI_STATE.messages.push({ role: "tutor", content: intro, at: new Date() });
@@ -3395,9 +3624,11 @@ function wireChat(main) {
       const res = await APP_STATE.backend.aiChat(AI_STATE.conversation, msg);
       AI_STATE.messages.pop(); // retirer "typing"
       AI_STATE.messages.push({ role: "tutor", content: res.reply, at: new Date() });
+      if (res.usage) { const qc = $("#ai-quota", main); if (qc) renderQuotaChip(qc, res.usage); }
     } catch (e) {
       AI_STATE.messages.pop();
       AI_STATE.messages.push({ role: "system", content: e.message === "err.network" ? t("err.network") : (e.message || t("err.generic")) });
+      if (e && e.reason === "quota") openPaywall(e.quota || {});
     }
     input.disabled = false; send.disabled = false;
     input.focus();
@@ -3627,6 +3858,13 @@ async function pageProfile(main) {
       <a class="btn btn-soft btn-sm" href="#/settings">${APP_STATE.uiLang === "fr" ? "Gérer" : "Manage"}</a>
     </div>
 
+    <div class="card mt-2 mission-row">
+      <span class="m-ico">💎</span>
+      <div class="m-body"><b>${t("sub.title")}</b>
+        <small class="muted" style="display:block;">${t("sub.profSub")}</small></div>
+      <a class="btn btn-soft btn-sm" href="#/subscription">${t("sub.open")}</a>
+    </div>
+
     <div class="grid grid-2 mt-3">
       <div class="card">
         <h3 style="font-weight:800;margin-bottom:14px;">✏️ ${t("prof.title")}</h3>
@@ -3682,6 +3920,301 @@ async function pageProfile(main) {
       await ensureDashboard(true);
       toast(t("prof.saved"), "success");
       pageProfile(main);
+    } catch (e) { toast(e.message || t("err.generic"), "error"); }
+  });
+}
+
+/* ============================================================
+   MONÉTISATION — Tarifs, Mon abonnement, paywall, paiement manuel
+   ============================================================ */
+function moneyFmt(amount, currency) {
+  const v = Number(amount);
+  if (isNaN(v)) return "—";
+  const str = (v % 1 === 0) ? String(v) : v.toFixed(2);
+  return { XAF: str + " FCFA", XOF: str + " FCFA", USD: "$" + str, EUR: str + " €" }[currency] || str + " " + currency;
+}
+function fmtDate(v) {
+  if (!v) return "—";
+  try { return new Date(v).toLocaleDateString(APP_STATE.uiLang === "fr" ? "fr-FR" : "en-GB"); }
+  catch (e) { return String(v); }
+}
+function renderQuotaChip(el, q) {
+  if (!el) return;
+  if (!q || q.limit == null) { el.innerHTML = ""; return; }
+  const full = (q.used || 0) >= q.limit;
+  const reset = q.reset_at ? " · " + t("ai.quotaReset", { d: fmtDate(q.reset_at) }) : "";
+  el.innerHTML = `<span class="quota-chip ${full ? "warn" : ""}" ${full ? 'style="cursor:pointer;" data-gopricing' : ""}>🤖 ${t("ai.quotaChip", { u: q.used || 0, l: q.limit })}${reset}</span>`;
+  const chip = el.querySelector("[data-gopricing]");
+  if (chip) chip.addEventListener("click", () => openPaywall(q));
+}
+async function refreshAiQuotaChip(main) {
+  const el = $("#ai-quota", main);
+  if (!el) return;
+  try {
+    const q = APP_STATE.mode === "demo"
+      ? (await APP_STATE.backend.getMySubscription()).usage
+      : await APP_STATE.backend.getAiQuota();
+    renderQuotaChip(el, q);
+  } catch (e) { el.innerHTML = ""; }
+}
+
+function openPaywall(data) {
+  $all(".paywall-backdrop").forEach((el) => el.remove());
+  const d = data || {};
+  const bd = document.createElement("div");
+  bd.className = "paywall-backdrop";
+  bd.innerHTML = `<div class="paywall-card">
+    <button class="icon-btn" data-close style="position:absolute;top:10px;right:10px;">✕</button>
+    <h2 style="font-weight:900;">${t("payw.title")}</h2>
+    ${d.used != null
+      ? `<p class="muted mt-2">${t("payw.used", { u: d.used, l: d.limit })}${d.reset_at ? " — " + t("payw.reset", { d: fmtDate(d.reset_at) }) : ""}</p>`
+      : `<p class="muted mt-2">${t("payw.sub2")}</p>`}
+    <ul class="price-feats mt-2">
+      <li>Tous les cours, tous les niveaux, tous les exercices</li>
+      <li>100 interactions IA par mois (contre 10 en Free)</li>
+      <li>Conversations personnalisées et simulations de situations</li>
+      <li>Corrections détaillées et explications grammaticales</li>
+      <li>Historique complet et statistiques avancées</li>
+      <li>Sans publicité</li>
+    </ul>
+    <div class="flex mt-3" style="gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary" data-go-pricing>💎 ${t("payw.cta")}</button>
+      <button class="btn btn-ghost" data-close>${t("payw.keep")}</button>
+    </div>
+  </div>`;
+  bd.addEventListener("click", (e) => {
+    if (e.target === bd || e.target.closest("[data-close]")) bd.remove();
+    else if (e.target.closest("[data-go-pricing]")) { bd.remove(); go("#/pricing"); }
+  });
+  document.body.appendChild(bd);
+}
+
+async function openPaymentModal(plan, pricingRow) {
+  if (APP_STATE.mode === "demo") { toast(t("pay.demoNote"), "error"); go("#/settings"); return; }
+  $all(".paywall-backdrop").forEach((el) => el.remove());
+  let instr = {};
+  try { instr = (await APP_STATE.backend.getPaymentInstructions()) || {}; } catch (e) { instr = {}; }
+  const ins = instr[pricingRow.currency] || {};
+  const bd = document.createElement("div");
+  bd.className = "paywall-backdrop";
+  bd.innerHTML = `<div class="paywall-card">
+    <button class="icon-btn" data-close style="position:absolute;top:10px;right:10px;">✕</button>
+    <h2 style="font-weight:900;">${t("pay.title", { plan: esc(plan.name) })}</h2>
+    <p style="font-size:1.7rem;font-weight:900;color:var(--brand-deep);margin-top:6px;">
+      ${moneyFmt(pricingRow.amount, pricingRow.currency)}
+      <small class="muted" style="font-size:.9rem;">${pricingRow.billing_interval === "yearly" ? t("price.year") : t("price.month")}</small>
+    </p>
+    <div class="mt-2" style="background:var(--bg-sunken);border-radius:var(--radius-sm);padding:12px;">
+      <b>💳 ${esc(ins.method || t("pay.manualDefault"))}</b>
+      <p class="muted" style="font-size:.85rem;margin-top:4px;">${esc(ins.details || t("pay.manualTBD"))}</p>
+    </div>
+    <label class="field mt-2"><span>${t("pay.refLabel")}</span>
+      <input class="input" id="pay-ref" placeholder="${t("pay.refPlaceholder")}"></label>
+    <label class="field"><span>${t("pay.noteLabel")}</span>
+      <input class="input" id="pay-note"></label>
+    <p class="muted" style="font-size:.78rem;">${t("pay.validateNote")}</p>
+    <button class="btn btn-primary mt-2" id="pay-submit">${t("pay.submit")}</button>
+    <div id="pay-result"></div>
+  </div>`;
+  bd.addEventListener("click", (e) => { if (e.target === bd || e.target.closest("[data-close]")) bd.remove(); });
+  document.body.appendChild(bd);
+  $("#pay-submit", bd).addEventListener("click", async () => {
+    const ref = $("#pay-ref", bd).value.trim();
+    const note = $("#pay-note", bd).value.trim();
+    if (ref.length < 4) { toast(t("pay.minRef"), "error"); return; }
+    const btn = $("#pay-submit", bd);
+    btn.disabled = true;
+    try {
+      const r = await APP_STATE.backend.submitManualPayment(pricingRow.id, ref, note);
+      $("#pay-result", bd).innerHTML = `<div class="mt-2" style="background:var(--amber-soft);border-radius:var(--radius-sm);padding:12px;">
+        <b>⏳ ${t("st.pending")}</b>
+        <p class="muted" style="font-size:.85rem;margin-top:4px;">${t("pay.pendingMsg")} <a href="#/subscription" id="pay-go-sub"><b>${t("sub.title")}</b></a></p>
+      </div>`;
+      $("#pay-go-sub", bd).addEventListener("click", () => bd.remove());
+      toast("✓ " + (r.message || t("pay.pendingMsg")), "success");
+    } catch (e) {
+      toast(e.message || t("err.generic"), "error");
+      btn.disabled = false;
+    }
+  });
+}
+
+async function pagePricing(root, opts) {
+  const standalone = !!(opts && opts.standalone);
+  let plans = null;
+  try { plans = await APP_STATE.backend.getPricing(); } catch (e) { plans = null; }
+  let currentPlan = null;
+  if (APP_STATE.session) {
+    try { const sub = await APP_STATE.backend.getMySubscription(); currentPlan = sub ? sub.plan : null; } catch (e) { currentPlan = null; }
+  }
+  root.innerHTML = standalone && !APP_STATE.session
+    ? `<div class="auth-wrap"><div class="auth-card" style="max-width:1120px;">
+         <div class="auth-logo"><a class="logo" href="#/"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a></div>
+         <div id="pricing-body"></div></div></div>`
+    : `<div id="pricing-body"></div>`;
+  renderPricingInto($("#pricing-body", root), plans, currentPlan);
+}
+
+function renderPricingInto(body, plans, currentPlan) {
+  if (!body) return;
+  if (!plans || !plans.length) {
+    body.innerHTML = `<div class="card center">${t("pay.demoNote")}<br><br>
+      <a class="btn btn-soft" href="#/settings">⚙️ ${t("set.conn")}</a></div>`;
+    return;
+  }
+  const currencies = [];
+  plans.forEach((p) => (p.pricing || []).forEach((pr) => {
+    if (pr.amount > 0 && !currencies.includes(pr.currency)) currencies.push(pr.currency);
+  }));
+  const cur = body.dataset.cur && currencies.includes(body.dataset.cur)
+    ? body.dataset.cur : (currencies.includes("XAF") ? "XAF" : currencies[0] || "XAF");
+  const byCode = (code) => plans.find((p) => p.code === code);
+  const priceOf = (code) => {
+    const p = byCode(code);
+    if (!p) return null;
+    return (p.pricing || []).find((pr) => pr.currency === cur && pr.is_active !== false) || null;
+  };
+  const cmpRow = (label, a, b, c) => `
+    <tr><td>${label}</td>
+      <td class="${a ? "on" : "off"}">${a ? "✓" : "—"}</td>
+      <td class="${b ? "on" : "off"}">${b ? "✓" : "—"}</td>
+      <td class="${c ? "on" : "off"}">${c ? "✓" : "—"}</td></tr>`;
+  const card = (p, pr, o) => `
+    <div class="price-card ${o.cls || ""}">
+      ${o.flag ? `<div class="price-flag">${o.flag}</div>` : ""}
+      <div class="price-name">${esc(p.name)} ${currentPlan === p.code ? `<span class="chip chip-green">✓ ${t("price.current")}</span>` : ""}</div>
+      ${pr ? `<div class="price-amount">${moneyFmt(pr.amount, pr.currency)} <small>${pr.billing_interval === "yearly" ? t("price.year") : t("price.month")}</small></div>`
+           : `<div class="price-amount"><small>${t("price.unavailable")}</small></div>`}
+      ${o.note ? `<div class="price-note">${o.note}</div>` : ""}
+      <p class="muted" style="font-size:.82rem;flex:1;">${esc(p.description || "")}</p>
+      ${o.button}
+    </div>`;
+  const free = byCode("free"), pm = byCode("premium_monthly"), py = byCode("premium_yearly");
+  const prM = priceOf("premium_monthly"), prY = priceOf("premium_yearly");
+  body.innerHTML = `
+    <div class="flex" style="justify-content:space-between;align-items:center;">
+      <div><div class="page-title">💎 ${t("pricing.title")}</div><div class="page-sub">${t("pricing.sub")}</div></div>
+      <div class="flex" style="gap:6px;flex-wrap:wrap;">
+        ${currencies.map((c) => `<button class="cur-chip ${c === cur ? "active" : ""}" data-cur="${c}">${c}</button>`).join("")}
+      </div>
+    </div>
+    <div class="pricing-grid mt-2">
+      ${card(free, priceOf("free"), { cls: "free-card", note: t("price.freeNote"),
+        button: `<button class="btn btn-soft" data-act="free">🚀 ${t("price.ctaFree")}</button>` })}
+      ${card(pm, prM, { button: `<button class="btn btn-primary" data-act="premium_monthly">💎 ${t("price.ctaPremium")}</button>` })}
+      ${card(py, prY, { cls: prY ? "best" : "", flag: prY ? t("price.best") : null,
+        note: prY && cur === "XAF" ? t("price.yearNote") : (prY && cur === "XOF" ? t("price.yearNote") : ""),
+        button: `<button class="btn btn-primary" data-act="premium_yearly">💎 ${t("price.ctaYearly")}</button>` })}
+    </div>
+    <div class="card mt-3">
+      <h3 style="font-weight:800;">📋 ${t("price.cmpTitle")}</h3>
+      <div class="table-scroll mt-2"><table class="cmp-table">
+        <tr><th></th><th>Free</th><th>Premium Mensuel</th><th>Premium Annuel</th></tr>
+        ${cmpRow("🌐 Quatre langues (anglais, français, espagnol, allemand)", 1, 1, 1)}
+        ${cmpRow("📚 Leçons gratuites + exercices de base", 1, 1, 1)}
+        ${cmpRow("🎮 Jeux éducatifs de base", 1, 1, 1)}
+        ${cmpRow("🏅 XP, badges, séries quotidiennes", 1, 1, 1)}
+        ${cmpRow("📈 Suivi de progression standard", 1, 1, 1)}
+        ${cmpRow("📚 Tous les cours et tous les niveaux", 0, 1, 1)}
+        ${cmpRow("✏️ Tous les exercices", 0, 1, 1)}
+        ${cmpRow("🎮 Tous les jeux", 0, 1, 1)}
+        ${cmpRow("🤖 Professeur IA — 10 interactions / mois", 1, 0, 0)}
+        ${cmpRow("🤖 Professeur IA — 100 interactions / mois", 0, 1, 1)}
+        ${cmpRow("💬 Conversations personnalisées", 0, 1, 1)}
+        ${cmpRow("✏️ Corrections détaillées + explications grammaticales", 0, 1, 1)}
+        ${cmpRow("🕘 Historique complet des conversations", 0, 1, 1)}
+        ${cmpRow("📊 Statistiques avancées", 0, 1, 1)}
+        ${cmpRow("🚫 Sans publicité (la version Free pourra en comporter)", 0, 1, 1)}
+      </table></div>
+    </div>
+    <div class="card mt-2">
+      <h3 style="font-weight:800;">📜 ${t("price.termsTitle")}</h3>
+      <p class="muted mt-2" style="font-size:.9rem;">${t("price.termsBody")}</p>
+    </div>
+    <div class="card mt-2">
+      <h3 style="font-weight:800;">❓ ${t("price.faqTitle")}</h3>
+      <div class="mt-2" style="max-width:780px;">
+        <details class="faq-item"><summary>${t("price.faq.q1")}</summary><p>${t("price.faq.a1")}</p></details>
+        <details class="faq-item"><summary>${t("price.faq.q2")}</summary><p>${t("price.faq.a2")}</p></details>
+        <details class="faq-item"><summary>${t("price.faq.q3")}</summary><p>${t("price.faq.a3")}</p></details>
+        <details class="faq-item"><summary>${t("price.faq.q4")}</summary><p>${t("price.faq.a4")}</p></details>
+        <details class="faq-item"><summary>${t("price.faq.q5")}</summary><p>${t("price.faq.a5")}</p></details>
+      </div>
+    </div>`;
+  $all("[data-cur]", body).forEach((b) => b.addEventListener("click", () => {
+    body.dataset.cur = b.dataset.cur;
+    renderPricingInto(body, plans, currentPlan);
+  }));
+  $all("[data-act]", body).forEach((b) => b.addEventListener("click", () => {
+    const act = b.dataset.act;
+    if (act === "free") { go(APP_STATE.session ? "#/dashboard" : "#/register"); return; }
+    if (!APP_STATE.session) { go("#/register"); return; }
+    const p = byCode(act);
+    const pr = priceOf(act);
+    if (!p) return;
+    if (!pr || !pr.id) { toast(t("price.unavailable"), "error"); return; }
+    openPaymentModal(p, pr);
+  }));
+}
+
+async function pageMySubscription(main) {
+  await ensureDashboard();
+  let sub = null;
+  try { sub = await APP_STATE.backend.getMySubscription(); } catch (e) { sub = null; }
+  const demo = APP_STATE.mode === "demo";
+  let pays = [];
+  try { pays = await APP_STATE.backend.getPaymentHistory(); } catch (e) { pays = []; }
+  const st = sub ? sub.status : "free";
+  const usage = sub && sub.usage ? sub.usage : null;
+  const pct = usage && usage.limit ? Math.min(100, Math.round(100 * (usage.used || 0) / usage.limit)) : 0;
+  main.innerHTML = `
+    <div class="page-title">💎 ${t("sub.title")}</div><div class="page-sub">${t("sub.sub")}</div>
+    ${sub && sub.expiry_warning && st === "active" ? `<div class="demo-banner" style="background:var(--coral-soft);color:#B33A2B;">⏳ ${t("sub.expiryBanner", { n: sub.days_left, d: fmtDate(sub.expires_at) })} — <a href="#/pricing" style="color:inherit;"><b>${t("sub.renew")}</b></a></div>` : ""}
+    ${st === "pending" ? `<div class="demo-banner" style="background:var(--amber-soft);color:#8a5b00;">⏳ ${t("sub.pendingBanner")}</div>` : ""}
+    <div class="card mt-2" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+      <div style="font-size:2.4rem;">${st === "active" ? "💎" : "🆓"}</div>
+      <div style="flex:1;min-width:220px;">
+        <div class="flex" style="gap:10px;align-items:center;flex-wrap:wrap;">
+          <b style="font-size:1.15rem;">${esc(sub ? sub.plan_name : "Free")}</b>
+          <span class="sub-status st-${esc(st)}">${t("st." + st)}</span>
+        </div>
+        <small class="muted" style="display:block;margin-top:6px;">
+          ${sub && sub.started_at ? t("sub.started") + " : " + fmtDate(sub.started_at) + " · " : ""}
+          ${sub && sub.expires_at ? t("sub.expires") + " : " + fmtDate(sub.expires_at) + (sub.days_left != null ? " · " + t("sub.daysLeft", { n: sub.days_left }) : "") : t("sub.noExpiry")}
+        </small>
+        ${sub && sub.payment ? `<small class="muted" style="display:block;">${t("sub.payment")} : ${moneyFmt(sub.payment.amount, sub.payment.currency)} · ${t("st." + sub.payment.status)}${sub.payment.provider_reference ? " · " + esc(sub.payment.provider_reference) : ""}</small>` : ""}
+      </div>
+      <div class="flex" style="gap:8px;flex-wrap:wrap;">
+        ${st !== "active"
+          ? `<a class="btn btn-primary" href="#/pricing">💎 ${t("sub.renew")}</a>`
+          : `<a class="btn btn-soft" href="#/pricing">${t("sub.renew")}</a>
+             <button class="btn btn-ghost" id="sub-cancel">${t("sub.cancel")}</button>`}
+      </div>
+    </div>
+    ${usage ? `
+    <div class="card mt-2">
+      <div class="flex" style="justify-content:space-between;align-items:center;">
+        <b>🤖 ${t("sub.usage")}</b>
+        <span class="chip ${usage.used >= usage.limit ? "chip-coral" : "chip-brand"}">${usage.used}/${usage.limit}</span>
+      </div>
+      <div class="usage-bar mt-2"><i style="width:${pct}%"></i></div>
+      <small class="muted">${t("sub.resets")} : ${usage.reset_at ? fmtDate(usage.reset_at) : "—"}${demo ? " · " + t("sub.demoNote") : ""}</small>
+    </div>` : ""}
+    <div class="card mt-2">
+      <b>🧾 ${t("sub.history")}</b>
+      ${pays.length ? `<div class="table-scroll mt-2"><table class="data money-table">
+        <tr><th>${t("pay.date")}</th><th>${t("pay.planCol")}</th><th>${t("pay.amountCol")}</th><th>${t("pay.refCol")}</th><th>${t("pay.statusCol")}</th></tr>
+        ${pays.map((p) => `<tr><td>${fmtDate(p.created_at)}</td><td>${esc(p.provider)}</td><td>${moneyFmt(p.amount, p.currency)}</td><td>${esc(p.provider_reference)}</td>
+          <td><span class="sub-status st-${p.status === "confirmed" ? "confirmed" : p.status === "pending" ? "pending" : "rejected"}">${t("st." + p.status)}</span></td></tr>`).join("")}
+      </table></div>` : `<p class="muted mt-2" style="font-size:.85rem;">${t("sub.noPayments")}</p>`}
+    </div>`;
+  const cbtn = $("#sub-cancel", main);
+  if (cbtn) cbtn.addEventListener("click", async () => {
+    if (!confirm(t("sub.cancelConfirm"))) return;
+    try {
+      const r = await APP_STATE.backend.cancelRenewal();
+      toast(r.message || (r.ok ? t("sub.cancelOk") : t("err.generic")), r.ok ? "success" : "error");
+      pageMySubscription(main);
     } catch (e) { toast(e.message || t("err.generic"), "error"); }
   });
 }
@@ -3778,7 +4311,7 @@ async function pageAdmin(main) {
       <div class="card mt-2 center muted">${t("admin.noAccess")}</div>`;
     return;
   }
-  const TABS = ["overview", "users", "content", "settings", "ai"];
+  const TABS = ["overview", "users", "content", "settings", "ai", "money"];
   let activeTab = "overview";
   let stats = null, users = [], settingsList = [], aiUsage = [];
 
@@ -3853,6 +4386,8 @@ async function pageAdmin(main) {
         ctx.fillText(String(u.day).slice(5), pad + i * bw + 3, H - 12);
         if (u.user_msgs > 0) ctx.fillText(String(u.user_msgs), pad + i * bw + 3, H - pad - h - 6);
       });
+    } else if (activeTab === "money") {
+      renderAdminMoney(body);
     } else if (activeTab === "content") {
       body.innerHTML = `<div class="card">
         <p class="muted" style="font-size:.9rem;">Gestion du contenu : publication/dépublication des cours et leçons via
@@ -3882,6 +4417,181 @@ async function pageAdmin(main) {
         } catch (e) { toast(e.message, "error"); }
       }));
     } catch (e) { $("#adm-content-tree", body).innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
+  };
+
+  /* ---- Onglet Monétisation : stats, plans/tarifs, quotas, paiements, export ---- */
+  const renderAdminMoney = async (body) => {
+    body.innerHTML = `<div class="skeleton" style="height:180px"></div>`;
+    try {
+      const [st, plansRes] = await Promise.all([
+        APP_STATE.backend.adminMonetizationStats(),
+        APP_STATE.backend.adminListPlans(),
+      ]);
+      const rows = Array.isArray(plansRes) ? plansRes : (plansRes.data || []);
+      const mrrOf = (cur) => { const r = (st.mrr_by_currency || []).find((x) => x.currency === cur); return r ? r.mrr : 0; };
+      const arrOf = (cur) => { const r = (st.arr_by_currency || []).find((x) => x.currency === cur); return r ? r.arr : 0; };
+      const colOf = (cur) => { const r = (st.collected_by_currency || []).find((x) => x.currency === cur); return r ? r.collected : 0; };
+      const curList = ["XAF", "XOF", "USD", "EUR"];
+      const qf = settingsList.find((x) => x.key === "ai_quota_free");
+      const qp = settingsList.find((x) => x.key === "ai_quota_premium");
+      body.innerHTML = `
+        <div class="grid grid-4">
+          <div class="card stat-card"><div class="s-ico">🆓</div><div class="s-val">${st.free_users}</div><div class="s-lbl">Utilisateurs Free</div></div>
+          <div class="card stat-card"><div class="s-ico">💎</div><div class="s-val">${st.premium_active}</div><div class="s-lbl">Abonnés Premium</div></div>
+          <div class="card stat-card"><div class="s-ico">📈</div><div class="s-val">${st.conversion_rate_pct}%</div><div class="s-lbl">Conversion Free → Premium</div></div>
+          <div class="card stat-card"><div class="s-ico">📅</div><div class="s-val">${st.premium_monthly} / ${st.premium_yearly}</div><div class="s-lbl">Mensuels / Annuels</div></div>
+          <div class="card stat-card"><div class="s-ico">⏳</div><div class="s-val">${st.pending_payments}</div><div class="s-lbl">Paiements en attente</div></div>
+          <div class="card stat-card"><div class="s-ico">🤖</div><div class="s-val">${st.ai_interactions_month}</div><div class="s-lbl">Interactions IA (mois)</div></div>
+          <div class="card stat-card"><div class="s-ico">💰</div><div class="s-val">${st.ai_cost_estimate_fcfa_month} F</div><div class="s-lbl">Coût IA estimé (mois)</div></div>
+          <div class="card stat-card"><div class="s-ico">🔁</div><div class="s-val">${st.churn_rate_pct_30j}%</div><div class="s-lbl">Résiliation 30 j</div></div>
+        </div>
+        <div class="card mt-2">
+          <b>💸 Revenus par devise</b>
+          <small class="muted" style="display:block;">MRR = revenu mensuel récurrent (abonnement annuel compté ÷ 12) · ARR = MRR × 12 · Encaissé = paiements confirmés. À ne PAS additionner avec les revenus récurrents annualisés.</small>
+          <div class="table-scroll mt-2"><table class="data money-table">
+            <tr><th>Devise</th><th>MRR</th><th>ARR</th><th>Encaissé (total)</th></tr>
+            ${curList.map((c) => `<tr><td><b>${c}</b></td><td>${mrrOf(c)}</td><td>${arrOf(c)}</td><td>${colOf(c)}</td></tr>`).join("")}
+          </table></div>
+        </div>
+        <div class="card mt-2">
+          <b>🎫 Plans et tarifs</b>
+          <small class="muted" style="display:block;">Changer un prix crée une NOUVELLE ligne active (l'ancienne est conservée) : les abonnements en cours gardent leur prix. Prix officiels — ne pas modifier sans autorisation : 1 500 FCFA/mois · 12 000 FCFA/an · 3 $/mois · 24 $/an.</small>
+          <div id="m-plans" class="mt-2">${rows.map((p) => `
+            <div class="setting-row"><span class="s-key">${esc(p.code)}</span>
+              <span class="s-desc">${esc(p.name)} · ${p.is_active ? "actif" : "inactif"}</span>
+              <button class="btn btn-soft btn-sm" data-plan-toggle="${p.id}" data-to="${!p.is_active}">${p.is_active ? "Désactiver" : "Activer"}</button>
+            </div>
+            ${(p.pricing || []).map((pr) => `
+            <div class="setting-row" style="padding-left:18px;"><span class="s-key">${pr.currency} ${pr.amount} / ${pr.billing_interval === "yearly" ? "an" : "mois"} · ${esc(pr.region)}</span>
+              <span class="s-desc">${pr.is_active ? "ligne active" : "inactive"}</span>
+              ${pr.is_active ? `<button class="btn btn-ghost btn-sm" data-price-off="${pr.id}">Désactiver</button>` : ""}
+            </div>`).join("")}
+          `).join("")}</div>
+          <div class="add-pricing-row mt-2">
+            <label>Plan<select class="input" id="mp-plan">${rows.map((p) => `<option value="${p.id}">${esc(p.code)}</option>`).join("")}</select></label>
+            <label>Devise<select class="input" id="mp-cur"><option>XAF</option><option>XOF</option><option>USD</option><option>EUR</option></select></label>
+            <label>Montant<input class="input" id="mp-amt" type="number" min="0" step="0.01" style="width:110px;"></label>
+            <label>Période<select class="input" id="mp-iv"><option value="monthly">mensuel</option><option value="yearly">annuel</option></select></label>
+            <label>Région<input class="input" id="mp-reg" value="zone_fcfa" style="width:130px;"></label>
+            <button class="btn btn-primary btn-sm" id="mp-add">➕ Créer la ligne</button>
+          </div>
+        </div>
+        <div class="card mt-2">
+          <b>🤖 Quotas IA (interactions/mois)</b>
+          <small class="muted" style="display:block;">Défauts officiels : Free 10, Premium 100. Modifiables ici, journalisés, appliqués côté serveur.</small>
+          <div class="add-pricing-row mt-2">
+            <label>Free<input class="input" id="mq-free" type="number" min="0" style="width:100px;" value="${qf ? parseInt(qf.value, 10) || qf.value : ""}"></label>
+            <label>Premium<input class="input" id="mq-premium" type="number" min="1" style="width:100px;" value="${qp ? parseInt(qp.value, 10) || qp.value : ""}"></label>
+            <button class="btn btn-primary btn-sm" id="mq-save">💾 Enregistrer</button>
+          </div>
+        </div>
+        <div class="card mt-2">
+          <b>🧾 Paiements</b> <small class="muted">— validez SEULEMENT après vérification de la preuve (référence + montant reçus). La validation active l'accès Premium côté serveur.</small>
+          <div class="flex mt-2"><button class="btn btn-soft btn-sm" id="m-load-pays">🔄 Charger les paiements</button></div>
+          <div id="m-pays"></div>
+        </div>
+        <div class="card mt-2">
+          <b>👥 Abonnements</b>
+          <div class="flex mt-2"><button class="btn btn-soft btn-sm" id="m-load-subs">🔄 Charger les abonnements</button></div>
+          <div id="m-subs"></div>
+        </div>
+        <div class="card mt-2">
+          <b>📤 Export des données (CSV)</b>
+          <div class="flex mt-2" style="gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-soft btn-sm" data-export="subscriptions">Abonnements</button>
+            <button class="btn btn-soft btn-sm" data-export="payments">Paiements</button>
+            <button class="btn btn-soft btn-sm" data-export="events">Événements</button>
+            <button class="btn btn-soft btn-sm" data-export="ai_usage">Usage IA</button>
+          </div>
+        </div>`;
+
+      $all("[data-plan-toggle]", body).forEach((b) => b.addEventListener("click", async () => {
+        try { await APP_STATE.backend.adminSetPlanActive(b.dataset.planToggle, b.dataset.to === "true"); toast("✓", "success"); renderAdminMoney(body); }
+        catch (e) { toast(e.message, "error"); }
+      }));
+      $all("[data-price-off]", body).forEach((b) => b.addEventListener("click", async () => {
+        try { await APP_STATE.backend.adminDeactivatePricing(b.dataset.priceOff); toast("✓", "success"); renderAdminMoney(body); }
+        catch (e) { toast(e.message, "error"); }
+      }));
+      $("#mp-add", body).addEventListener("click", async () => {
+        const amt = parseFloat($("#mp-amt", body).value);
+        if (isNaN(amt) || amt < 0) { toast("Montant invalide", "error"); return; }
+        try {
+          await APP_STATE.backend.adminAddPricing($("#mp-plan", body).value, $("#mp-cur", body).value,
+            amt, $("#mp-iv", body).value, $("#mp-reg", body).value.trim() || "international");
+          toast("✓ Nouvelle ligne de tarif créée", "success"); renderAdminMoney(body);
+        } catch (e) { toast(e.message, "error"); }
+      });
+      $("#mq-save", body).addEventListener("click", async () => {
+        const f = parseInt($("#mq-free", body).value, 10), pr = parseInt($("#mq-premium", body).value, 10);
+        if (isNaN(f) || isNaN(pr)) { toast("Quotas invalides", "error"); return; }
+        try { await APP_STATE.backend.adminSetAiQuota(f, pr); toast("✓ Quotas mis à jour (journalisé)", "success"); }
+        catch (e) { toast(e.message, "error"); }
+      });
+
+      const loadPayments = async () => {
+        $("#m-pays", body).innerHTML = `<div class="skeleton"></div>`;
+        try {
+          const pays = await APP_STATE.backend.adminListPayments(null, 100);
+          const arrP = Array.isArray(pays) ? pays : [];
+          $("#m-pays", body).innerHTML = arrP.length ? `<div class="table-scroll"><table class="data money-table">
+            <tr><th>Date</th><th>Email</th><th>Montant</th><th>Référence</th><th>Statut</th><th>Plan</th><th></th></tr>
+            ${arrP.map((p) => `<tr><td>${fmtDate(p.created_at)}</td><td>${esc(p.email || "")}</td><td>${moneyFmt(p.amount, p.currency)}</td><td>${esc(p.provider_reference)}</td>
+              <td><span class="sub-status st-${p.status === "confirmed" ? "confirmed" : p.status === "pending" ? "pending" : "rejected"}">${t("st." + p.status)}</span></td>
+              <td>${esc(p.plan_code || "—")}</td>
+              <td>${p.status === "pending" ? `<span class="flex" style="gap:4px;"><button class="btn btn-primary btn-sm" data-pay-ok="${p.id}">✓ Valider</button><button class="btn btn-ghost btn-sm" data-pay-ko="${p.id}">✕ Rejeter</button></span>` : ""}</td></tr>`).join("")}
+          </table></div>` : `<p class="muted" style="font-size:.85rem;">Aucun paiement enregistré.</p>`;
+          $all("[data-pay-ok]", body).forEach((b) => b.addEventListener("click", async () => {
+            try { await APP_STATE.backend.adminConfirmPayment(b.dataset.payOk); toast("✓ Confirmé — accès Premium activé", "success"); loadPayments(); }
+            catch (e) { toast(e.message, "error"); }
+          }));
+          $all("[data-pay-ko]", body).forEach((b) => b.addEventListener("click", async () => {
+            const reason = prompt("Motif du rejet (journalisé) :") || "";
+            try { await APP_STATE.backend.adminRejectPayment(b.dataset.payKo, reason); toast("Paiement rejeté", "success"); loadPayments(); }
+            catch (e) { toast(e.message, "error"); }
+          }));
+        } catch (e) { $("#m-pays", body).innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
+      };
+      $("#m-load-pays", body).addEventListener("click", loadPayments);
+
+      const loadSubs = async () => {
+        $("#m-subs", body).innerHTML = `<div class="skeleton"></div>`;
+        try {
+          const subs = await APP_STATE.backend.adminListSubscriptions(100, 0, null);
+          const arrS = Array.isArray(subs) ? subs : [];
+          $("#m-subs", body).innerHTML = arrS.length ? `<div class="table-scroll"><table class="data money-table">
+            <tr><th>Email</th><th>Plan</th><th>Statut</th><th>Tarif</th><th>Début</th><th>Expiration</th><th>Paiements ✓</th></tr>
+            ${arrS.map((x) => `<tr><td>${esc(x.email || "")}</td><td>${esc(x.plan_name || "")}</td>
+              <td><span class="sub-status st-${esc(x.status)}">${t("st." + x.status)}</span></td>
+              <td>${x.amount != null ? moneyFmt(x.amount, x.currency) : "—"}</td>
+              <td>${x.started_at ? fmtDate(x.started_at) : "—"}</td><td>${x.expires_at ? fmtDate(x.expires_at) : "—"}</td>
+              <td>${x.payments_confirmed}</td></tr>`).join("")}
+          </table></div>` : `<p class="muted" style="font-size:.85rem;">Aucun abonnement.</p>`;
+        } catch (e) { $("#m-subs", body).innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
+      };
+      $("#m-load-subs", body).addEventListener("click", loadSubs);
+
+      const doExport = async (kind) => {
+        try {
+          const rowsX = await APP_STATE.backend.adminExportMonetization(kind);
+          const arrX = Array.isArray(rowsX) ? rowsX : [];
+          if (!arrX.length) { toast("Aucune donnée à exporter", "error"); return; }
+          const cols = Object.keys(arrX[0]);
+          const cell = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""').replace(/\r?\n/g, " ") + '"';
+          const csv = "\uFEFF" + cols.join(",") + "\n" + arrX.map((r) => cols.map((c) => cell(r[c])).join(",")).join("\n");
+          const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "majoop_" + kind + "_" + new Date().toISOString().slice(0, 10) + ".csv";
+          document.body.appendChild(a); a.click(); a.remove();
+          URL.revokeObjectURL(a.href);
+          toast("✓ Export " + kind + " (" + arrX.length + " lignes)", "success");
+        } catch (e) { toast(e.message || "Erreur export", "error"); }
+      };
+      $all("[data-export]", body).forEach((b) => b.addEventListener("click", () => doExport(b.dataset.export)));
+    } catch (e) {
+      body.innerHTML = `<div class="card center">${esc(e.message)}</div>`;
+    }
   };
 
   const load = async () => {

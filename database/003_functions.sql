@@ -364,8 +364,8 @@ begin
   select * into v_key from public.exercise_answer_keys where exercise_id = p_exercise;
   if not found then raise exception 'MAJOOP: exercice non corrige'; end if;
 
-  perform public.evaluate_answer(v_ex.type, v_key.correct, v_key.accepted, p_answer,
-                                 v_ok, v_ratio, v_expected);
+  select * into v_ok, v_ratio, v_expected
+    from public.evaluate_answer(v_ex.type, v_key.correct, v_key.accepted, p_answer);
 
   insert into public.exercise_attempts (user_id, exercise_id, answer, is_correct, score_ratio)
   values (auth.uid(), p_exercise, coalesce(p_answer, '{}'::jsonb), v_ok, v_ratio);
@@ -373,7 +373,7 @@ begin
   v_xp := 0;
   if v_ok then
     v_xp := public.award_xp(auth.uid(), 'exercise', p_exercise::text,
-                            (public.get_setting('xp_correct_answer', '10'))::int,
+                            (public.get_setting('xp_correct_answer', '10'))::text::int,
                             jsonb_build_object('type', v_ex.type, 'lesson', v_ex.lesson_id));
     perform public.progress_mission(auth.uid(), 'answer_exercises', 1);
   end if;

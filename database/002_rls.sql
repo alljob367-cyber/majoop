@@ -16,8 +16,12 @@ language sql stable security definer set search_path = public as $$
   );
 $$;
 
-revoke all on function public.is_admin() from public, anon;
-grant execute on function public.is_admin() to authenticated;
+-- NB : EXECUTE est accordé aussi à anon — les policies de contenu public
+-- (cours, modules, leçons, exercices) appellent is_admin() même pour anon ;
+-- sans ce grant, la lecture publique échouerait (permission denied).
+-- La fonction ne révèle rien (false si non connecté).
+revoke all on function public.is_admin() from public;
+grant execute on function public.is_admin() to anon, authenticated;
 
 -- ============================================================
 -- 2. ACTIVER RLS PARTOUT

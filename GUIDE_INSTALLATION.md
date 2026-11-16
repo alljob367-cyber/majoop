@@ -27,9 +27,14 @@ Dans le Dashboard Supabase → **SQL Editor** → « New query » → colle le c
 | 2 | `database/002_rls.sql` | Row Level Security, politiques, verrou `is_admin` |
 | 3 | `database/003_functions.sql` | XP serveur, corrections, missions, badges, admin, IA |
 | 4 | `database/004_seed.sql` | Paramètres, badges, 4 langues, 32 leçons, 192 exercices |
-| 5 | `database/005_tests_securite.sql` | Tests de sécurité — doit finir par « ✅ TOUS LES TESTS DE SÉCURITÉ SONT PASSÉS » |
+| 5 | `database/006_ai_providers.sql` | Réglages multi-fournisseurs IA (OpenRouter, Mistral) |
+| 6 | `database/007_monetisation.sql` | **Monétisation** : plans, grille tarifaire officielle, quotas IA mensuels, RPC paiements/admin |
+| 7 | `database/005_tests_securite.sql` | Tests de sécurité — doit finir par « ✅ TOUS LES TESTS DE SÉCURITÉ SONT PASSÉS » |
+| 8 | `database/008_tests_monetisation.sql` | **Tests monétisation** — doit finir par « ✅ TOUS LES TESTS DE MONÉTISATION SONT PASSÉS » |
 
-Chaque script est idempotent : tu peux le relancer sans dupliquer. Si le script 005 lève une exception, ne continue pas : corrige la cause (le message indique le test en échec).
+Chaque script est idempotent : tu peux le relancer sans dupliquer. Si un script de test lève une exception, ne continue pas : corrige la cause (le message indique le test en échec).
+
+> 💎 **Monétisation** : la grille officielle (Free 0 · Premium 1 500 FCFA/mois · 12 000 FCFA/an · 3 $/24 $) est créée par le script 007 — détail complet dans [MODULE_MONETISATION.md](MODULE_MONETISATION.md). Les quotas IA (10 Free / 100 Premium par mois) sont actifs dès le déploiement de l'Edge Function (Étape 4).
 
 ## Étape 3 — Nommmer le premier administrateur (1 min)
 

@@ -8,6 +8,7 @@
 do $$
 declare
   v_n int;
+  v_ok boolean;
 begin
   -- ============================================================
   -- 0. PRÉREQUIS
@@ -50,8 +51,8 @@ begin
   end;
 
   -- Les clés de correction doivent être IMPOSSIBLES à lire pour anon
-  declare
-    v_ok boolean := false;
+  -- (v_ok est déclaré dans le bloc externe pour rester visible après l'exception)
+  v_ok := false;
   begin
     execute 'set local role anon';
     perform 1 from public.exercise_answer_keys limit 1;
@@ -148,7 +149,7 @@ begin
   raise notice 'OK 4b — contenu de leçon servi sans réponses';
 
   -- Mauvaise réponse : 0 XP
-  select id into v_ex.id from public.exercises
+  select id into v_ex from public.exercises
    where lesson_id = v_lesson and position = 1;
   v_res := public.submit_exercise(v_ex.id, to_jsonb(-1));
   if (v_res->>'correct')::boolean then

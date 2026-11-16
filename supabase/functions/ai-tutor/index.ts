@@ -1,12 +1,17 @@
 // ============================================================
 // MAJOOP — Edge Function : ai-tutor
 // Professeur IA MULTI-FOURNISSEURS : Gemini, OpenRouter, Mistral.
-//  • Auth JWT obligatoire, quotas journaliers, anti-spam
-//  • Clés API stockées en secrets serveur (jamais côté client)
+//  • Auth JWT obligatoire, quota MENSUEL par plan (10 Free / 100 Premium),
+//    compté côté serveur de façon atomique (ai_consume_quota, table ai_usage)
+//  • Anti-spam + garde anti-abus journalière + limite de taille des messages
+//  • max_tokens configurable (ai_max_output_tokens) pour maîtriser les coûts
+//  • Clés API stockées en secrets serveur (JAMAIS côté client, jamais en réponse)
 //  • Fournisseur choisi via admin_settings.ai_provider :
 //      "auto" (repli automatique) | "gemini" | "openrouter" | "mistral"
 //  • En mode auto, si un fournisseur échoue (quota, indispo),
 //    le suivant disponible répond — l'apprenant n'est jamais bloqué.
+//  • Si TOUS les fournisseurs échouent : l'interaction est REMBOURSÉE
+//    (ai_refund_quota) — l'utilisateur ne paie jamais une erreur serveur.
 //
 // Déploiement :
 //   supabase functions deploy ai-tutor
@@ -121,6 +126,7 @@ export async function callGemini(
   model: string,
   systemPrompt: string,
   history: { role: string; content: string }[],
+  maxTokens: number = 600,
 ): Promise<string> {
   const contents = history
     .filter((m) => m.role === "user" || m.role === "tutor")
@@ -132,7 +138,7 @@ export async function callGemini(
   const body = {
     systemInstruction: { parts: [{ text: systemPrompt }] },
     contents,
-    generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+    generationConfig: { temperature: 0.7, maxOutputTokens: maxTokens },
   };
 
   const resp = await fetch(
@@ -166,6 +172,7 @@ export async function callChatCompletions(
   model: string,
   systemPrompt: string,
   history: { role: string; content: string }[],
+  maxTokens: number = 600,
 ): Promise<string> {
   const baseUrl = provider === "openrouter"
     ? "https://openrouter.ai/api/v1/chat/completions"
@@ -188,7 +195,7 @@ export async function callChatCompletions(
       model,
       messages: toChatMessages(systemPrompt, history),
       temperature: 0.7,
-      max_tokens: 600,
+      max_tokens: maxTokens,
     }),
   });
 
@@ -209,9 +216,10 @@ export async function callProvider(
   model: string,
   systemPrompt: string,
   history: { role: string; content: string }[],
+  maxTokens: number = 600,
 ): Promise<string> {
-  if (provider === "gemini") return callGemini(apiKey, model, systemPrompt, history);
-  return callChatCompletions(provider, apiKey, model, systemPrompt, history);
+  if (provider === "gemini") return callGemini(apiKey, model, systemPrompt, history, maxTokens);
+  return callChatCompletions(provider, apiKey, model, systemPrompt, history, maxTokens);
 }
 
 /** Lit un réglage (admin_settings) via RPC — service_role. */
@@ -319,18 +327,36 @@ export async function handler(req: Request): Promise<Response> {
       });
     }
 
-    // ---------- 4. Quota + anti-spam + enregistrement du message ----------
+    // ---------- 4. Quota MENSUEL par plan + anti-spam + enregistrement ----------
+    // ai_consume_quota (serveur) : compte 1 interaction de façon ATOMIQUE,
+    // applique ai_quota_free / ai_quota_premium (configurables admin),
+    // la limite de taille (ai_max_message_chars) et la garde journalière.
     const { data: quota, error: quotaError } = await adminClient.rpc(
       "ai_consume_quota",
       { p_conversation: conversationId, p_user_msg: message.trim() },
     );
     if (quotaError) throw quotaError;
     if (quota?.ok === false) {
-      return new Response(
-        JSON.stringify({ error: quota.message, reason: quota.reason }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
+      const status = quota.reason === "quota" ? 402 : quota.reason === "too_long" ? 400 : 429;
+      const payload: Record<string, unknown> = { error: quota.message, reason: quota.reason };
+      if (quota.reason === "quota") {
+        payload.used = quota.used;
+        payload.limit = quota.limit;
+        payload.reset_at = quota.reset_at;
+        payload.upgrade = quota.upgrade;
+      }
+      return new Response(JSON.stringify(payload), {
+        status,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
+    // Infos de consommation à renvoyer à l'UI (compteur, date de réinitialisation)
+    const usage = {
+      used: quota?.used ?? null,
+      limit: quota?.limit ?? null,
+      reset_at: quota?.reset_at ?? null,
+      plan: quota?.plan ?? "free",
+    };
 
     // ---------- 5. Résolution du fournisseur IA (multi-provider) ----------
     const providerSetting = await readSetting(adminClient, "ai_provider", "auto");
@@ -371,6 +397,7 @@ export async function handler(req: Request): Promise<Response> {
     const history = (ctx?.history ?? []) as { role: string; content: string }[];
 
     // ---------- 7. Appel avec repli automatique ----------
+    const maxTokens = parseInt(await readSetting(adminClient, "ai_max_output_tokens", "600"), 10) || 600;
     let reply = "";
     let usedProvider: ProviderName | null = null;
     let usedModel = "";
@@ -381,7 +408,7 @@ export async function handler(req: Request): Promise<Response> {
       const model = await readSetting(adminClient, settingKey, DEFAULT_MODELS[provider]);
       const apiKey = Deno.env.get(PROVIDER_KEYS[provider])!;
       try {
-        reply = await callProvider(provider, apiKey, model, systemPrompt, history);
+        reply = await callProvider(provider, apiKey, model, systemPrompt, history, maxTokens);
         usedProvider = provider;
         usedModel = model;
         break;
@@ -393,12 +420,18 @@ export async function handler(req: Request): Promise<Response> {
     }
 
     if (!usedProvider) {
+      // Tous les fournisseurs ont échoué : l'interaction n'a pas produit de
+      // réponse → REMBOURSÉE (le compteur mensuel redescend d'une unité).
+      try {
+        await adminClient.rpc("ai_refund_quota", { p_conversation: conversationId });
+      } catch { /* le compteur reste inchangé en cas d'échec du remboursement */ }
       const allQuota = errorsTried.length > 0 && errorsTried.every((e) => e.includes("_429"));
       return new Response(
         JSON.stringify({
           error: allQuota
             ? "Limite des modèles gratuits atteinte pour aujourd'hui — réessaie plus tard !"
             : `Erreur du professeur IA (${errorsTried.join(" | ")})`,
+          refunded: true,
         }),
         { status: allQuota ? 429 : 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
@@ -411,7 +444,7 @@ export async function handler(req: Request): Promise<Response> {
     });
 
     return new Response(
-      JSON.stringify({ reply, conversationId, provider: usedProvider, model: usedModel }),
+      JSON.stringify({ reply, conversationId, provider: usedProvider, model: usedModel, usage }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
