@@ -14,7 +14,7 @@ majoop/                            ← dépôt Git PRÊT À POUSSER (branche mai
 ├── DEPLOIEMENT_GITHUB.md          ← mise en ligne GitHub Pages en 4 manipulations (voie web ou git)
 ├── DIAGNOSTIC.md                   ← diagnostic environnement + architecture + sécurité
 ├── GUIDE_INSTALLATION.md           ← les étapes manuelles exactes (Supabase, IA Gemini/OpenRouter/Mistral, hébergement)
-├── .github/workflows/pages.yml    ← publication automatique sur GitHub Pages à chaque push
+├── docs/                           ← copie de publication servie par GitHub Pages (branche main + dossier /docs)
 ├── captures/                       ← 7 captures d'écran à jour de l'application
 ├── database/
 │   ├── 001_schema.sql              ← 19 tables, index, FK, triggers (syntaxe vérifiée)

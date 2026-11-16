@@ -23,7 +23,7 @@ Deux voies possibles — même résultat. La **voie B** est recommandée : les m
 
 ## Voie B — Dépôt complet prêt à pousser (recommandée)
 
-Le dossier `majoop/` de ce livrable est **déjà un dépôt Git prêt** (branche `main`, tout committé, workflow de déploiement inclus dans `.github/workflows/pages.yml`). Chaque push sur `main` republie automatiquement l'app — aucun build, aucune manipulation après coup.
+Le dossier `majoop/` de ce livrable est **déjà un dépôt Git prêt** (branche `main`, tout committé). Le site publié est la copie `docs/index.html` du fichier de l'application `app/index.html` : GitHub Pages le sert en mode « Deploy from a branch » — ni build ni Actions nécessaires, et **aucune portée `workflow` requise** sur ton token.
 
 1. **Crée le dépôt** (vide, public, nommé `majoop`) sur [github.com/new](https://github.com/new). Ne coche PAS « Add a README ».
 2. **Pousse le dépôt préparé** — sur ta machine, dans le dossier `majoop` :
@@ -33,11 +33,13 @@ Le dossier `majoop/` de ce livrable est **déjà un dépôt Git prêt** (branche
    git push -u origin main
    ```
 
-   *(GitHub te demandera de t'identifier : sur le web c'est le navigateur, en ligne de commande utilise un [Personal Access Token](https://github.com/settings/tokens) comme mot de passe — jamais ton mot de passe de compte.)*
-3. **Active Pages** (une seule fois) : dépôt → **Settings → Pages** → Source : **« GitHub Actions »**.
-4. Onglet **Actions** du dépôt : le workflow « Déployer MAJOOP sur GitHub Pages » tourne (~1 min). L'URL est alors en ligne.
+   *(GitHub te demandera de t'identifier : sur le web c'est le navigateur, en ligne de commande utilise un [Personal Access Token](https://github.com/settings/tokens) avec la portée `repo` comme mot de passe — jamais ton mot de passe de compte.)*
+3. **Active Pages** (une seule fois) : dépôt → **Settings → Pages** → « Build and deployment » → Source : **« Deploy from a branch »** → Branch : `main`, dossier : **`/docs`** → Save.
+4. Attends ~1 minute : l'URL `https://TON-PSEUDO.github.io/majoop/` est en ligne.
 
-Mises à jour suivantes : modifie les fichiers, puis `git add -A && git commit -m "…" && git push` → republié automatiquement.
+Mises à jour suivantes : modifie `app/index.html` (le fichier canonique), puis **copie-le vers `docs/index.html`** (`cp app/index.html docs/index.html`), committe et pousse → le site se republie tout seul.
+
+> **Option workflow (facultative)** : une première version de ce livrable embarquait `.github/workflows/pages.yml`, qui publie automatiquement `app/index.html` via GitHub Actions. GitHub **refuse de pousser un fichier de workflow** avec un token qui n'a que la portée `repo` (portée `workflow` exigée) — le fichier a donc été retiré du dépôt et conservé hors dépôt (`scripts/pages_workflow_backup.yml` du livrable). Pour l'utiliser un jour : crée un token avec les portées `repo` **+** `workflow`, remets le fichier dans `.github/workflows/`, pousse, puis passe Pages en source « GitHub Actions ».
 
 ---
 
@@ -53,8 +55,8 @@ Mises à jour suivantes : modifie les fichiers, puis `git add -A && git commit -
 
 | Symptôme | Cause | Solution |
 |---|---|---|
-| 404 sur l'URL | Pages pas activé, ou mauvaise branche/dossier | Settings → Pages : voie A = `main` + `/ (root)` ; voie B = « GitHub Actions » |
-| Le workflow échoue dans l'onglet Actions | Pages activé en « Deploy from a branch » alors que le workflow exige « GitHub Actions » | Settings → Pages → Source = GitHub Actions, relance le workflow (Re-run) |
+| 404 sur l'URL | Pages pas activé, ou mauvaise branche/dossier | Settings → Pages : branche `main` + dossier **`/docs`** (les deux voies) |
+| Le workflow échoue dans l'onglet Actions | Option workflow utilisée sans portée `workflow` sur le token | token avec `repo` + `workflow`, ou reste en « Deploy from a branch » + `/docs` |
 | L'app s'affiche mais « MODE DÉMO » | Supabase non connecté dans les Réglages | checklist #1 |
 | Le tuteur IA répond mais une erreur CORS apparaît | `ALLOWED_ORIGIN` ne contient pas l'URL Pages | checklist #2 (ou laisse `*`) |
 | Modification poussée mais site inchangé | cache Pages | attends ~1 min puis Ctrl+F5 (rechargement forcé) |
