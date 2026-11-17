@@ -653,6 +653,17 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
   </section>
 
   <section class="landing-section">
+    <a class="card" href="#/concours" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:linear-gradient(135deg,var(--violet-soft,#ede9fe),var(--amber-soft,#fef3c7));padding:20px 24px;">
+      <div style="font-size:2.2rem;">🏆</div>
+      <div style="flex:1;min-width:240px;">
+        <div style="font-weight:800;font-size:1.05rem;" data-i18n="concours.cardTitle">Concours hebdo : 25 000 F aux meilleurs</div>
+        <div class="muted" style="font-size:.9rem;" data-i18n="concours.cardSub">Les 3 meilleurs apprenants de la semaine sont payés en Mobile Money.</div>
+      </div>
+      <span class="btn btn-coral btn-sm" data-i18n="concours.cardCta">Voir</span>
+    </a>
+  </section>
+
+  <section class="landing-section">
     <h2 data-i18n="feat.title">Tout ce qu'il faut pour progresser</h2>
     <p class="section-sub" data-i18n="feat.sub">Une méthode complète : comprendre, s'entraîner, jouer, parler. Chaque activité te rapporte de l'XP et fait avancer ton parcours.</p>
     <div class="grid grid-4">
@@ -794,10 +805,10 @@ window.MAJOOP_CONFIG = {
 const I18N = {
   fr: {
     "nav.login": "Se connecter", "nav.register": "S'inscrire", "nav.demo": "Mode démo",
-    "hero.badge": "🚀 Nouveau · Professeur IA inclus",
+    "hero.badge": "🏆 Concours : 25 000 F chaque semaine · Apprends et gagne",
     "hero.title": "Apprends une langue.<br>Joue. Progresse. Parle.",
     "hero.lead": "Des leçons interactives, des jeux éducatifs et un professeur intelligent qui s'adapte à ton niveau. 15 minutes par jour suffisent pour te lancer.",
-    "hero.cta1": "Commencer gratuitement", "hero.cta2": "Essayer la démo",
+    "hero.cta1": "S'inscrire — 3 000 F", "hero.cta2": "Essayer la démo",
     "feat.title": "Tout ce qu'il faut pour progresser",
     "feat.sub": "Une méthode complète : comprendre, s'entraîner, jouer, parler. Chaque activité te rapporte de l'XP et fait avancer ton parcours.",
     "feat.c1": "Cours structurés", "feat.c1p": "Des leçons du niveau A1 au C2 : objectif, explication claire, vocabulaire, exemples et test de validation.",
@@ -811,8 +822,8 @@ const I18N = {
     "tst.f2": "— « Théo M. », profil fictif de démonstration",
     "tst.f3": "— « Laura P. », profil fictif de démonstration",
     "faq.title": "Questions fréquentes",
-    "faq.q1": "MAJOOP est-il vraiment gratuit ?",
-    "faq.a1": "Oui. La version de lancement repose entièrement sur des services gratuits (Supabase Free, tier gratuit de Gemini). Une version Premium pourra arriver plus tard sans supprimer ce qui est gratuit.",
+    "faq.q1": "L'inscription est-elle payante ?",
+    "faq.a1": "Oui : MAJOOP est « sans gratuit » — l'inscription démarre à 3 000 F par mois. En échange, tu participes au concours hebdomadaire : chaque semaine, 25 000 F répartis entre les 3 meilleurs apprenants (🥇 15 000 · 🥈 6 000 · 🥉 4 000).",
     "faq.q2": "Comment fonctionne le professeur IA ?",
     "faq.a2": "Il connaît ta langue d'interface, la langue étudiée, ton niveau CECRL et tes erreurs récentes. Chaque échange passe par un serveur sécurisé : quota quotidien et protection anti-spam inclus.",
     "faq.q3": "Mes données sont-elles protégées ?",
@@ -938,8 +949,8 @@ const I18N = {
     "nav.tarifs": "Tarifs",
     "price.month": "/ mois", "price.year": "/ an", "price.best": "MEILLEURE VALEUR",
     "price.freeNote": "Gratuit à vie — aucune carte bancaire",
-    "price.yearNote": "≈ 1 000 FCFA/mois · Économise 6 000 FCFA",
-    "price.ctaFree": "Commencer gratuitement", "price.ctaPremium": "Choisir Premium", "price.ctaYearly": "Choisir Premium Annuel",
+    "price.yearNote": "≈ 2 500 F/mois · Économise 6 000 F",
+    "price.ctaFree": "Commencer gratuitement", "price.ctaPremium": "S'inscrire — Mensuel", "price.ctaYearly": "S'inscrire à l'année",
     "price.current": "Ta formule actuelle", "price.unavailable": "Tarif non configuré pour cette devise",
     "price.cmpTitle": "Comparaison des formules", "price.faqTitle": "FAQ des abonnements",
     "price.termsTitle": "Conditions de renouvellement et de résiliation",
@@ -954,7 +965,7 @@ const I18N = {
     "sub.title": "Mon abonnement", "sub.sub": "Ta formule, ton usage IA et tes paiements.", "sub.open": "Ouvrir",
     "sub.profSub": "Formule, date d'expiration, renouvellement et historique de paiements.",
     "sub.usage": "Interactions IA ce mois", "sub.resets": "Réinitialisation le", "sub.started": "Début",
-    "sub.expires": "Expiration", "sub.daysLeft": "{n} jours restants", "sub.noExpiry": "Accès gratuit, sans expiration",
+    "sub.expires": "Expiration", "sub.daysLeft": "{n} jours restants", "sub.noExpiry": "Accès sans expiration",
     "sub.payment": "Dernier paiement", "sub.history": "Historique des paiements", "sub.noPayments": "Aucun paiement pour le moment.",
     "sub.cancel": "Annuler le renouvellement", "sub.cancelOk": "Renouvellement annulé — accès conservé jusqu'à la fin payée.",
     "sub.cancelConfirm": "Annuler le renouvellement ? Ton accès restera actif jusqu'à la fin de la période déjà payée.",
@@ -964,32 +975,55 @@ const I18N = {
     "payw.used": "{u}/{l} interactions IA utilisées ce mois-ci",
     "payw.reset": "Ton compteur se réinitialise le {d}.",
     "payw.sub2": "Débloque tous les cours, tous les jeux et 100 interactions IA par mois.",
-    "payw.cta": "Voir les formules Premium", "payw.keep": "Continuer gratuitement",
-    "st.free": "Gratuit", "st.pending": "En attente", "st.active": "Actif", "st.expired": "Expiré",
+    "payw.cta": "Voir les formules d'inscription", "payw.keep": "Fermer",
+    "st.free": "Non inscrit", "st.pending": "En attente", "st.active": "Actif", "st.expired": "Expiré",
     "st.cancelled": "Annulé", "st.payment_failed": "Paiement échoué", "st.confirmed": "Confirmé",
     "st.rejected": "Rejeté", "st.failed": "Échoué",
     "admin.tab.money": "Monétisation",
     "ai.quotaChip": "IA : {u}/{l} ce mois", "ai.quotaReset": "reset le {d}",
-    "pricing.title": "Tarifs MAJOOP", "pricing.sub": "Commence gratuitement. Passe à Premium quand tu veux aller plus loin — annulable à tout moment.",
-    "pricing.fallback": "Grille officielle affichée : les tarifs en ligne et les paiements s'activent dès que l'administrateur exécute les migrations de monétisation (007) sur le serveur.",
-    "pricing.fallbackToast": "Paiements pas encore actifs : l'administrateur doit exécuter les migrations de monétisation (007) sur Supabase.",
-    "price.faq.q1": "Comment souscrire à Premium ?",
-    "price.faq.a1": "Choisis la formule mensuelle ou annuelle : tu paies par Mobile Money ou virement (instructions affichées à l'écran), tu saisis ta référence de transaction, puis un administrateur vérifie ton paiement. Ton accès Premium est activé dès la validation — généralement sous 24 à 48 heures.",
+    "pricing.title": "Tarifs MAJOOP", "pricing.sub": "Aucun plan gratuit : l'inscription démarre à 3 000 F. Et chaque semaine, 25 000 F aux meilleurs apprenants.",
+    "pricing.fallback": "Grille officielle affichée : les tarifs en ligne et les paiements s'activent dès que l'administrateur exécute les migrations de monétisation sur le serveur.",
+    "pricing.fallbackToast": "Paiements pas encore actifs : l'administrateur doit exécuter les migrations de monétisation sur Supabase.",
+    "gate.required": "Inscription requise : l'accès démarre à 3 000 F — et chaque semaine, 25 000 F aux meilleurs !",
+    "price.notEnrolled": "Non inscrit",
+    "cmp.m": "Inscription Mensuelle", "cmp.y": "Inscription Annuelle",
+    "cmp.durM": "1 mois", "cmp.durY": "12 mois",
+    "price.faq.q6": "Comment sont payés les gains du concours ?",
+    "price.faq.a6": "À la clôture (dimanche minuit UTC), le top 3 de la semaine est figé par le serveur. Les gains (🥇 15 000 F · 🥈 6 000 F · 🥉 4 000 F) sont versés par Mobile Money sous 72 h ; chaque versement est tracé avec sa référence.",
+    "concours.title": "Concours hebdomadaire", "concours.sub": "Tu apprends, tu progresses, tu gagnes : chaque semaine, 25 000 F aux meilleurs apprenants.",
+    "concours.prizePool": "Cagnotte", "concours.closesIn": "Clôture dans", "concours.closed": "Clôturé",
+    "concours.podium": "Podium de la semaine", "concours.tableTitle": "Classement (top 10)",
+    "concours.rank": "#", "concours.player": "Apprenant", "concours.xp": "XP de la semaine", "concours.days": "Jours actifs",
+    "concours.you": "toi", "concours.myRank": "Ta position",
+    "concours.rankN": "Rang {n}", "concours.gap": "Encore {n} XP pour intégrer le podium 💪",
+    "concours.notEligible": "Non inscrit — participe en t'inscrivant à partir de 3 000 F",
+    "concours.empty": "Le classement démarre dès les premières inscriptions. Sois le premier sur le podium !",
+    "concours.ctaJoin": "Participer", "concours.demoNote": "MODE DÉMO — classement simulé.",
+    "concours.rules": "Règles du jeu",
+    "concours.rule1": "📅 La semaine va du lundi 00:00 UTC au dimanche minuit UTC.",
+    "concours.rule2": "💰 Cagnotte : 25 000 F chaque semaine — 🥇 15 000 F · 🥈 6 000 F · 🥉 4 000 F.",
+    "concours.rule3": "✅ Éligible : tout apprenant dont l'inscription est ACTIVE (à partir de 3 000 F).",
+    "concours.rule4": "📊 Classement : XP gagnés pendant la semaine (leçons, exercices, jeux, missions). Les XP sont validés côté serveur — impossible de tricher.",
+    "concours.rule5": "💸 Gains payés par Mobile Money sous 72 h après la clôture ; chaque versement est tracé avec sa référence.",
+    "concours.rule6": "⚖️ Départages : XP de la semaine, puis nombre de jours actifs, puis heure du premier XP.",
+    "concours.cardTitle": "Concours hebdo : 25 000 F aux meilleurs", "concours.cardSub": "Les 3 meilleurs apprenants de la semaine sont payés en Mobile Money.", "concours.cardCta": "Voir",
+    "price.faq.q1": "Comment m'inscrire ?",
+    "price.faq.a1": "Choisis l'Inscription Mensuelle ou Annuelle : tu paies par Mobile Money ou virement (instructions affichées à l'écran), tu saisis ta référence de transaction, puis un administrateur vérifie ton paiement. Ton accès est activé dès la validation — généralement sous 24 à 48 heures.",
     "price.faq.q2": "Quand commence et se termine mon accès ?",
     "price.faq.a2": "L'accès démarre à la validation de ton paiement et couvre exactement la période payée : 1 mois ou 12 mois. La date d'expiration exacte est toujours visible dans « Mon abonnement ».",
     "price.faq.q3": "Puis-je annuler ? Que deviennent mes droits ?",
     "price.faq.a3": "Oui, à tout moment depuis « Mon abonnement ». Tu conserves TOUS tes droits jusqu'à la fin de la période déjà payée — l'annulation empêche seulement la prolongation, elle ne coupe jamais un accès payé.",
     "price.faq.q4": "Que se passe-t-il quand mes interactions IA sont épuisées ?",
-    "price.faq.a4": "Le compteur se remplit au fil de tes messages et se réinitialise automatiquement le 1er de chaque mois. Free : 10 interactions par mois. Premium : 100 interactions par mois. Aucune formule n'est présentée comme illimitée.",
+    "price.faq.a4": "Le compteur se remplit au fil de tes messages et se réinitialise automatiquement le 1er de chaque mois. Inscription : 100 interactions par mois. Aucune formule n'est présentée comme illimitée.",
     "price.faq.q5": "Comment mes paiements sont-ils protégés ?",
-    "price.faq.a5": "Le montant provient toujours de la grille officielle vérifiée côté serveur — jamais du navigateur. Chaque paiement est enregistré avec une référence unique, et une validation humaine (administrateur) précède toute activation de Premium.",
+    "price.faq.a5": "Le montant provient toujours de la grille officielle vérifiée côté serveur — jamais du navigateur. Chaque paiement est enregistré avec une référence unique, et une validation humaine (administrateur) précède toute activation.",
   },
   en: {
     "nav.login": "Log in", "nav.register": "Sign up", "nav.demo": "Demo mode",
-    "hero.badge": "🚀 New · AI tutor included",
+    "hero.badge": "🏆 Weekly contest: win 25,000 F · Learn & earn",
     "hero.title": "Learn a language.<br>Play. Progress. Speak.",
     "hero.lead": "Interactive lessons, educational games and a smart tutor that adapts to your level. 15 minutes a day is enough to get started.",
-    "hero.cta1": "Start for free", "hero.cta2": "Try the demo",
+    "hero.cta1": "Register — 3,000 F", "hero.cta2": "Try the demo",
     "feat.title": "Everything you need to progress",
     "feat.sub": "A complete method: understand, practice, play, speak. Every activity earns XP and moves your journey forward.",
     "feat.c1": "Structured courses", "feat.c1p": "Lessons from A1 to C2: goal, clear explanation, vocabulary, examples and a validation test.",
@@ -1002,8 +1036,8 @@ const I18N = {
     "tst.f1": "— 'Camille D.', fictional demo profile", "tst.f2": "— 'Théo M.', fictional demo profile",
     "tst.f3": "— 'Laura P.', fictional demo profile",
     "faq.title": "Frequently asked questions",
-    "faq.q1": "Is MAJOOP really free?",
-    "faq.a1": "Yes. The launch version runs entirely on free tiers (Supabase Free, Gemini free tier). A Premium plan may come later without removing what is free.",
+    "faq.q1": "Is registration paid?",
+    "faq.a1": "Yes — MAJOOP is “no free tier”: registration starts at 3,000 F per month. In exchange, you enter the weekly contest: every week, 25,000 F is shared among the top 3 learners (🥇 15,000 · 🥈 6,000 · 🥉 4,000).",
     "faq.q2": "How does the AI tutor work?",
     "faq.a2": "It knows your interface language, target language, CEFR level and recent mistakes. Every exchange goes through a secure server: daily quota and anti-spam included.",
     "faq.q3": "Is my data protected?",
@@ -1126,8 +1160,8 @@ const I18N = {
     "nav.tarifs": "Pricing",
     "price.month": "/ month", "price.year": "/ year", "price.best": "BEST VALUE",
     "price.freeNote": "Free forever — no credit card",
-    "price.yearNote": "≈ $1.2/month · Save 6,000 FCFA",
-    "price.ctaFree": "Start for free", "price.ctaPremium": "Choose Premium", "price.ctaYearly": "Choose Annual Premium",
+    "price.yearNote": "≈ 2,500 F/month · Save 6,000 F",
+    "price.ctaFree": "Start for free", "price.ctaPremium": "Register — Monthly", "price.ctaYearly": "Register — Yearly",
     "price.current": "Your current plan", "price.unavailable": "Price not configured for this currency",
     "price.cmpTitle": "Plan comparison", "price.faqTitle": "Subscription FAQ",
     "price.termsTitle": "Renewal and cancellation terms",
@@ -1142,7 +1176,7 @@ const I18N = {
     "sub.title": "My subscription", "sub.sub": "Your plan, AI usage and payments.", "sub.open": "Open",
     "sub.profSub": "Plan, expiry date, renewal and payment history.",
     "sub.usage": "AI interactions this month", "sub.resets": "Resets on", "sub.started": "Start",
-    "sub.expires": "Expiry", "sub.daysLeft": "{n} days left", "sub.noExpiry": "Free access, no expiry",
+    "sub.expires": "Expiry", "sub.daysLeft": "{n} days left", "sub.noExpiry": "Access with no expiry",
     "sub.payment": "Last payment", "sub.history": "Payment history", "sub.noPayments": "No payments yet.",
     "sub.cancel": "Cancel renewal", "sub.cancelOk": "Renewal cancelled — access kept until the paid period ends.",
     "sub.cancelConfirm": "Cancel renewal? Your access stays active until the end of the period already paid.",
@@ -1152,25 +1186,48 @@ const I18N = {
     "payw.used": "{u}/{l} AI interactions used this month",
     "payw.reset": "Your counter resets on {d}.",
     "payw.sub2": "Unlock all courses, all games and 100 AI interactions per month.",
-    "payw.cta": "See Premium plans", "payw.keep": "Continue for free",
-    "st.free": "Free", "st.pending": "Pending", "st.active": "Active", "st.expired": "Expired",
+    "payw.cta": "See registration plans", "payw.keep": "Close",
+    "st.free": "Not enrolled", "st.pending": "Pending", "st.active": "Active", "st.expired": "Expired",
     "st.cancelled": "Cancelled", "st.payment_failed": "Payment failed", "st.confirmed": "Confirmed",
     "st.rejected": "Rejected", "st.failed": "Failed",
     "admin.tab.money": "Monetization",
     "ai.quotaChip": "AI: {u}/{l} this month", "ai.quotaReset": "resets on {d}",
-    "pricing.title": "MAJOOP Pricing", "pricing.sub": "Start for free. Upgrade whenever you want to go further — cancel anytime.",
-    "pricing.fallback": "Official grid shown: online pricing and payments activate as soon as the administrator runs the monetization migrations (007) on the server.",
-    "pricing.fallbackToast": "Payments not active yet: the administrator must run the monetization migrations (007) on Supabase.",
-    "price.faq.q1": "How do I subscribe to Premium?",
-    "price.faq.a1": "Pick the monthly or yearly plan: pay by Mobile Money or bank transfer (instructions shown on screen), enter your transaction reference, then an administrator verifies your payment. Premium activates as soon as it is confirmed — usually within 24 to 48 hours.",
+    "pricing.title": "MAJOOP Pricing", "pricing.sub": "No free tier: registration starts at 3,000 F. And every week, 25,000 F goes to the best learners.",
+    "pricing.fallback": "Official grid shown: online pricing and payments activate as soon as the administrator runs the monetization migrations on the server.",
+    "pricing.fallbackToast": "Payments not active yet: the administrator must run the monetization migrations on Supabase.",
+    "gate.required": "Registration required: access starts at 3,000 F — and every week, 25,000 F goes to the best!",
+    "price.notEnrolled": "Not enrolled",
+    "cmp.m": "Monthly registration", "cmp.y": "Yearly registration",
+    "cmp.durM": "1 month", "cmp.durY": "12 months",
+    "price.faq.q6": "How are contest prizes paid?",
+    "price.faq.a6": "At closing time (Sunday midnight UTC), the server freezes the weekly top 3. Prizes (🥇 15,000 F · 🥈 6,000 F · 🥉 4,000 F) are sent via Mobile Money within 72 hours; every payout is tracked with its reference.",
+    "concours.title": "Weekly contest", "concours.sub": "You learn, you progress, you win: every week, 25,000 F goes to the best learners.",
+    "concours.prizePool": "Prize pool", "concours.closesIn": "Closes in", "concours.closed": "Closed",
+    "concours.podium": "Podium of the week", "concours.tableTitle": "Leaderboard (top 10)",
+    "concours.rank": "#", "concours.player": "Learner", "concours.xp": "XP this week", "concours.days": "Active days",
+    "concours.you": "you", "concours.myRank": "Your position",
+    "concours.rankN": "Rank {n}", "concours.gap": "Only {n} more XP to reach the podium 💪",
+    "concours.notEligible": "Not enrolled — join by registering from 3,000 F",
+    "concours.empty": "The leaderboard starts as soon as the first learners register. Be the first on the podium!",
+    "concours.ctaJoin": "Join", "concours.demoNote": "DEMO MODE — simulated leaderboard.",
+    "concours.rules": "Rules",
+    "concours.rule1": "📅 The week runs from Monday 00:00 UTC to Sunday midnight UTC.",
+    "concours.rule2": "💰 Prize pool: 25,000 F every week — 🥇 15,000 F · 🥈 6,000 F · 🥉 4,000 F.",
+    "concours.rule3": "✅ Eligible: every learner with an ACTIVE registration (from 3,000 F).",
+    "concours.rule4": "📊 Ranking: XP earned during the week (lessons, exercises, games, missions). XP is validated server-side — cheating is impossible.",
+    "concours.rule5": "💸 Prizes are paid via Mobile Money within 72 hours after closing; every payout is tracked with its reference.",
+    "concours.rule6": "⚖️ Tie-breakers: weekly XP, then active days, then time of the first XP.",
+    "concours.cardTitle": "Weekly contest: 25,000 F for the best", "concours.cardSub": "The top 3 learners of the week are paid via Mobile Money.", "concours.cardCta": "See",
+    "price.faq.q1": "How do I register?",
+    "price.faq.a1": "Pick the Monthly or Yearly registration: pay by Mobile Money or bank transfer (instructions shown on screen), enter your transaction reference, then an administrator verifies your payment. Your access activates as soon as it is confirmed — usually within 24 to 48 hours.",
     "price.faq.q2": "When does my access start and end?",
     "price.faq.a2": "Access starts when your payment is validated and covers exactly the paid period: 1 month or 12 months. The exact expiry date is always visible in “My subscription”.",
     "price.faq.q3": "Can I cancel? What happens to my rights?",
     "price.faq.a3": "Yes, anytime from “My subscription”. You keep ALL your rights until the end of the period you already paid for — cancelling only prevents the next extension, it never cuts paid access.",
     "price.faq.q4": "What happens when I run out of AI interactions?",
-    "price.faq.a4": "The counter fills as you chat and resets automatically on the 1st of each month. Free: 10 interactions per month. Premium: 100 interactions per month. No plan is advertised as unlimited.",
+    "price.faq.a4": "The counter fills as you chat and resets automatically on the 1st of each month. Registration: 100 interactions per month. No plan is advertised as unlimited.",
     "price.faq.q5": "How are my payments protected?",
-    "price.faq.a5": "The amount always comes from the official grid verified server-side — never from the browser. Every payment is stored with a unique reference, and a human validation (administrator) precedes any Premium activation.",
+    "price.faq.a5": "The amount always comes from the official grid verified server-side — never from the browser. Every payment is stored with a unique reference, and a human validation (administrator) precedes any activation.",
   },
   es: {
     "nav.login": "Iniciar sesión", "nav.register": "Registrarse", "nav.demo": "Modo demo",
@@ -1773,21 +1830,19 @@ class DemoBackend {
   async getPricing() {
     const cur = (currency, amount, interval, region) => ({ currency, amount, billing_interval: interval, region });
     return [
-      { code: "free", name: "Free", id: null, is_active: true,
-        description: "Gratuit : 4 langues, leçons gratuites, exercices de base, jeux de base, XP, badges, séries, 10 interactions IA/mois.",
-        pricing: [cur("XAF", 0, "monthly", "zone_fcfa")] },
-      { code: "premium_monthly", name: "Premium Mensuel", id: null, is_active: true,
-        description: "1 500 FCFA par mois : tous les cours, tous les niveaux, tous les exercices, tous les jeux, 100 interactions IA/mois, statistiques avancées, sans publicité.",
-        pricing: [cur("XAF", 1500, "monthly", "zone_fcfa"), cur("XOF", 1500, "monthly", "zone_fcfa"), cur("USD", 3, "monthly", "international")] },
-      { code: "premium_yearly", name: "Premium Annuel", id: null, is_active: true,
-        description: "12 000 FCFA par an (12 mois, ≈ 1 000 FCFA/mois, économie de 6 000 FCFA) : mêmes avantages que le mensuel.",
-        pricing: [cur("XAF", 12000, "yearly", "zone_fcfa"), cur("XOF", 12000, "yearly", "zone_fcfa"), cur("USD", 24, "yearly", "international")] },
+      { code: "premium_monthly", name: "Inscription Mensuelle", id: null, is_active: true,
+        description: "3 000 F par mois : accès complet (tous les cours, niveaux, exercices, jeux, 100 interactions IA/mois) + concours hebdomadaire : 25 000 F aux meilleurs chaque semaine.",
+        pricing: [cur("XAF", 3000, "monthly", "zone_fcfa"), cur("XOF", 3000, "monthly", "zone_fcfa"), cur("USD", 6, "monthly", "international")] },
+      { code: "premium_yearly", name: "Inscription Annuelle", id: null, is_active: true,
+        description: "30 000 F par an (12 mois, ≈ 2 500 F/mois, économie de 6 000 F) : mêmes avantages que le mensuel, concours hebdomadaire inclus.",
+        pricing: [cur("XAF", 30000, "yearly", "zone_fcfa"), cur("XOF", 30000, "yearly", "zone_fcfa"), cur("USD", 60, "yearly", "international")] },
     ];
   }
   async getMySubscription() {
     const q = await this.demoAiUsage();
-    return { plan: "free", plan_name: "Free", status: "free", started_at: null, expires_at: null,
-             auto_renew: false, days_left: null, pricing: null, payment: null, expiry_warning: false, usage: q };
+    return { plan: "premium_monthly", plan_name: "Inscription Mensuelle", status: "active",
+             started_at: new Date().toISOString(), expires_at: new Date(Date.now() + 25 * 864e5).toISOString(),
+             auto_renew: false, days_left: 25, pricing: null, payment: null, expiry_warning: false, usage: q };
   }
   async getAiQuota() { return this.demoAiUsage(); }
   async getPaymentInstructions() {
@@ -1798,6 +1853,25 @@ class DemoBackend {
   }
   async cancelRenewal() { return { ok: false, message: "MODE DÉMO : aucun abonnement actif." }; }
   async getPaymentHistory() { return []; }
+  getCompetitionOverview() {
+    const d = new Date(); const day = (d.getUTCDay() + 6) % 7;
+    const mon = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - day));
+    return { week_start: mon.toISOString().slice(0, 10), closes_at: new Date(mon.getTime() + 7 * 864e5 - 1000).toISOString(),
+             enabled: true, prize_pool: 25000, split: { "1": 15000, "2": 6000, "3": 4000 }, status: "open", top3: [] };
+  }
+  getWeeklyLeaderboard() {
+    return [
+      { rank: 1, user_id: "demo-1", name: "Awa K.", weekly_xp: 540, days_active: 6, is_me: false },
+      { rank: 2, user_id: "demo-2", name: "Jean-Marc", weekly_xp: 480, days_active: 5, is_me: false },
+      { rank: 3, user_id: "demo-3", name: "Fatou D.", weekly_xp: 415, days_active: 7, is_me: false },
+      { rank: 4, user_id: "demo-4", name: "Serge N.", weekly_xp: 380, days_active: 4, is_me: false },
+      { rank: 5, user_id: "demo-5", name: "Marie-Claire", weekly_xp: 310, days_active: 5, is_me: false },
+    ];
+  }
+  getMyWeeklyRank() {
+    return { eligible: true, week_start: this.getCompetitionOverview().week_start,
+             weekly_xp: 310, rank: 5, gap_to_podium: 105 };
+  }
 }
 
 /* Bot de démonstration : réponses simulées, clairement identifiées. */
@@ -1979,6 +2053,9 @@ class SupabaseBackend {
     return data || [];
   }
   getMySubscription() { return this.rpc("my_subscription"); }
+  getWeeklyLeaderboard(pWeekStart) { return this.rpc("get_weekly_leaderboard", pWeekStart ? { p_week_start: pWeekStart } : {}); }
+  getMyWeeklyRank() { return this.rpc("get_my_weekly_rank", {}); }
+  getCompetitionOverview() { return this.rpc("get_competition_overview", {}); }
   getAiQuota() { return this.rpc("my_ai_quota"); }
   getPaymentInstructions() { return this.rpc("get_payment_instructions"); }
   submitManualPayment(pricingId, reference, note) {
@@ -2092,7 +2169,7 @@ function route() {
   APP_STATE.route = hash;
   const landing = $("#landing-root"), app = $("#app-root"), bare = $("#bare-root");
   const publicRoutes = ["#/", "#/login", "#/register", "#/forgot"];
-  const bareRoutes = ["#/login", "#/register", "#/forgot", "#/onboarding", "#/result", "#/pricing"];
+  const bareRoutes = ["#/login", "#/register", "#/forgot", "#/onboarding", "#/result", "#/pricing", "#/concours"];
 
   const inApp = APP_STATE.session;
   const isLanding = hash === "#/" || hash === "" || hash === "#";
@@ -2115,6 +2192,13 @@ window.addEventListener("hashchange", route);
 /* ============================================================
    8. INITIALISATION
    ============================================================ */
+async function ensureMySub() {
+  if (APP_STATE.mySub) return APP_STATE.mySub;
+  try { APP_STATE.mySub = await APP_STATE.backend.getMySubscription(); } catch (e) { return null; }
+  return APP_STATE.mySub;
+}
+function invalidateMySub() { APP_STATE.mySub = null; }
+
 async function initBackend() {
   loadCfg();
   const cfg = window.MAJOOP_CONFIG;
@@ -2204,6 +2288,7 @@ function renderBare(hash) {
   if (hash === "#/onboarding") return pageOnboarding(root);
   if (hash === "#/result") return pageResult(root);
   if (hash === "#/pricing") return pagePricing(root, { standalone: true });
+  if (hash === "#/concours") return pageConcours(root, { standalone: true });
 }
 
 function authShell(inner) {
@@ -2450,6 +2535,18 @@ async function renderApp(hash) {
     go("#/onboarding"); return;
   }
 
+  // Paywall « sans gratuit » : le contenu requiert une inscription ACTIVE.
+  // (Réglages, profil, admin, tarifs, concours et mon abonnement restent libres.)
+  const gated = ["dashboard", "languages", "courses", "lesson", "games", "game", "ai", "conversation", "progress"];
+  if (APP_STATE.mode === "supabase" && gated.includes(page)) {
+    const mySub = await ensureMySub();
+    if (mySub && !String(mySub.plan || "").startsWith("premium")) {
+      toast(t("gate.required"), "error");
+      go("#/pricing");
+      return;
+    }
+  }
+
   if (["dashboard", "courses", "lesson", "games", "ai", "progress", "languages"].includes(page)) {
     await ensureDashboard();
   }
@@ -2467,6 +2564,7 @@ async function renderApp(hash) {
     else if (page === "settings") await pageSettings(main);
     else if (page === "admin") await pageAdmin(main);
     else if (page === "pricing") await pagePricing(main, { standalone: false });
+    else if (page === "concours") await pageConcours(main, { standalone: false });
     else if (page === "subscription") await pageMySubscription(main);
     else main.innerHTML = `<div class="card center">404 · <a href="#/dashboard">${t("t.back")}</a></div>`;
   } catch (e) {
@@ -2530,6 +2628,15 @@ async function pageDashboard(main) {
       </div>
       <a class="btn btn-coral" href="#/lesson/${encodeURIComponent(nextL.id)}">${d.stats.lessons_completed > 0 ? t("dash.continue") : t("dash.startFirst")}</a>
     </div>` : `<div class="card mt-2 center">${t("dash.noLesson")}</div>`}
+
+    <a class="card mt-2" href="#/concours" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div style="font-size:1.8rem;">🏆</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;">${t("concours.cardTitle")}</div>
+        <div class="muted" style="font-size:.85rem;">${t("concours.cardSub")}</div>
+      </div>
+      <span class="btn btn-coral btn-sm">${t("concours.cardCta")}</span>
+    </a>
 
     <div class="grid grid-4 mt-3">
       <div class="card stat-card"><div class="s-ico">📚</div><div class="s-val">${d.stats.lessons_completed}</div><div class="s-lbl">${t("dash.stat.lessons")}</div></div>
@@ -4053,6 +4160,7 @@ async function openPaymentModal(plan, pricingRow) {
     btn.disabled = true;
     try {
       const r = await APP_STATE.backend.submitManualPayment(pricingRow.id, ref, note);
+      invalidateMySub();
       $("#pay-result", bd).innerHTML = `<div class="mt-2" style="background:var(--amber-soft);border-radius:var(--radius-sm);padding:12px;">
         <b>⏳ ${t("st.pending")}</b>
         <p class="muted" style="font-size:.85rem;margin-top:4px;">${t("pay.pendingMsg")} <a href="#/subscription" id="pay-go-sub"><b>${t("sub.title")}</b></a></p>
@@ -4064,6 +4172,96 @@ async function openPaymentModal(plan, pricingRow) {
       btn.disabled = false;
     }
   });
+}
+
+let concoursTimer = null;
+async function pageConcours(root, opts) {
+  const standalone = !!(opts && opts.standalone);
+  if (concoursTimer) { clearInterval(concoursTimer); concoursTimer = null; }
+  let ov = null, lb = [], my = null;
+  try { ov = await APP_STATE.backend.getCompetitionOverview(); } catch (e) { ov = null; }
+  try { lb = (await APP_STATE.backend.getWeeklyLeaderboard()) || []; } catch (e) { lb = []; }
+  if (APP_STATE.session) { try { my = await APP_STATE.backend.getMyWeeklyRank(); } catch (e) { my = null; } }
+  const podium = ov && ov.top3 && ov.top3.length ? ov.top3 : lb.slice(0, 3);
+  const medal = { 1: "🥇", 2: "🥈", 3: "🥉" };
+  const split = (ov && ov.split) || { "1": 15000, "2": 6000, "3": 4000 };
+  const rows = lb.slice(0, 10).map((r) => `
+    <tr${r.is_me ? ' style="background:var(--amber-soft);"' : ""}>
+      <td><b>${medal[r.rank] || "#" + r.rank}</b></td>
+      <td>${esc(r.name)}${r.is_me ? ` <span class="chip chip-green">${t("concours.you")}</span>` : ""}</td>
+      <td>${r.weekly_xp}</td><td>${r.days_active}</td></tr>`).join("");
+  const myBand = my ? `
+    <div class="card mt-2" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div style="font-size:1.6rem;">📍</div>
+      <div style="flex:1;">
+        <b>${t("concours.myRank")}</b> : ${my.eligible
+          ? `${t("concours.rankN", { n: my.rank || "—" })} · ${my.weekly_xp || 0} XP`
+          : `<span class="muted">${t("concours.notEligible")}</span>`}
+        ${my.eligible && my.gap_to_podium != null ? `<div class="muted" style="font-size:.85rem;">${t("concours.gap", { n: my.gap_to_podium })}</div>` : ""}
+      </div>
+      ${my.eligible ? "" : `<a class="btn btn-coral" href="#/pricing">${t("concours.ctaJoin")}</a>`}
+    </div>` : "";
+  const closesAt = ov && ov.closes_at ? new Date(ov.closes_at) : null;
+  root.innerHTML = `${standalone && !APP_STATE.session
+    ? `<div class="auth-wrap"><div class="auth-card" style="max-width:900px;">
+        <div class="auth-logo"><a class="logo" href="#/"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a></div>`
+    : `<div>`}
+    <div class="flex" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div><div class="page-title">🏆 ${t("concours.title")}</div><div class="page-sub">${t("concours.sub")}</div></div>
+      ${closesAt ? `<div class="card" style="padding:10px 16px;text-align:center;"><small class="muted">${t("concours.closesIn")}</small><div id="cd-remain" style="font-weight:800;font-size:1.1rem;">—</div></div>` : ""}
+    </div>
+    <div class="card mt-2" style="background:linear-gradient(135deg,var(--violet-soft,#ede9fe),var(--amber-soft,#fef3c7));">
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+        <div style="font-size:2.4rem;">💰</div>
+        <div style="flex:1;">
+          <div style="font-weight:800;font-size:1.15rem;">${t("concours.prizePool")} : ${moneyFmt(25000, "XAF")} / ${APP_STATE.uiLang === "fr" ? "semaine" : "week"}</div>
+          <div class="muted" style="font-size:.9rem;">🥇 ${moneyFmt(split["1"], "XAF")} · 🥈 ${moneyFmt(split["2"], "XAF")} · 🥉 ${moneyFmt(split["3"], "XAF")}</div>
+        </div>
+        <a class="btn btn-primary" href="#/pricing">${t("concours.ctaJoin")}</a>
+      </div>
+    </div>
+    ${APP_STATE.mode === "demo" ? `<div class="demo-banner mt-2">🧪 ${t("concours.demoNote")}</div>` : ""}
+    ${myBand}
+    <div class="card mt-2">
+      <h3 style="font-weight:800;">🏆 ${t("concours.podium")}</h3>
+      ${podium.length ? `<div class="mt-2" style="display:flex;gap:10px;flex-wrap:wrap;">
+        ${podium.map((r) => `<div class="card" style="flex:1;min-width:180px;text-align:center;padding:18px;">
+          <div style="font-size:2rem;">${medal[r.rank] || ""}</div>
+          <div style="font-weight:700;">${esc(r.name)}</div>
+          <div class="muted" style="font-size:.85rem;">${r.weekly_xp} XP</div>
+          <div style="font-weight:800;margin-top:4px;">${moneyFmt(split[String(r.rank)] || 0, "XAF")}</div>
+        </div>`).join("")}
+      </div>` : `<p class="muted mt-2">${t("concours.empty")}</p>`}
+    </div>
+    <div class="card mt-2">
+      <h3 style="font-weight:800;">📊 ${t("concours.tableTitle")}</h3>
+      ${lb.length ? `<div class="table-scroll mt-2"><table class="cmp-table">
+        <tr><th>${t("concours.rank")}</th><th>${t("concours.player")}</th><th>${t("concours.xp")}</th><th>${t("concours.days")}</th></tr>
+        ${rows}
+      </table></div>` : `<p class="muted mt-2">${t("concours.empty")}</p>`}
+    </div>
+    <div class="card mt-2">
+      <h3 style="font-weight:800;">📜 ${t("concours.rules")}</h3>
+      <ul class="mt-2" style="line-height:1.8;">
+        <li>${t("concours.rule1")}</li><li>${t("concours.rule2")}</li><li>${t("concours.rule3")}</li>
+        <li>${t("concours.rule4")}</li><li>${t("concours.rule5")}</li><li>${t("concours.rule6")}</li>
+      </ul>
+    </div>
+  ${standalone && !APP_STATE.session ? `</div></div>` : `</div>`}`;
+  if (closesAt) {
+    const el = $("#cd-remain", root);
+    const tick = () => {
+      if (!document.body.contains(el)) { clearInterval(concoursTimer); concoursTimer = null; return; }
+      const ms = closesAt - Date.now();
+      if (ms <= 0) { el.textContent = t("concours.closed"); clearInterval(concoursTimer); concoursTimer = null; return; }
+      const d = Math.floor(ms / 864e5), h = Math.floor((ms % 864e5) / 36e5),
+            m = Math.floor((ms % 36e5) / 6e4), sec = Math.floor((ms % 6e4) / 1e3);
+      el.textContent = (d ? d + "j " : "") + String(h).padStart(2, "0") + ":"
+        + String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+    };
+    tick();
+    concoursTimer = setInterval(tick, 1000);
+  }
 }
 
 function officialFallbackPricing() {
@@ -4087,6 +4285,7 @@ async function pagePricing(root, opts) {
   const standalone = !!(opts && opts.standalone);
   let plans = null;
   try { plans = await APP_STATE.backend.getPricing(); } catch (e) { plans = null; }
+  if (plans) plans = plans.filter((p) => p.is_active !== false);
   if (!plans || !plans.length) plans = officialFallbackPricing();
   let currentPlan = null;
   if (APP_STATE.session) {
@@ -4120,11 +4319,10 @@ function renderPricingInto(body, plans, currentPlan) {
     if (!p) return null;
     return (p.pricing || []).find((pr) => pr.currency === cur && pr.is_active !== false) || null;
   };
-  const cmpRow = (label, a, b, c) => `
+  const cmpRow = (label, a, b) => `
     <tr><td>${label}</td>
-      <td class="${a ? "on" : "off"}">${a ? "✓" : "—"}</td>
-      <td class="${b ? "on" : "off"}">${b ? "✓" : "—"}</td>
-      <td class="${c ? "on" : "off"}">${c ? "✓" : "—"}</td></tr>`;
+      <td class="${a === false ? "off" : "on"}">${a === true ? "✓" : a === false ? "—" : a}</td>
+      <td class="${b === false ? "off" : "on"}">${b === true ? "✓" : b === false ? "—" : b}</td></tr>`;
   const card = (p, pr, o) => `
     <div class="price-card ${o.cls || ""}">
       ${o.flag ? `<div class="price-flag">${o.flag}</div>` : ""}
@@ -4135,7 +4333,7 @@ function renderPricingInto(body, plans, currentPlan) {
       <p class="muted" style="font-size:.82rem;flex:1;">${esc(p.description || "")}</p>
       ${o.button}
     </div>`;
-  const free = byCode("free"), pm = byCode("premium_monthly"), py = byCode("premium_yearly");
+  const pm = byCode("premium_monthly"), py = byCode("premium_yearly");
   const prM = priceOf("premium_monthly"), prY = priceOf("premium_yearly");
   body.innerHTML = `
     <div class="flex" style="justify-content:space-between;align-items:center;">
@@ -4146,8 +4344,6 @@ function renderPricingInto(body, plans, currentPlan) {
     </div>
     ${isFallback ? `<div class="demo-banner" style="background:var(--amber-soft);color:#8a5b00;">⚙️ ${t("pricing.fallback")}</div>` : ""}
     <div class="pricing-grid mt-2">
-      ${card(free, priceOf("free"), { cls: "free-card", note: t("price.freeNote"),
-        button: `<button class="btn btn-soft" data-act="free">🚀 ${t("price.ctaFree")}</button>` })}
       ${card(pm, prM, { button: `<button class="btn btn-primary" data-act="premium_monthly">💎 ${t("price.ctaPremium")}</button>` })}
       ${card(py, prY, { cls: prY ? "best" : "", flag: prY ? t("price.best") : null,
         note: prY && cur === "XAF" ? t("price.yearNote") : (prY && cur === "XOF" ? t("price.yearNote") : ""),
@@ -4156,22 +4352,16 @@ function renderPricingInto(body, plans, currentPlan) {
     <div class="card mt-3">
       <h3 style="font-weight:800;">📋 ${t("price.cmpTitle")}</h3>
       <div class="table-scroll mt-2"><table class="cmp-table">
-        <tr><th></th><th>Free</th><th>Premium Mensuel</th><th>Premium Annuel</th></tr>
-        ${cmpRow("🌐 Quatre langues (anglais, français, espagnol, allemand)", 1, 1, 1)}
-        ${cmpRow("📚 Leçons gratuites + exercices de base", 1, 1, 1)}
-        ${cmpRow("🎮 Jeux éducatifs de base", 1, 1, 1)}
-        ${cmpRow("🏅 XP, badges, séries quotidiennes", 1, 1, 1)}
-        ${cmpRow("📈 Suivi de progression standard", 1, 1, 1)}
-        ${cmpRow("📚 Tous les cours et tous les niveaux", 0, 1, 1)}
-        ${cmpRow("✏️ Tous les exercices", 0, 1, 1)}
-        ${cmpRow("🎮 Tous les jeux", 0, 1, 1)}
-        ${cmpRow("🤖 Professeur IA — 10 interactions / mois", 1, 0, 0)}
-        ${cmpRow("🤖 Professeur IA — 100 interactions / mois", 0, 1, 1)}
-        ${cmpRow("💬 Conversations personnalisées", 0, 1, 1)}
-        ${cmpRow("✏️ Corrections détaillées + explications grammaticales", 0, 1, 1)}
-        ${cmpRow("🕘 Historique complet des conversations", 0, 1, 1)}
-        ${cmpRow("📊 Statistiques avancées", 0, 1, 1)}
-        ${cmpRow("🚫 Sans publicité (la version Free pourra en comporter)", 0, 1, 1)}
+        <tr><th></th><th>${t("cmp.m")}</th><th>${t("cmp.y")}</th></tr>
+        ${cmpRow("🌐 Quatre langues (anglais, français, espagnol, allemand)", 1, 1)}
+        ${cmpRow("📚 Tous les cours, tous les niveaux, tous les exercices", 1, 1)}
+        ${cmpRow("🎮 Tous les jeux éducatifs", 1, 1)}
+        ${cmpRow("🏅 XP, badges, séries quotidiennes", 1, 1)}
+        ${cmpRow("🏆 Concours hebdomadaire — 25 000 F aux meilleurs", 1, 1)}
+        ${cmpRow("🤖 Professeur IA — 100 interactions / mois", 1, 1)}
+        ${cmpRow("💬 Conversations personnalisées + corrections détaillées", 1, 1)}
+        ${cmpRow("📊 Statistiques avancées · Sans publicité", 1, 1)}
+        ${cmpRow("⏳ Durée de l'accès", t("cmp.durM"), t("cmp.durY"))}
       </table></div>
     </div>
     <div class="card mt-2">
@@ -4186,6 +4376,7 @@ function renderPricingInto(body, plans, currentPlan) {
         <details class="faq-item"><summary>${t("price.faq.q3")}</summary><p>${t("price.faq.a3")}</p></details>
         <details class="faq-item"><summary>${t("price.faq.q4")}</summary><p>${t("price.faq.a4")}</p></details>
         <details class="faq-item"><summary>${t("price.faq.q5")}</summary><p>${t("price.faq.a5")}</p></details>
+        <details class="faq-item"><summary>${t("price.faq.q6")}</summary><p>${t("price.faq.a6")}</p></details>
       </div>
     </div>`;
   $all("[data-cur]", body).forEach((b) => b.addEventListener("click", () => {
@@ -4194,7 +4385,6 @@ function renderPricingInto(body, plans, currentPlan) {
   }));
   $all("[data-act]", body).forEach((b) => b.addEventListener("click", () => {
     const act = b.dataset.act;
-    if (act === "free") { go(APP_STATE.session ? "#/dashboard" : "#/register"); return; }
     if (!APP_STATE.session) { go("#/register"); return; }
     const p = byCode(act);
     const pr = priceOf(act);
@@ -4260,6 +4450,7 @@ async function pageMySubscription(main) {
     if (!confirm(t("sub.cancelConfirm"))) return;
     try {
       const r = await APP_STATE.backend.cancelRenewal();
+      invalidateMySub();
       toast(r.message || (r.ok ? t("sub.cancelOk") : t("err.generic")), r.ok ? "success" : "error");
       pageMySubscription(main);
     } catch (e) { toast(e.message || t("err.generic"), "error"); }
