@@ -31,10 +31,12 @@ Dans le Dashboard Supabase → **SQL Editor** → « New query » → colle le c
 | 6 | `database/007_monetisation.sql` | **Monétisation** : plans, grille tarifaire officielle, quotas IA mensuels, RPC paiements/admin |
 | 7 | `database/005_tests_securite.sql` | Tests de sécurité — doit finir par « ✅ TOUS LES TESTS DE SÉCURITÉ SONT PASSÉS » |
 | 8 | `database/008_tests_monetisation.sql` | **Tests monétisation** — doit finir par « ✅ TOUS LES TESTS DE MONÉTISATION SONT PASSÉS » |
+| 9 | `database/009_concours_hebdomadaire.sql` | **V2 sans gratuit + concours** : free désactivé, inscription 3 000 F/mois · 30 000 F/an, tables et RPC du concours hebdomadaire 25 000 F |
+| 10 | `database/010_tests_concours.sql` | **Tests concours** — doit finir par « ✅ TOUS LES TESTS DU CONCOURS SONT PASSÉS » |
 
 Chaque script est idempotent : tu peux le relancer sans dupliquer. Si un script de test lève une exception, ne continue pas : corrige la cause (le message indique le test en échec).
 
-> 💎 **Monétisation** : la grille officielle (Free 0 · Premium 1 500 FCFA/mois · 12 000 FCFA/an · 3 $/24 $) est créée par le script 007 — détail complet dans [MODULE_MONETISATION.md](MODULE_MONETISATION.md). Les quotas IA (10 Free / 100 Premium par mois) sont actifs dès le déploiement de l'Edge Function (Étape 4).
+> 💎 **Monétisation v2 (2026-11-17)** : plus de gratuit — inscription **3 000 F/mois** ou **30 000 F/an** (créée par 007 puis mise à jour par 009), **concours hebdomadaire 25 000 F** aux 3 meilleurs (🥇 15 000 · 🥈 6 000 · 🥉 4 000). Quota IA : 100 interactions/mois pour les inscrits. Détail complet dans [MODULE_MONETISATION.md](MODULE_MONETISATION.md).
 
 ## Étape 3 — Nommmer le premier administrateur (1 min)
 

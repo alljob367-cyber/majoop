@@ -1,4 +1,27 @@
-# 💎 MODULE DE MONÉTISATION — MAJOOP (Free / Premium)
+# 💎 MODULE DE MONÉTISATION — MAJOOP (v2 : sans gratuit + concours)
+
+> ⚡ **V2 — 2026-11-17 (modèle actuel)** : plus de plan gratuit. Inscription **3 000 F/mois** ou **30 000 F/an** (60 $/an, 6 $/mois international), et **CONCOURS HEBDOMADAIRE : 25 000 F chaque semaine** aux 3 meilleurs apprenants (🥇 15 000 · 🥈 6 000 · 🥉 4 000), payés en Mobile Money sous 72 h. Migration `009_concours_hebdomadaire.sql` (appliquée et testée par `010`). Les sections ci-dessous décrivent la base v1 restée valable (paiements, quotas, admin).
+
+## 10. V2 — Concours hebdomadaire (`009_concours_hebdomadaire.sql`)
+
+**Tarifs (lignes actives au 2026-11-17)** : les anciennes lignes (0 / 1 500 / 12 000 / 3 $ / 24 $) sont désactivées (jamais supprimées — historique conservé) ; nouvelles lignes : XAF/XOF 3 000 mensuel · XAF/XOF 30 000 annuel · USD 6 / 60. Le plan `free` est désactivé (`is_active=false`) ; `user_effective_plan` ne renvoie plus que `premium_*` pour les inscrits actifs.
+
+**Tables** : `competition_weeks` (lundi UTC, cagnotte, statut open/distributed) et `competition_winners` (rang 1-3, montant, statut pending/paid, canal + référence de versement) — RLS activées, accès uniquement via RPC.
+
+**RPC publiques** (anon ou authentifié) :
+- `get_weekly_leaderboard(p_week_start default null)` — top 50 : XP de la semaine (lundi 00:00 → dimanche minuit UTC) parmi les inscrits ACTIFS uniquement ; départages : XP, puis jours actifs, puis premier XP.
+- `get_competition_overview()` — semaine courante, clôture, cagnotte, répartition, top 3.
+- `get_my_weekly_rank()` (authentifié) — éligibilité, rang, écart au podium.
+
+**RPC admin** (garde `is_admin()` revérifiée dans chaque fonction) :
+- `admin_close_competition_week(p_week_start)` — fige le podium d'une semaine TERMINÉE (refus sinon), crée les gains `pending` ; idempotent.
+- `admin_mark_winner_paid(p_winner_id, p_channel, p_reference)` — marque payé, une seule fois.
+- `admin_list_competition_weeks(p_limit)` — historique pour l'administration.
+
+**Réglages** (`admin_settings`) : `competition_prize_pool` (25 000), `competition_prize_split` ({"1":15000,"2":6000,"3":4000}), `competition_enabled` (true).
+
+**Front** : page publique `#/concours` (podium, top 10, ta position, compte à rebours, règles), bandeau concours sur la landing et le dashboard, page Tarifs sans carte gratuite, **paywall** : les pages de contenu redirigent vers les tarifs tant que l'inscription n'est pas active (`gate.required`). Process de payout : chaque dimanche ≥ minuit UTC → Administration → Concours → clôturer → payer les 3 gains en Mobile Money et saisir les références.
+
 
 Système de monétisation SaaS complet : deux formules principales (Free, Premium) et deux périodicités (mensuelle, annuelle), multi-devises, avec quotas du professeur IA comptés côté serveur, paiement manuel validé par un administrateur, administration des tarifs et statistiques commerciales.
 
