@@ -616,6 +616,93 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 .add-pricing-row label { font-size:.72rem; color:var(--ink-3); display:flex; flex-direction:column; gap:4px; }
 .cur-chip { border:2px solid var(--line); background:var(--bg-card); border-radius:999px; padding:6px 14px; font-weight:700; font-size:.85rem; cursor:pointer; }
 .cur-chip.active { border-color:var(--brand); color:var(--brand); background:rgba(91,79,233,.08); }
+
+/* ============================================================
+   ANIMATIONS APPRENTISSAGE v2 — l'app prend vie
+   ============================================================ */
+@keyframes shakeX { 10%,90% { transform:translateX(-2px); } 20%,80% { transform:translateX(4px); } 30%,50%,70% { transform:translateX(-7px); } 40%,60% { transform:translateX(7px); } }
+@keyframes popIn { 0% { transform:scale(.55); opacity:0; } 60% { transform:scale(1.09); } 100% { transform:scale(1); opacity:1; } }
+@keyframes flyUp { 0% { opacity:0; transform:translateY(8px) scale(.7); } 18% { opacity:1; transform:translateY(0) scale(1); } 100% { opacity:0; transform:translateY(-64px) scale(1.2); } }
+@keyframes pageIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+@keyframes flameBeat { 0%,100% { transform:scale(1) rotate(-3deg); } 50% { transform:scale(1.22) rotate(4deg); } }
+@keyframes shineSweep { from { left:-40%; } to { left:130%; } }
+@keyframes glowPulse { 0%,100% { box-shadow:0 0 0 0 rgba(91,79,233,.30); } 55% { box-shadow:0 0 0 12px rgba(91,79,233,0); } }
+@keyframes flipPop { 0% { transform:perspective(400px) rotateY(85deg) scale(.92); } 100% { transform:perspective(400px) rotateY(0) scale(1); } }
+@keyframes matchPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.06); } }
+@keyframes floatSoft { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+
+/* Chaque page entre en glissant, sections en cascade */
+#app-main > * { animation: pageIn .32s ease both; }
+#app-main > *:nth-child(2) { animation-delay: .04s; }
+#app-main > *:nth-child(3) { animation-delay: .08s; }
+#app-main > *:nth-child(4) { animation-delay: .12s; }
+#app-main > *:nth-child(5) { animation-delay: .16s; }
+#app-main > *:nth-child(6) { animation-delay: .20s; }
+
+/* Cartes et boutons vivants */
+.card, .price-card, .game-card, .lesson-row, .vocab-card { transition: transform .18s ease, box-shadow .18s ease; }
+.game-card:hover, .vocab-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
+.lesson-row:hover { transform: translateX(4px); border-color: var(--brand); }
+.btn { transition: transform .12s ease, box-shadow .12s ease, filter .12s ease; }
+.btn:hover { filter: brightness(1.05); }
+.btn:active { transform: scale(.95); }
+.btn-primary { animation: glowPulse 2.8s ease-in-out infinite; }
+.stat-card:hover { transform: translateY(-3px); }
+
+/* Barre de progression héro : remplissage animé + reflet balayant */
+.hero-bar { position:relative; background:rgba(255,255,255,.25); height:10px; border-radius:999px; overflow:hidden; }
+.hero-bar > i { display:block; height:100%; width:0; background:#fff; border-radius:999px; transition: width .9s cubic-bezier(.22,1,.36,1); }
+.hero-bar > i::after { content:""; position:absolute; top:0; bottom:0; width:35%; left:-40%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent); animation: shineSweep 2.6s ease-in-out infinite; }
+.hero-bar-wrap { position:relative; }
+/* Progression des exercices : transition fluide aussi */
+.ex-progress i { transition: width .45s cubic-bezier(.22,1,.36,1); }
+
+/* Flamme de série quotidiennes */
+.streak-flame { display:inline-block; animation: flameBeat 1.5s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(255,150,40,.55)); }
+
+/* Options de quiz : entrée en cascade, réussite/erreur animées */
+.opt-btn, .word-chip, .match-item { animation: pageIn .3s ease both; }
+.opt-btn:nth-of-type(1), .match-item:nth-of-type(1) { animation-delay:.03s; }
+.opt-btn:nth-of-type(2), .match-item:nth-of-type(2) { animation-delay:.07s; }
+.opt-btn:nth-of-type(3), .match-item:nth-of-type(3) { animation-delay:.11s; }
+.opt-btn:nth-of-type(4), .match-item:nth-of-type(4) { animation-delay:.15s; }
+.opt-btn.correct, .opt-btn.is-good, .match-item.paired.is-good, .word-chip.is-good, .input.is-good { animation: matchPulse .45s ease; border-color: var(--green) !important; background: var(--green-soft) !important; }
+.opt-btn.wrong, .opt-btn.is-bad, .word-chip.is-bad, .match-item.is-bad, .input.is-bad { animation: shakeX .5s ease; border-color: var(--coral) !important; background: var(--coral-soft) !important; }
+.input.is-good, .input.is-bad { background-clip: padding-box; }
+
+/* Bloc de feedback : pop à l'apparition */
+.feedback.show { animation: popIn .35s cubic-bezier(.22,1.4,.36,1) both; }
+
+/* Étiquette XP volante « +12 XP » */
+.xp-fly { position:fixed; z-index:1500; pointer-events:none; font-weight:900; color:var(--amber,#F59E0B);
+  text-shadow:0 1px 2px rgba(0,0,0,.15); font-size:1.15rem; animation: flyUp .9s ease forwards; }
+
+/* Anneaux de progression : le trait grandit au chargement */
+.anim-ring circle[data-target] { transition: stroke-dasharray .95s cubic-bezier(.22,1,.36,1); }
+.result-wrap .r-emoji { animation: popIn .6s cubic-bezier(.22,1.4,.36,1) both, floatSoft 2.4s ease-in-out .7s infinite; }
+.result-wrap .result-stats .card { animation: popIn .5s ease both; }
+.result-wrap .result-stats .card:nth-child(2) { animation-delay:.25s; }
+
+/* Jeu mémoire : retour de carte façon flip 3D */
+.mem-cell.flip { animation: flipPop .38s ease; }
+.mem-cell.done { animation: matchPulse .4s ease; opacity:.75; }
+
+/* Leçons verrouillées du plan gratuit */
+.lesson-row.free-locked { opacity:.55; cursor:pointer; }
+.lesson-row.free-locked .l-num { background:var(--coral-soft); color:var(--coral); }
+.lock-chip { font-size:.68rem; font-weight:800; color:var(--coral); background:var(--coral-soft);
+  padding:3px 9px; border-radius:999px; white-space:nowrap; }
+.free-chip { display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-weight:800;
+  background:var(--green-soft); color:#0e7a45; padding:4px 11px; border-radius:999px; }
+.free-banner { display:flex; gap:12px; align-items:center; flex-wrap:wrap; background:linear-gradient(135deg,var(--green-soft),var(--amber-soft));
+  border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px 18px; margin-bottom:14px; }
+
+/* Compteurs statistiques : pop d'entrée */
+.stat-card .s-val { animation: popIn .45s ease both; }
+.stat-card:nth-child(2) .s-val { animation-delay:.08s; }
+.stat-card:nth-child(3) .s-val { animation-delay:.16s; }
+.stat-card:nth-child(4) .s-val { animation-delay:.24s; }
 </style>
 </head>
 <body>
@@ -808,7 +895,7 @@ const I18N = {
     "hero.badge": "🏆 Concours : 25 000 F chaque semaine · Apprends et gagne",
     "hero.title": "Apprends une langue.<br>Joue. Progresse. Parle.",
     "hero.lead": "Des leçons interactives, des jeux éducatifs et un professeur intelligent qui s'adapte à ton niveau. 15 minutes par jour suffisent pour te lancer.",
-    "hero.cta1": "S'inscrire — 3 000 F", "hero.cta2": "Essayer la démo",
+    "hero.cta1": "Commencer gratuitement", "hero.cta2": "Essayer la démo",
     "feat.title": "Tout ce qu'il faut pour progresser",
     "feat.sub": "Une méthode complète : comprendre, s'entraîner, jouer, parler. Chaque activité te rapporte de l'XP et fait avancer ton parcours.",
     "feat.c1": "Cours structurés", "feat.c1p": "Des leçons du niveau A1 au C2 : objectif, explication claire, vocabulaire, exemples et test de validation.",
@@ -823,7 +910,7 @@ const I18N = {
     "tst.f3": "— « Laura P. », profil fictif de démonstration",
     "faq.title": "Questions fréquentes",
     "faq.q1": "L'inscription est-elle payante ?",
-    "faq.a1": "Oui : MAJOOP est « sans gratuit » — l'inscription démarre à 3 000 F par mois. En échange, tu participes au concours hebdomadaire : chaque semaine, 25 000 F répartis entre les 3 meilleurs apprenants (🥇 15 000 · 🥈 6 000 · 🥉 4 000).",
+    "faq.a1": "Oui : MAJOOP est freemium — un Plan Découverte gratuit très limité (1 leçon par cours, 2 jeux, 3 interactions IA/mois) permet d'essayer. Pour tout débloquer et participer au concours hebdomadaire (25 000 F répartis entre les 3 meilleurs : 🥇 15 000 · 🥈 6 000 · 🥉 4 000), l'inscription démarre à 3 000 F par mois.",
     "faq.q2": "Comment fonctionne le professeur IA ?",
     "faq.a2": "Il connaît ta langue d'interface, la langue étudiée, ton niveau CECRL et tes erreurs récentes. Chaque échange passe par un serveur sécurisé : quota quotidien et protection anti-spam inclus.",
     "faq.q3": "Mes données sont-elles protégées ?",
@@ -981,10 +1068,10 @@ const I18N = {
     "st.rejected": "Rejeté", "st.failed": "Échoué",
     "admin.tab.money": "Monétisation",
     "ai.quotaChip": "IA : {u}/{l} ce mois", "ai.quotaReset": "reset le {d}",
-    "pricing.title": "Tarifs MAJOOP", "pricing.sub": "Aucun plan gratuit : l'inscription démarre à 3 000 F. Et chaque semaine, 25 000 F aux meilleurs apprenants.",
+    "pricing.title": "Tarifs MAJOOP", "pricing.sub": "Commence gratuitement (Plan Découverte, très limité) — ou débloque tout dès 3 000 F/mois. Chaque semaine, 25 000 F aux meilleurs apprenants.",
     "pricing.fallback": "Grille officielle affichée : les tarifs en ligne et les paiements s'activent dès que l'administrateur exécute les migrations de monétisation sur le serveur.",
     "pricing.fallbackToast": "Paiements pas encore actifs : l'administrateur doit exécuter les migrations de monétisation sur Supabase.",
-    "gate.required": "Inscription requise : l'accès démarre à 3 000 F — et chaque semaine, 25 000 F aux meilleurs !",
+    "gate.required": "Le plan gratuit est très limité — passe à l'Inscription (dès 3 000 F/mois) pour tout débloquer !",
     "price.notEnrolled": "Non inscrit",
     "cmp.m": "Inscription Mensuelle", "cmp.y": "Inscription Annuelle",
     "cmp.durM": "1 mois", "cmp.durY": "12 mois",
@@ -996,13 +1083,13 @@ const I18N = {
     "concours.rank": "#", "concours.player": "Apprenant", "concours.xp": "XP de la semaine", "concours.days": "Jours actifs",
     "concours.you": "toi", "concours.myRank": "Ta position",
     "concours.rankN": "Rang {n}", "concours.gap": "Encore {n} XP pour intégrer le podium 💪",
-    "concours.notEligible": "Non inscrit — participe en t'inscrivant à partir de 3 000 F",
+    "concours.notEligible": "Non inscrit — le concours est réservé aux abonnés (dès 3 000 F/mois)",
     "concours.empty": "Le classement démarre dès les premières inscriptions. Sois le premier sur le podium !",
     "concours.ctaJoin": "Participer", "concours.demoNote": "MODE DÉMO — classement simulé.",
     "concours.rules": "Règles du jeu",
     "concours.rule1": "📅 La semaine va du lundi 00:00 UTC au dimanche minuit UTC.",
     "concours.rule2": "💰 Cagnotte : 25 000 F chaque semaine — 🥇 15 000 F · 🥈 6 000 F · 🥉 4 000 F.",
-    "concours.rule3": "✅ Éligible : tout apprenant dont l'inscription est ACTIVE (à partir de 3 000 F).",
+    "concours.rule3": "✅ Éligible : tout apprenant abonné (Inscription dès 3 000 F/mois). Le plan gratuit ne participe pas.",
     "concours.rule4": "📊 Classement : XP gagnés pendant la semaine (leçons, exercices, jeux, missions). Les XP sont validés côté serveur — impossible de tricher.",
     "concours.rule5": "💸 Gains payés par Mobile Money sous 72 h après la clôture ; chaque versement est tracé avec sa référence.",
     "concours.rule6": "⚖️ Départages : XP de la semaine, puis nombre de jours actifs, puis heure du premier XP.",
@@ -1023,7 +1110,7 @@ const I18N = {
     "hero.badge": "🏆 Weekly contest: win 25,000 F · Learn & earn",
     "hero.title": "Learn a language.<br>Play. Progress. Speak.",
     "hero.lead": "Interactive lessons, educational games and a smart tutor that adapts to your level. 15 minutes a day is enough to get started.",
-    "hero.cta1": "Register — 3,000 F", "hero.cta2": "Try the demo",
+    "hero.cta1": "Start for free", "hero.cta2": "Try the demo",
     "feat.title": "Everything you need to progress",
     "feat.sub": "A complete method: understand, practice, play, speak. Every activity earns XP and moves your journey forward.",
     "feat.c1": "Structured courses", "feat.c1p": "Lessons from A1 to C2: goal, clear explanation, vocabulary, examples and a validation test.",
@@ -1037,7 +1124,7 @@ const I18N = {
     "tst.f3": "— 'Laura P.', fictional demo profile",
     "faq.title": "Frequently asked questions",
     "faq.q1": "Is registration paid?",
-    "faq.a1": "Yes — MAJOOP is “no free tier”: registration starts at 3,000 F per month. In exchange, you enter the weekly contest: every week, 25,000 F is shared among the top 3 learners (🥇 15,000 · 🥈 6,000 · 🥉 4,000).",
+    "faq.a1": "Yes — MAJOOP is freemium: a very limited free Discovery plan (1 lesson per course, 2 games, 3 AI interactions/month) lets you try it. To unlock everything and enter the weekly contest (25,000 F shared among the top 3: 🥇 15,000 · 🥈 6,000 · 🥉 4,000), registration starts at 3,000 F per month.",
     "faq.q2": "How does the AI tutor work?",
     "faq.a2": "It knows your interface language, target language, CEFR level and recent mistakes. Every exchange goes through a secure server: daily quota and anti-spam included.",
     "faq.q3": "Is my data protected?",
@@ -1192,10 +1279,10 @@ const I18N = {
     "st.rejected": "Rejected", "st.failed": "Failed",
     "admin.tab.money": "Monetization",
     "ai.quotaChip": "AI: {u}/{l} this month", "ai.quotaReset": "resets on {d}",
-    "pricing.title": "MAJOOP Pricing", "pricing.sub": "No free tier: registration starts at 3,000 F. And every week, 25,000 F goes to the best learners.",
+    "pricing.title": "MAJOOP Pricing", "pricing.sub": "Start for free (Discovery plan, very limited) — or unlock everything from 3,000 F/month. Every week, 25,000 F goes to the best learners.",
     "pricing.fallback": "Official grid shown: online pricing and payments activate as soon as the administrator runs the monetization migrations on the server.",
     "pricing.fallbackToast": "Payments not active yet: the administrator must run the monetization migrations on Supabase.",
-    "gate.required": "Registration required: access starts at 3,000 F — and every week, 25,000 F goes to the best!",
+    "gate.required": "The free plan is very limited — subscribe (from 3,000 F/month) to unlock everything!",
     "price.notEnrolled": "Not enrolled",
     "cmp.m": "Monthly registration", "cmp.y": "Yearly registration",
     "cmp.durM": "1 month", "cmp.durY": "12 months",
@@ -1207,13 +1294,13 @@ const I18N = {
     "concours.rank": "#", "concours.player": "Learner", "concours.xp": "XP this week", "concours.days": "Active days",
     "concours.you": "you", "concours.myRank": "Your position",
     "concours.rankN": "Rank {n}", "concours.gap": "Only {n} more XP to reach the podium 💪",
-    "concours.notEligible": "Not enrolled — join by registering from 3,000 F",
+    "concours.notEligible": "Not eligible — the contest is reserved for subscribers (from 3,000 F/month)",
     "concours.empty": "The leaderboard starts as soon as the first learners register. Be the first on the podium!",
     "concours.ctaJoin": "Join", "concours.demoNote": "DEMO MODE — simulated leaderboard.",
     "concours.rules": "Rules",
     "concours.rule1": "📅 The week runs from Monday 00:00 UTC to Sunday midnight UTC.",
     "concours.rule2": "💰 Prize pool: 25,000 F every week — 🥇 15,000 F · 🥈 6,000 F · 🥉 4,000 F.",
-    "concours.rule3": "✅ Eligible: every learner with an ACTIVE registration (from 3,000 F).",
+    "concours.rule3": "✅ Eligible: every subscribed learner (from 3,000 F/month). The free plan does not take part.",
     "concours.rule4": "📊 Ranking: XP earned during the week (lessons, exercises, games, missions). XP is validated server-side — cheating is impossible.",
     "concours.rule5": "💸 Prizes are paid via Mobile Money within 72 hours after closing; every payout is tracked with its reference.",
     "concours.rule6": "⚖️ Tie-breakers: weekly XP, then active days, then time of the first XP.",
@@ -1830,6 +1917,9 @@ class DemoBackend {
   async getPricing() {
     const cur = (currency, amount, interval, region) => ({ currency, amount, billing_interval: interval, region });
     return [
+      { code: "free", name: "Plan Découverte", id: null, is_active: true,
+        description: "Très limité : 1 seule leçon par cours, 2 jeux (mémoire + quiz), 3 interactions IA/mois, XP et badges inclus. Concours hebdomadaire réservé aux abonnés.",
+        pricing: [cur("XAF", 0, "monthly", "zone_fcfa"), cur("XOF", 0, "monthly", "zone_fcfa"), cur("USD", 0, "monthly", "international")] },
       { code: "premium_monthly", name: "Inscription Mensuelle", id: null, is_active: true,
         description: "3 000 F par mois : accès complet (tous les cours, niveaux, exercices, jeux, 100 interactions IA/mois) + concours hebdomadaire : 25 000 F aux meilleurs chaque semaine.",
         pricing: [cur("XAF", 3000, "monthly", "zone_fcfa"), cur("XOF", 3000, "monthly", "zone_fcfa"), cur("USD", 6, "monthly", "international")] },
@@ -2115,6 +2205,71 @@ function confetti(n) {
     setTimeout(() => c.remove(), 3400);
   }
 }
+/* Étiquette XP volante : « +12 XP » s'envole depuis l'élément donné. */
+function xpFly(txt, anchor) {
+  try {
+    if (!anchor) { toast("⚡ " + txt, "xp"); return; }
+    const r = anchor.getBoundingClientRect();
+    const el = document.createElement("div");
+    el.className = "xp-fly";
+    el.textContent = "⚡ " + txt;
+    el.style.left = Math.max(8, Math.min(window.innerWidth - 110, r.left + r.width / 2 - 40)) + "px";
+    el.style.top = Math.max(8, r.top - 6) + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 950);
+  } catch (e) { /* silencieux */ }
+}
+/* Compteur animé : la valeur monte de 0 à target en ~0.8 s. */
+function countUp(el, target, suffix) {
+  if (!el) return;
+  const n = Math.max(0, parseInt(target, 10) || 0);
+  if (n === 0) { el.textContent = "0" + (suffix || ""); return; }
+  const t0 = performance.now(), dur = 800;
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / dur);
+    const eased = 1 - Math.pow(1 - k, 3);
+    el.textContent = Math.round(n * eased) + (suffix || "");
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
+   PLAN GRATUIT TRÈS LIMITÉ (freemium) — helpers et limites
+   Tout utilisateur sans abonnement premium actif est 'free'
+   (côté serveur : user_effective_plan → 'free' automatique).
+   ============================================================ */
+const FREE_LIMITS = {
+  lessonsPerCourse: 1,                       // 1 seule leçon par cours (la première)
+  games: ["memory", "quiz_race"],            // 2 jeux sur 8
+  aiPerMonth: 3,                             // affichage ; quota réel = réglage serveur
+};
+function myPlanCode() {
+  if (APP_STATE.mode === "demo") return "premium_monthly"; // démo : tout débloqué
+  return APP_STATE.mySub ? String(APP_STATE.mySub.plan || "free") : "free";
+}
+function isFreePlan() { return !/^premium/.test(myPlanCode()); }
+/* Ensemble des leçons accessibles en gratuit : la 1re leçon du
+   1er module de chaque cours de la langue cible. */
+async function freeAllowedLessons() {
+  const allowed = new Set();
+  try {
+    const lang = APP_STATE.dashboard && APP_STATE.dashboard.profile && APP_STATE.dashboard.profile.target_lang;
+    if (!lang) return allowed;
+    let ov = APP_STATE.cache.overview;
+    if (!ov || ov.__lang !== lang) {
+      ov = await APP_STATE.backend.getLanguageOverview(lang);
+      ov.__lang = lang;
+      APP_STATE.cache.overview = ov;
+    }
+    (ov || []).forEach((c) => {
+      const m0 = (c.modules || [])[0];
+      const l0 = m0 && (m0.lessons || [])[0];
+      if (l0) allowed.add(String(l0.id));
+    });
+  } catch (e) { /* en cas d'échec réseau, on ne bloque pas l'utilisateur */ }
+  return allowed;
+}
 function speak(text, lang) {
   try {
     if (!("speechSynthesis" in window)) { toast("🔊 Web Speech API indisponible"); return; }
@@ -2133,18 +2288,29 @@ function shuffle(a) {
   }
   return arr;
 }
-function ringSvg(pct, color, size) {
+function ringSvg(pct, color, size, animate) {
   const r = 42, c = 2 * Math.PI * r;
   const p = Math.max(0, Math.min(100, pct || 0));
-  return `<svg width="${size || 96}" height="${size || 96}" viewBox="0 0 96 96">
+  const target = (c * p / 100).toFixed(1);
+  return `<svg class="anim-ring" width="${size || 96}" height="${size || 96}" viewBox="0 0 96 96">
     <circle class="track" cx="48" cy="48" r="${r}" fill="none" stroke="var(--bg-sunken)" stroke-width="9"/>
     <circle cx="48" cy="48" r="${r}" fill="none" stroke="${color || "var(--brand)"}" stroke-width="9"
-      stroke-linecap="round" stroke-dasharray="${(c * p / 100).toFixed(1)} ${c.toFixed(1)}"/>
+      stroke-linecap="round" stroke-dasharray="${animate ? "0 " + c.toFixed(1) : target + " " + c.toFixed(1)}"
+      ${animate ? `data-target="${target}"` : ""}/>
   </svg>`;
+}
+/* Anime tous les anneaux « anim-ring » du conteneur : le trait grandit
+   de 0 à la valeur cible (transition CSS stroke-dasharray). */
+function animateRings(scope) {
+  $all(".anim-ring circle[data-target]", scope || document).forEach((circle) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      circle.setAttribute("stroke-dasharray", circle.dataset.target + " 999");
+    }));
+  });
 }
 function xpRing(xp, floor, next) {
   const pct = next > floor ? Math.round(100 * (xp - floor) / (next - floor)) : 100;
-  return `<div class="ring">${ringSvg(pct)}<div class="ring-val">${xp}<small>XP</small></div></div>`;
+  return `<div class="ring">${ringSvg(pct, null, null, true)}<div class="ring-val">${xp}<small>XP</small></div></div>`;
 }
 function applyTheme() {
   const th = APP_STATE.theme;
@@ -2506,9 +2672,9 @@ function pageResult(root) {
     <h2>${win ? t("res.title.win") : t("res.title.retry")}</h2>
     <p class="muted">${esc(r.course || "")}</p>
     <div class="result-stats">
-      <div class="card" style="min-width:120px;"><div class="ring">${ringSvg(r.score, win ? "var(--green)" : "var(--amber)")}
+      <div class="card" style="min-width:120px;"><div class="ring">${ringSvg(r.score, win ? "var(--green)" : "var(--amber)", null, true)}
         <div class="ring-val">${r.score}<small>${t("res.score")}</small></div></div></div>
-      <div class="card" style="min-width:120px;"><div class="s-val" style="font-size:1.8rem;color:var(--amber);">⚡ +${r.xp}</div>
+      <div class="card" style="min-width:120px;"><div class="s-val" id="res-xp" style="font-size:1.8rem;color:var(--amber);">⚡ +0</div>
         <div class="s-lbl">${t("res.xp")}</div></div>
     </div>
     <div class="result-actions">
@@ -2516,7 +2682,25 @@ function pageResult(root) {
       <button class="btn btn-primary" id="r-back">${t("res.back")}</button>
     </div>
   </div></div>`;
-  if (win) confetti(26);
+  requestAnimationFrame(() => {
+    animateRings(root);
+    const xpEl = $("#res-xp", root);
+    if (xpEl) xpEl.innerHTML = "⚡ +<span id='res-xp-n'>0</span>";
+    countUp($("#res-xp-n", root), r.xp);
+  });
+  // Level-up : ancien niveau (profil avant la leçon) vs nouveau calculé
+  try {
+    const prof = APP_STATE.dashboard && APP_STATE.dashboard.profile;
+    if (prof && typeof levelForXp === "function") {
+      const before = prof.level || levelForXp(prof.xp_total || 0);
+      const after = levelForXp((prof.xp_total || 0) + (r.xp || 0));
+      if (after > before) {
+        confetti(90);
+        setTimeout(() => toast(t("mod.levelUp", { n: after }), "success"), 900);
+      }
+    }
+  } catch (e) { /* silencieux */ }
+  if (win) confetti(60);
   $("#r-retry").addEventListener("click", () => { if (r.lessonId) go("#/lesson/" + encodeURIComponent(r.lessonId)); else go("#/courses"); });
   $("#r-back").addEventListener("click", () => go("#/courses"));
 }
@@ -2535,17 +2719,11 @@ async function renderApp(hash) {
     go("#/onboarding"); return;
   }
 
-  // Paywall « sans gratuit » : le contenu requiert une inscription ACTIVE.
-  // (Réglages, profil, admin, tarifs, concours et mon abonnement restent libres.)
-  const gated = ["dashboard", "languages", "courses", "lesson", "games", "game", "ai", "conversation", "progress"];
-  if (APP_STATE.mode === "supabase" && gated.includes(page)) {
-    const mySub = await ensureMySub();
-    if (mySub && !String(mySub.plan || "").startsWith("premium")) {
-      toast(t("gate.required"), "error");
-      go("#/pricing");
-      return;
-    }
-  }
+  // Freemium : le plan gratuit (très limité) donne accès aux pages
+  // d'apprentissage. Les limites (1 leçon/cours, 2 jeux, quota IA)
+  // sont appliquées dans les pages concernées via isFreePlan().
+  // (Réglages, profil, admin, tarifs, concours et abonnement restent libres.)
+  if (APP_STATE.mode === "supabase") await ensureMySub();
 
   if (["dashboard", "courses", "lesson", "games", "ai", "progress", "languages"].includes(page)) {
     await ensureDashboard();
@@ -2603,13 +2781,13 @@ async function pageDashboard(main) {
     ${APP_STATE.mode === "demo" ? `<div class="demo-banner">🧪 ${t("t.demo")} — <a href="#/settings">${t("set.conn")}</a></div>` : ""}
     <div class="hero-card">
       <div style="flex:1;min-width:220px;">
-        <h2>${t("dash.hello")}, ${esc(firstName)} ! 👋</h2>
+        <h2>${t("dash.hello")}, ${esc(firstName)} ! 👋 ${isFreePlan() ? `<span class="free-chip" style="vertical-align:middle;">🆓 ${APP_STATE.uiLang === "fr" ? "Plan Découverte" : "Free plan"}</span>` : ""}</h2>
         <p class="hc-sub">${t("dash.subtitle")} ${p.target_lang ? "· " + { en: "🇬🇧 Anglais", fr: "🇫🇷 Français", es: "🇪🇸 Espagnol", de: "🇩🇪 Allemand" }[p.target_lang] : ""} ${p.cefr_level ? "· " + esc(p.cefr_level) : ""} · ${t("dash.goal")} : ${p.daily_goal_minutes} min/${APP_STATE.uiLang === "fr" ? "jour" : "day"}</p>
-        <div style="margin-top:14px;">
-          <div style="background:rgba(255,255,255,.25);height:10px;border-radius:999px;overflow:hidden;">
-            <i style="display:block;height:100%;width:${pct}%;background:#fff;border-radius:999px;"></i>
+        <div style="margin-top:14px;" class="hero-bar-wrap">
+          <div class="hero-bar">
+            <i id="hero-bar-fill" style="width:0%;"></i>
           </div>
-          <small style="opacity:.85;">${t("dash.level")} ${p.level} · ${p.xp_total} XP · ${p.next_level_xp - p.xp_total} XP → ${t("dash.level")} ${p.level + 1}</small>
+          <small style="opacity:.85;">${t("dash.level")} ${p.level} · <span id="hero-xp">${p.xp_total}</span> XP · ${p.next_level_xp - p.xp_total} XP → ${t("dash.level")} ${p.level + 1}</small>
         </div>
       </div>
       ${xpRing(p.xp_total, p.level_floor_xp, p.next_level_xp)}
@@ -2619,6 +2797,17 @@ async function pageDashboard(main) {
         <small style="opacity:.85;">${t("dash.streak")} · ${t("dash.best")} ${d.streak?.best || 0}</small>
       </div>
     </div>
+
+    ${isFreePlan() ? `<div class="free-banner">
+      <div style="font-size:1.7rem;">🆓</div>
+      <div style="flex:1;min-width:200px;">
+        <b>${APP_STATE.uiLang === "fr" ? "Plan Découverte — très limité" : "Free plan — very limited"}</b>
+        <div class="muted" style="font-size:.85rem;">${APP_STATE.uiLang === "fr"
+          ? "1 leçon par cours · 2 jeux · 3 interactions IA/mois · pas de concours."
+          : "1 lesson per course · 2 games · 3 AI interactions/month · no contest."}</div>
+      </div>
+      <a class="btn btn-coral" href="#/pricing">💎 ${APP_STATE.uiLang === "fr" ? "Tout débloquer dès 3 000 F" : "Unlock everything"}</a>
+    </div>` : ""}
 
     ${nextL ? `<div class="card mt-2" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
       <span style="font-size:1.8rem;">📌</span>
@@ -2639,10 +2828,10 @@ async function pageDashboard(main) {
     </a>
 
     <div class="grid grid-4 mt-3">
-      <div class="card stat-card"><div class="s-ico">📚</div><div class="s-val">${d.stats.lessons_completed}</div><div class="s-lbl">${t("dash.stat.lessons")}</div></div>
-      <div class="card stat-card"><div class="s-ico">✅</div><div class="s-val">${d.stats.exercises_correct}</div><div class="s-lbl">${t("dash.stat.correct")}</div></div>
-      <div class="card stat-card"><div class="s-ico">⚡</div><div class="s-val">${d.stats.xp_today}</div><div class="s-lbl">${t("dash.stat.xpToday")}</div></div>
-      <div class="card stat-card"><div class="s-ico">⏱️</div><div class="s-val">${d.stats.minutes_today_est}</div><div class="s-lbl">${t("dash.stat.minutes")}</div></div>
+      <div class="card stat-card"><div class="s-ico">📚</div><div class="s-val" data-count="${d.stats.lessons_completed}">0</div><div class="s-lbl">${t("dash.stat.lessons")}</div></div>
+      <div class="card stat-card"><div class="s-ico">✅</div><div class="s-val" data-count="${d.stats.exercises_correct}">0</div><div class="s-lbl">${t("dash.stat.correct")}</div></div>
+      <div class="card stat-card"><div class="s-ico">⚡</div><div class="s-val" data-count="${d.stats.xp_today}">0</div><div class="s-lbl">${t("dash.stat.xpToday")}</div></div>
+      <div class="card stat-card"><div class="s-ico">⏱️</div><div class="s-val" data-count="${d.stats.minutes_today_est}">0</div><div class="s-lbl">${t("dash.stat.minutes")}</div></div>
     </div>
 
     <div class="grid grid-2 mt-3">
@@ -2681,6 +2870,14 @@ async function pageDashboard(main) {
       <h3 style="font-weight:800;margin-bottom:8px;">🏆 ${t("dash.leaderboard")}</h3>
       <div id="lb-rows"><div class="skeleton"></div></div>
     </div>`;
+
+  // Animations : remplissage du barreau XP, anneau, compteurs qui montent
+  requestAnimationFrame(() => {
+    const bar = $("#hero-bar-fill", main);
+    if (bar) bar.style.width = pct + "%";
+    animateRings(main);
+    $all("[data-count]", main).forEach((el) => countUp(el, el.dataset.count));
+  });
 
   // Missions : réclamer
   $all("[data-claim]", main).forEach((b) => b.addEventListener("click", async () => {
@@ -2763,22 +2960,37 @@ async function pageCourses(main, langParam) {
   const colors = { A1: "var(--green)", A2: "var(--blue)", B1: "var(--brand)", B2: "var(--brand-deep)", C1: "var(--coral)", C2: "var(--amber)" };
   $("#courses-tree", main).innerHTML = overview.length === 0
     ? `<div class="card center muted">${APP_STATE.uiLang === "fr" ? "Aucun cours publié pour cette langue." : "No published course for this language."}</div>`
-    : overview.map((c) => `
+    : overview.map((c) => {
+      const freeL0 = isFreePlan() && c.modules && c.modules[0] && c.modules[0].lessons && c.modules[0].lessons[0];
+      const freeId = freeL0 ? String(freeL0.id) : null;
+      return `
       <div class="card module-block">
         <div class="flex" style="justify-content: space-between; margin-bottom: 12px;">
           <div><b style="font-size:1.05rem;">${esc(c.title)}</b>
             <div class="muted" style="font-size:.85rem;">${esc(c.description || "")}</div></div>
           <span class="cc-level" style="background:${colors[c.level] || "var(--brand)"};">${esc(c.level)}</span>
         </div>
+        ${isFreePlan() ? `<div class="muted" style="font-size:.78rem;margin-bottom:6px;">🔒 ${APP_STATE.uiLang === "fr"
+          ? "Plan Découverte : seule la 1re leçon est ouverte — passez Premium pour tout débloquer."
+          : "Free plan: only the first lesson is open — go Premium to unlock everything."}</div>` : ""}
         ${(c.modules || []).map((m) => `
           <div style="margin: 12px 0 4px; font-weight: 700; color: var(--ink-2); font-size: .92rem;">▸ ${esc(m.title)}</div>
-          ${(m.lessons || []).map((l, i) => `
-            <a class="lesson-row ${l.status === "completed" ? "done" : ""}" href="#/lesson/${encodeURIComponent(l.id)}">
-              <span class="l-num">${l.status === "completed" ? "✓" : i + 1}</span>
+          ${(m.lessons || []).map((l, i) => {
+            const locked = isFreePlan() && String(l.id) !== freeId;
+            return `
+            <a class="lesson-row ${l.status === "completed" ? "done" : ""} ${locked ? "free-locked" : ""}"
+               ${locked ? `data-locked="1"` : `href="#/lesson/${encodeURIComponent(l.id)}"`}>
+              <span class="l-num">${locked ? "🔒" : l.status === "completed" ? "✓" : i + 1}</span>
               <span class="l-main"><b>${esc(l.title)}</b><small>${esc(l.objective || "")}</small></span>
-              ${l.score != null ? `<span class="l-score">${l.score}%</span>` : `<span class="chip">${l.minutes}′</span>`}
-            </a>`).join("")}`).join("")}
-      </div>`).join("");
+              ${locked ? `<span class="lock-chip">${APP_STATE.uiLang === "fr" ? "Premium" : "Premium"}</span>`
+                : l.score != null ? `<span class="l-score">${l.score}%</span>` : `<span class="chip">${l.minutes}′</span>`}
+            </a>`; }).join("")}`).join("")}
+      </div>`; }).join("");
+  // Leçons verrouillées : clic → paywall
+  $all("[data-locked]", main).forEach((el) => el.addEventListener("click", (e) => {
+    e.preventDefault();
+    openPaywall({ freeNote: true });
+  }));
 }
 /* ============================================================
    MAJOOP — LECTEUR DE LEÇON + MOTEUR D'EXERCICES (partie B)
@@ -2798,6 +3010,24 @@ async function pageLesson(main, lessonId) {
   } catch (e) {
     main.innerHTML = `<div class="card center">${esc(e.message)}<br><br><a class="btn btn-soft" href="#/courses">${t("t.back")}</a></div>`;
     return;
+  }
+  // Plan gratuit : seules les 1res leçons de cours sont ouvertes.
+  if (APP_STATE.mode === "supabase" && isFreePlan()) {
+    const allowed = await freeAllowedLessons();
+    if (!allowed.has(String(lessonId))) {
+      openPaywall({ freeNote: true });
+      main.innerHTML = `<div class="card center">
+        <div style="font-size:2.4rem;">🔒</div>
+        <b>${APP_STATE.uiLang === "fr" ? "Leçon réservée aux abonnés" : "Lesson reserved for subscribers"}</b>
+        <p class="muted mt-2">${APP_STATE.uiLang === "fr"
+          ? "Le plan Découverte ouvre uniquement la 1re leçon de chaque cours. Passez à l'Inscription (dès 3 000 F/mois) pour débloquer tous les cours et le concours."
+          : "The free plan opens only the first lesson of each course. Subscribe (from 3 000 F/month) to unlock everything."}</p>
+        <div class="flex mt-3" style="justify-content:center;">
+          <a class="btn btn-primary" href="#/pricing">💎 ${t("payw.cta")}</a>
+          <a class="btn btn-soft" href="#/courses">← ${t("t.back")}</a>
+        </div></div>`;
+      return;
+    }
   }
   const lang = (APP_STATE.dashboard && APP_STATE.dashboard.profile.target_lang) || "en";
   const vocab = content.vocab || [];
@@ -3018,9 +3248,26 @@ function wireExerciseEvents(main, ex, lang) {
     try {
       const res = await APP_STATE.backend.submitExercise(ex.id, S.answer);
       S.xpSum += res.xp || 0;
-      if (res.correct || (res.ratio || 0) >= 1) S.correctCount++;
+      const ok = res.correct || (res.ratio || 0) >= 1;
+      if (ok) S.correctCount++;
+      // Animations : réussite « pop », erreur « tremble », XP qui s'envole
+      const anchors = {
+        mcq: ".opt-btn.picked", listening: ".opt-btn.picked", reading: ".opt-btn.picked",
+        reorder: "#word-line .word-chip[data-undo]",
+        matching: ".match-item.paired", translation: "#ex-input", gap_fill: "[data-gap]",
+      };
+      const sel = anchors[ex.type];
+      let firstEl = null;
+      if (sel) {
+        const els = $all(sel, main);
+        firstEl = els[0] || null;
+        els.forEach((el) => {
+          el.classList.remove("picked");
+          el.classList.add(ok ? "is-good" : "is-bad");
+        });
+      }
       showFeedback(fb, res, ex);
-      if (res.xp > 0) toast("⚡ +" + res.xp + " XP", "xp");
+      if (res.xp > 0) xpFly("+" + res.xp + " XP", ok ? (firstEl || fb) : fb);
       const xpChip = $(".ex-actions .chip", main);
       if (xpChip) xpChip.textContent = "⚡ " + S.xpSum + " XP";
       $(".ex-progress i", main).style.width = Math.round(100 * (S.index + 1) / S.exercises.length) + "%";
@@ -3085,23 +3332,55 @@ const GAMES_META = [
 
 async function pageGames(main) {
   await ensureDashboard();
+  const isFree = isFreePlan();
   main.innerHTML = `
     <div class="page-title">🎮 ${t("games.title")}</div>
     <div class="page-sub">${t("games.sub")}</div>
+    ${isFree ? `<div class="free-banner">
+      <div style="font-size:1.6rem;">🧠</div>
+      <div style="flex:1;min-width:200px;">
+        <b>${APP_STATE.uiLang === "fr" ? "Plan Découverte : 2 jeux ouverts" : "Free plan: 2 games open"}</b>
+        <div class="muted" style="font-size:.85rem;">${APP_STATE.uiLang === "fr"
+          ? "Les 6 autres jeux (traduction éclair, phrase à reconstruire, images, défi de vocabulaire, conjugaison, défi quotidien) sont réservés aux abonnés."
+          : "The 6 other games are reserved for subscribers."}</div>
+      </div>
+      <a class="btn btn-coral" href="#/pricing">💎 ${APP_STATE.uiLang === "fr" ? "Débloquer les 8 jeux" : "Unlock all 8 games"}</a>
+    </div>` : ""}
     <div class="grid grid-4">
-      ${GAMES_META.map((g) => `
-        <a class="game-card" href="#/game/${g.code}">
-          <div class="g-ico" style="background:${APP_STATE.uiLang === "fr" ? "" : ""}; background: color-mix(in srgb, ${g.color} 14%, transparent);">${g.ico}</div>
+      ${GAMES_META.map((g) => {
+        const locked = isFree && !FREE_LIMITS.games.includes(g.code);
+        return `
+        <a class="game-card" ${locked ? `data-locked="1"` : `href="#/game/${g.code}"`} style="${locked ? "opacity:.6;" : ""}">
+          <div class="g-ico" style="background: color-mix(in srgb, ${g.color} 14%, transparent);">${locked ? "🔒" : g.ico}</div>
           <b>${t("games." + g.code)}</b>
           <small>${t("games." + g.code + ".d")}</small>
-        </a>`).join("")}
+          ${locked ? `<span class="lock-chip">${APP_STATE.uiLang === "fr" ? "Premium" : "Premium"}</span>` : ""}
+        </a>`; }).join("")}
     </div>`;
+  $all("[data-locked]", main).forEach((el) => el.addEventListener("click", (e) => {
+    e.preventDefault();
+    openPaywall({ freeNote: true });
+  }));
 }
 
 async function pageGame(main, code) {
   await ensureDashboard();
   const meta = GAMES_META.find((g) => g.code === code);
   if (!meta || !GAME_IMPLS[code]) { go("#/games"); return; }
+  // Plan gratuit : uniquement les 2 jeux inclus.
+  if (APP_STATE.mode === "supabase" && isFreePlan() && !FREE_LIMITS.games.includes(code)) {
+    main.innerHTML = `<div class="card center mt-2">
+      <div style="font-size:2.4rem;">🔒</div>
+      <b>${APP_STATE.uiLang === "fr" ? "Jeu réservé aux abonnés" : "Game reserved for subscribers"}</b>
+      <p class="muted mt-2">${APP_STATE.uiLang === "fr"
+        ? "Le plan Découverte inclut 2 jeux (Mémoire et Quiz éclair). Passez Premium pour jouer aux 8 jeux."
+        : "The free plan includes 2 games. Go Premium to play all 8."}</p>
+      <div class="flex mt-3" style="justify-content:center;">
+        <a class="btn btn-primary" href="#/pricing">💎 ${t("payw.cta")}</a>
+        <a class="btn btn-soft" href="#/games">← ${t("games.exit")}</a>
+      </div></div>`;
+    return;
+  }
   main.innerHTML = `
     <div class="flex" style="justify-content: space-between;">
       <div class="page-title" style="font-size:1.2rem;">${meta.ico} ${t("games." + code)}</div>
@@ -4105,15 +4384,15 @@ function openPaywall(data) {
       : `<p class="muted mt-2">${t("payw.sub2")}</p>`}
     <ul class="price-feats mt-2">
       <li>Tous les cours, tous les niveaux, tous les exercices</li>
-      <li>100 interactions IA par mois (contre 10 en Free)</li>
-      <li>Conversations personnalisées et simulations de situations</li>
-      <li>Corrections détaillées et explications grammaticales</li>
-      <li>Historique complet et statistiques avancées</li>
-      <li>Sans publicité</li>
+      <li>100 interactions IA par mois (contre 3 en gratuit)</li>
+      <li>Les 8 jeux éducatifs (contre 2 en gratuit)</li>
+      <li>Concours hebdomadaire — 25 000 F aux meilleurs</li>
+      <li>Conversations personnalisées et corrections détaillées</li>
+      <li>Statistiques avancées et sans publicité</li>
     </ul>
     <div class="flex mt-3" style="gap:10px;flex-wrap:wrap;">
       <button class="btn btn-primary" data-go-pricing>💎 ${t("payw.cta")}</button>
-      <button class="btn btn-ghost" data-close>${t("payw.keep")}</button>
+      ${APP_STATE.session && isFreePlan() ? `<button class="btn btn-ghost" data-close>${APP_STATE.uiLang === "fr" ? "🆓 Continuer gratuitement" : "🆓 Continue free"}</button>` : `<button class="btn btn-ghost" data-close>${t("payw.keep")}</button>`}
     </div>
   </div>`;
   bd.addEventListener("click", (e) => {
@@ -4210,6 +4489,16 @@ async function pageConcours(root, opts) {
       <div><div class="page-title">🏆 ${t("concours.title")}</div><div class="page-sub">${t("concours.sub")}</div></div>
       ${closesAt ? `<div class="card" style="padding:10px 16px;text-align:center;"><small class="muted">${t("concours.closesIn")}</small><div id="cd-remain" style="font-weight:800;font-size:1.1rem;">—</div></div>` : ""}
     </div>
+    ${APP_STATE.session && isFreePlan() ? `<div class="free-banner" style="margin-top:12px;">
+      <div style="font-size:1.6rem;">🔒</div>
+      <div style="flex:1;min-width:200px;">
+        <b>${APP_STATE.uiLang === "fr" ? "Concours réservé aux abonnés" : "Contest for subscribers only"}</b>
+        <div class="muted" style="font-size:.85rem;">${APP_STATE.uiLang === "fr"
+          ? "Le plan Découverte ne permet pas de figurer au classement. Passez Premium pour jouer pour les 25 000 F chaque semaine."
+          : "The free plan does not enter the leaderboard. Go Premium to play for the 25 000 F weekly prize."}</div>
+      </div>
+      <a class="btn btn-coral" href="#/pricing">💎 ${t("concours.ctaJoin")}</a>
+    </div>` : ""}
     <div class="card mt-2" style="background:linear-gradient(135deg,var(--violet-soft,#ede9fe),var(--amber-soft,#fef3c7));">
       <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
         <div style="font-size:2.4rem;">💰</div>
@@ -4267,9 +4556,9 @@ async function pageConcours(root, opts) {
 function officialFallbackPricing() {
   const cur = (currency, amount, interval, region) => ({ currency, amount, billing_interval: interval, region });
   const arr = [
-    { code: "free", name: "Free", id: null, is_active: true,
-      description: "Gratuit : 4 langues, leçons gratuites, exercices de base, jeux de base, XP, badges, séries, 10 interactions IA/mois.",
-      pricing: [cur("XAF", 0, "monthly", "zone_fcfa")] },
+    { code: "free", name: "Plan Découverte", id: null, is_active: true,
+      description: "Très limité : 1 seule leçon par cours, 2 jeux (mémoire + quiz), 3 interactions IA/mois, XP et badges inclus. Concours hebdomadaire réservé aux abonnés.",
+      pricing: [cur("XAF", 0, "monthly", "zone_fcfa"), cur("XOF", 0, "monthly", "zone_fcfa"), cur("USD", 0, "monthly", "international")] },
     { code: "premium_monthly", name: "Premium Mensuel", id: null, is_active: true,
       description: "1 500 FCFA par mois : tous les cours, tous les niveaux, tous les exercices, tous les jeux, 100 interactions IA/mois, statistiques avancées, sans publicité.",
       pricing: [cur("XAF", 1500, "monthly", "zone_fcfa"), cur("XOF", 1500, "monthly", "zone_fcfa"), cur("USD", 3, "monthly", "international")] },
@@ -4319,10 +4608,11 @@ function renderPricingInto(body, plans, currentPlan) {
     if (!p) return null;
     return (p.pricing || []).find((pr) => pr.currency === cur && pr.is_active !== false) || null;
   };
-  const cmpRow = (label, a, b) => `
+  const cmpRow = (label, a, b, c) => `
     <tr><td>${label}</td>
       <td class="${a === false ? "off" : "on"}">${a === true ? "✓" : a === false ? "—" : a}</td>
-      <td class="${b === false ? "off" : "on"}">${b === true ? "✓" : b === false ? "—" : b}</td></tr>`;
+      <td class="${b === false ? "off" : "on"}">${b === true ? "✓" : b === false ? "—" : b}</td>
+      <td class="${c === false ? "off" : "on"}">${c === true ? "✓" : c === false ? "—" : c}</td></tr>`;
   const card = (p, pr, o) => `
     <div class="price-card ${o.cls || ""}">
       ${o.flag ? `<div class="price-flag">${o.flag}</div>` : ""}
@@ -4333,8 +4623,14 @@ function renderPricingInto(body, plans, currentPlan) {
       <p class="muted" style="font-size:.82rem;flex:1;">${esc(p.description || "")}</p>
       ${o.button}
     </div>`;
-  const pm = byCode("premium_monthly"), py = byCode("premium_yearly");
-  const prM = priceOf("premium_monthly"), prY = priceOf("premium_yearly");
+  const pf = byCode("free"), pm = byCode("premium_monthly"), py = byCode("premium_yearly");
+  const pr0 = priceOf("free"), prM = priceOf("premium_monthly"), prY = priceOf("premium_yearly");
+  const fr = APP_STATE.uiLang === "fr";
+  const freeBtn = !APP_STATE.session
+    ? `<a class="btn btn-soft" href="#/register">🚀 ${fr ? "Créer mon compte gratuit" : "Create free account"}</a>`
+    : currentPlan === "free"
+      ? `<a class="btn btn-soft" href="#/dashboard">🚀 ${fr ? "Continuer gratuitement" : "Continue for free"}</a>`
+      : `<span class="muted" style="font-size:.8rem;text-align:center;">${fr ? "Plan d'entrée — automatique pour tout nouveau compte" : "Entry plan — automatic for every new account"}</span>`;
   body.innerHTML = `
     <div class="flex" style="justify-content:space-between;align-items:center;">
       <div><div class="page-title">💎 ${t("pricing.title")}</div><div class="page-sub">${t("pricing.sub")}</div></div>
@@ -4344,6 +4640,9 @@ function renderPricingInto(body, plans, currentPlan) {
     </div>
     ${isFallback ? `<div class="demo-banner" style="background:var(--amber-soft);color:#8a5b00;">⚙️ ${t("pricing.fallback")}</div>` : ""}
     <div class="pricing-grid mt-2">
+      ${pf ? card(pf, pr0, { cls: "free-card",
+        note: fr ? "Sans carte bancaire · attribution automatique" : "No card needed · automatic",
+        button: freeBtn }) : ""}
       ${card(pm, prM, { button: `<button class="btn btn-primary" data-act="premium_monthly">💎 ${t("price.ctaPremium")}</button>` })}
       ${card(py, prY, { cls: prY ? "best" : "", flag: prY ? t("price.best") : null,
         note: prY && cur === "XAF" ? t("price.yearNote") : (prY && cur === "XOF" ? t("price.yearNote") : ""),
@@ -4352,16 +4651,16 @@ function renderPricingInto(body, plans, currentPlan) {
     <div class="card mt-3">
       <h3 style="font-weight:800;">📋 ${t("price.cmpTitle")}</h3>
       <div class="table-scroll mt-2"><table class="cmp-table">
-        <tr><th></th><th>${t("cmp.m")}</th><th>${t("cmp.y")}</th></tr>
-        ${cmpRow("🌐 Quatre langues (anglais, français, espagnol, allemand)", 1, 1)}
-        ${cmpRow("📚 Tous les cours, tous les niveaux, tous les exercices", 1, 1)}
-        ${cmpRow("🎮 Tous les jeux éducatifs", 1, 1)}
-        ${cmpRow("🏅 XP, badges, séries quotidiennes", 1, 1)}
-        ${cmpRow("🏆 Concours hebdomadaire — 25 000 F aux meilleurs", 1, 1)}
-        ${cmpRow("🤖 Professeur IA — 100 interactions / mois", 1, 1)}
-        ${cmpRow("💬 Conversations personnalisées + corrections détaillées", 1, 1)}
-        ${cmpRow("📊 Statistiques avancées · Sans publicité", 1, 1)}
-        ${cmpRow("⏳ Durée de l'accès", t("cmp.durM"), t("cmp.durY"))}
+        <tr><th></th><th>${pf ? esc(pf.name) : (fr ? "Découverte" : "Free")}</th><th>${t("cmp.m")}</th><th>${t("cmp.y")}</th></tr>
+        ${cmpRow("🌐 Quatre langues (anglais, français, espagnol, allemand)", 1, 1, 1)}
+        ${cmpRow("📚 Leçons", fr ? "1re leçon / cours" : "1st lesson / course", 1, 1)}
+        ${cmpRow("🎮 Jeux éducatifs", fr ? "2 jeux sur 8" : "2 of 8 games", 1, 1)}
+        ${cmpRow("🏅 XP, badges, séries quotidiennes", 1, 1, 1)}
+        ${cmpRow("🏆 Concours hebdomadaire — 25 000 F aux meilleurs", false, 1, 1)}
+        ${cmpRow("🤖 Professeur IA", fr ? "3 / mois" : "3 / month", 1, 1)}
+        ${cmpRow("💬 Conversations personnalisées + corrections détaillées", false, 1, 1)}
+        ${cmpRow("📊 Statistiques avancées · Sans publicité", false, 1, 1)}
+        ${cmpRow("⏳ Durée de l'accès", "∞", t("cmp.durM"), t("cmp.durY"))}
       </table></div>
     </div>
     <div class="card mt-2">
