@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="MAJOOP — Apprends une langue. Joue. Progresse. Parle. Plateforme d'apprentissage des langues avec professeur IA, leçons interactives et jeux éducatifs.">
 <title>MAJOOP — Apprends une langue. Joue. Progresse. Parle.</title>
+<meta name="theme-color" content="#5B4FE9">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAJOOP">
+<meta property="og:title" content="MAJOOP — Apprends une langue. Joue. Progresse. Parle.">
+<meta property="og:description" content="Leçons interactives du niveau A1 au C2, 8 jeux éducatifs et professeur IA. Essaie gratuitement le Plan Découverte.">
+<meta property="og:url" content="https://majoop.vercel.app/">
+<link rel="canonical" href="https://majoop.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 /* ============================================================
    MAJOOP — DESIGN SYSTEM v1.0
@@ -168,6 +176,22 @@ label.field > span { display: block; font-weight: 600; font-size: .9rem; margin-
 }
 @media (max-width: 560px) {
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* --- Mobile-first : durcissement petits écrans (le téléphone d'abord) --- */
+@media (max-width: 560px) {
+  .app-header { padding: 10px 12px; gap: 8px; }
+  .hero { padding: 72px 16px 110px; }
+  .landing-section { padding: 42px 16px; }
+  .hero-actions .btn-lg { width: 100%; justify-content: center; }
+  .mini-card { padding: 18px 14px; }
+  .mini-opt { min-height: 44px; padding: 12px 14px; }
+  .btn-sm { min-height: 38px; }
+  .admin-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .setting-row { flex-wrap: wrap; }
+  .data { font-size: .82rem; }
+  .ad-slot { flex-direction: column; align-items: flex-start; }
+  .chart-card canvas { max-width: 100%; height: auto; }
 }
 
 /* ---------- Anneaux de progression ---------- */
@@ -774,6 +798,14 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 <!-- ============================================================
      PAGE D'ACCUEIL PUBLIQUE (LandingPage)
      ============================================================ -->
+<noscript>
+  <div style="max-width:760px;margin:0 auto;padding:40px 20px;font-family:sans-serif;">
+    <h1>MAJOOP — Apprends une langue. Joue. Progresse. Parle.</h1>
+    <p>MAJOOP est une plateforme d'apprentissage des langues (anglais, français, espagnol, allemand) pensée pour l'Afrique francophone : leçons interactives du niveau A1 au C2, 8 jeux éducatifs (memory, quiz éclair, construction de phrases…), professeur IA conversationnel, séries quotidiennes, badges et concours hebdomadaire doté de 25 000 F répartis entre les 3 meilleurs apprenants.</p>
+    <p>Le Plan Découverte est gratuit (1 leçon par cours, 2 jeux, 3 interactions IA par mois, avec publicités) ; l'Inscription Mensuelle ou Annuelle (dès 3 000 F/mois) débloque tout, sans publicité. Paiement par Mobile Money.</p>
+    <p>Cette application nécessite JavaScript : active-le pour commencer, puis <a href="#/register">crée ton compte gratuit</a>.</p>
+  </div>
+</noscript>
 <div id="landing-root">
   <header class="app-header" style="background: color-mix(in srgb, var(--bg-card) 90%, transparent);">
     <a class="logo" href="#/"><span class="logo-badge logo-badge-m">M<b>🎓</b></span>MAJOOP</a>
@@ -1000,6 +1032,8 @@ table.data td { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 window.MAJOOP_CONFIG = {
   supabaseUrl: "https://noqseajlpogutoneexnf.supabase.co",
   supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vcXNlYWpscG9ndXRvbmVleG5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4NTgwNTEsImV4cCI6MjExMDQzNDA1MX0.hnpJ3WPQ7q3ReiGAThzL_ifM0NENbKeEfK9iLEUVyns",
+  adminEmails: [],  /* ✅ ADMIN : ajoute ton email ici, ex. ["ton-email@gmail.com"] —
+                       en complément du drapeau is_admin attribué côté serveur (SQL 013 §4). */
 };
 
 /* ============================================================
@@ -2270,6 +2304,15 @@ class SupabaseBackend {
   submitManualPayment(pricingId, reference, note) {
     return this.rpc("submit_manual_payment", { p_pricing_id: pricingId, p_reference: reference, p_note: note || null });
   }
+  /* Chantier 2 : vérification de paiement assistée (auto si secrets MoMo, sinon manuel) */
+  requestPaymentCheck(reference, provider) {
+    return this.rpc("request_payment_check", { p_reference: reference, p_provider: provider || "mtn_momo" });
+  }
+  /* Chantier 3 : journal d'usage + KPI et file de vérifications (admin) */
+  trackEvent(name, meta) { return this.rpc("track_event", { p_name: name, p_meta: meta || {} }); }
+  adminKpis() { return this.rpc("admin_kpis"); }
+  adminListPaymentChecks(limit) { return this.rpc("admin_list_payment_checks", { p_limit: limit || 50 }); }
+  adminResolvePaymentCheck(id, status, note) { return this.rpc("admin_resolve_payment_check", { p_id: id, p_new_status: status, p_note: note || {} }); }
   cancelRenewal() { return this.rpc("user_cancel_renewal"); }
   async getPaymentHistory() {
     const { data, error } = await this.client.from("payments")
@@ -2378,6 +2421,20 @@ function adSlotHTML(ctx) {
     <div class="ad-body">${t("ad.content")}</div>
     <a class="ad-cta" href="#/pricing">💎 ${t("ad.remove")}</a>
   </div>`;
+}
+/* Administration : drapeau is_admin côté base (attribution serveur, SQL 013 §4)
+   OU email listé dans MAJOOP_CONFIG.adminEmails. La protection réelle reste
+   côté serveur (RLS + is_admin() dans les RPC). */
+function isAdminUser() {
+  const p = APP_STATE.dashboard && APP_STATE.dashboard.profile;
+  if (p && p.is_admin) return true;
+  const email = String((APP_STATE.session && APP_STATE.session.user && APP_STATE.session.user.email) || "").toLowerCase();
+  return (window.MAJOOP_CONFIG.adminEmails || []).map((e) => String(e).toLowerCase()).includes(email);
+}
+/* Journalisation d'usage (chantier 3) — silencieuse, tout reste dans Supabase */
+function track(name, meta) {
+  if (APP_STATE.mode !== "supabase") return;
+  try { APP_STATE.backend.trackEvent(name, meta || {}); } catch (e) { /* ignore */ }
 }
 /* Ensemble des leçons accessibles en gratuit : la 1re leçon du
    1er module de chaque cours de la langue cible. */
@@ -2537,6 +2594,9 @@ function route() {
   const protectedPrefix = ["#/dashboard", "#/courses", "#/lesson", "#/games", "#/game", "#/ai", "#/conversation", "#/progress", "#/profile", "#/settings", "#/admin", "#/languages", "#/subscription"];
   const isProtected = protectedPrefix.some((p) => hash.startsWith(p));
   if (isProtected && !inApp) { go("#/login"); return; }
+  /* Administration : visible uniquement pour l'admin (drapeau base ou email configuré).
+     pageAdmin refait le contrôle côté serveur après chargement du profil. */
+  if (hash.startsWith("#/admin") && inApp && APP_STATE.dashboard && !isAdminUser()) { go("#/dashboard"); return; }
   if (hash === "#/onboarding" && !inApp) { go("#/login"); return; }
 
   if (bareRoutes.includes(hash)) { renderBare(hash); return; }
@@ -3221,6 +3281,9 @@ async function pageLesson(main, lessonId) {
       return;
     }
   }
+  /* Chantier 3 : mesure d'usage — ouverture de leçon (et 1re leçon gratuite) */
+  track("lesson_opened", { lesson: lessonId, free: isFreePlan() });
+  if (isFreePlan()) track("first_lesson_started", { lesson: lessonId });
   const lang = (APP_STATE.dashboard && APP_STATE.dashboard.profile.target_lang) || "en";
   const vocab = content.vocab || [];
   const examples = content.examples || [];
@@ -3493,6 +3556,10 @@ function showFeedback(fb, res, ex) {
 }
 
 async function finishLesson(main) {
+  /* Chantier 3 : complétion de leçon (KPI 1re leçon gratuite) */
+  const freeFirst = isFreePlan();
+  track("lesson_completed", { lesson: (APP_STATE.currentLesson || {}).id, free: freeFirst });
+  if (freeFirst) track("first_lesson_completed", { lesson: (APP_STATE.currentLesson || {}).id });
   const S = LESSON_SESSION;
   try {
     const res = await APP_STATE.backend.completeLesson(S.lessonId);
@@ -4452,7 +4519,7 @@ async function pageProfile(main) {
           <span class="chip chip-brand">🏅 ${t("prof.level", { n: p.level, xp: p.xp_total })}</span>
           <span class="chip chip-amber">🔥 ${streak.current || 0} ${t("dash.streak")} · ${t("dash.best")} ${streak.best || 0}</span>
           ${p.target_lang ? `<span class="chip">${{ en: "🇬🇧", fr: "🇫🇷", es: "🇪🇸", de: "🇩🇪" }[p.target_lang]} ${p.target_lang.toUpperCase()} · ${p.cefr_level || ""}</span>` : ""}
-          ${p.is_admin ? `<span class="chip chip-coral">⚙️ ${t("admin.title")}</span>` : ""}
+          ${p.is_admin ? `<a class="chip chip-coral" href="#/admin" style="text-decoration:none;">⚙️ ${t("admin.title")}</a>` : ""}
         </div>
       </div>
       <button class="btn btn-ghost" id="pf-logout">🚪 ${APP_STATE.uiLang === "fr" ? "Se déconnecter" : "Log out"}</button>
@@ -4634,6 +4701,18 @@ async function openPaymentModal(plan, pricingRow) {
     try {
       const r = await APP_STATE.backend.submitManualPayment(pricingRow.id, ref, note);
       invalidateMySub();
+      /* Chantier 2 : tentative de vérification AUTOMATIQUE de la référence
+         (Edge Function verify-payment). Sans secrets MoMo configurés, le
+         flux reste manuel comme avant — le repli est silencieux. */
+      try {
+        const chk = await APP_STATE.backend.requestPaymentCheck(ref);
+        if (chk && chk.id && APP_STATE.backend.client && APP_STATE.backend.client.functions) {
+          const fn = await APP_STATE.backend.client.functions.invoke("verify-payment", { body: { check_id: chk.id } });
+          const st = fn && fn.data ? fn.data.status : (fn && fn.status);
+          if (st === "auto_verified") toast("✅ " + (APP_STATE.uiLang === "fr" ? "Paiement vérifié automatiquement !" : "Payment auto-verified!"), "success");
+          else if (st === "auto_rejected") toast("❌ " + (APP_STATE.uiLang === "fr" ? "Référence refusée par l'opérateur." : "Reference rejected by the operator."), "error");
+        }
+      } catch (e2) { /* vérification auto indisponible : repli manuel */ }
       $("#pay-result", bd).innerHTML = `<div class="mt-2" style="background:var(--amber-soft);border-radius:var(--radius-sm);padding:12px;">
         <b>⏳ ${t("st.pending")}</b>
         <p class="muted" style="font-size:.85rem;margin-top:4px;">${t("pay.pendingMsg")} <a href="#/subscription" id="pay-go-sub"><b>${t("sub.title")}</b></a></p>
@@ -5031,7 +5110,21 @@ async function pageAdmin(main) {
         <div class="card stat-card"><div class="s-ico">⚡</div><div class="s-val">${stats.xp_total}</div><div class="s-lbl">${t("admin.xp_total")}</div></div>
         <div class="card stat-card"><div class="s-ico">🤖</div><div class="s-val">${stats.ai_msgs_today}</div><div class="s-lbl">${t("admin.ai_msgs_today")}</div></div>
         <div class="card stat-card"><div class="s-ico">🎯</div><div class="s-val">${stats.attempts_total ? Math.round(100 * stats.attempts_correct / stats.attempts_total) : 0}%</div><div class="s-lbl">${t("prog.stat.accuracy")}</div></div>
-      </div>`;
+      </div>
+      <div class="card mt-3"><h3 style="font-weight:800;margin-bottom:8px;">📊 Mesures (chantier 3 du rapport)</h3>
+        <p class="muted" style="font-size:.8rem;margin-bottom:10px;">Complétion de la 1re leçon gratuite · conversion gratuit→payant à 7 jours · coût IA par utilisateur gratuit. Journal : table app_events (aucun traceur tiers, tout reste dans Supabase).</p>
+        <div id="adm-kpis"><div class="skeleton"></div></div></div>`;
+      APP_STATE.backend.adminKpis().then((k) => {
+        const el = $("#adm-kpis", main); if (!el || !k) return;
+        el.innerHTML = `<div class="grid grid-3">
+          <div class="card stat-card"><div class="s-ico">🎓</div><div class="s-val">${k.first_lesson.rate_pct != null ? k.first_lesson.rate_pct + "%" : "—"}</div><div class="s-lbl">Complétion 1re leçon gratuite (${k.first_lesson.completed}/${k.first_lesson.started} démarrées)</div></div>
+          <div class="card stat-card"><div class="s-ico">💎</div><div class="s-val">${k.conversion_7d.rate_pct != null ? k.conversion_7d.rate_pct + "%" : "—"}</div><div class="s-lbl">Conversion à 7 jours (${k.conversion_7d.converted}/${k.conversion_7d.signups_90d} inscrits sur 90 j)</div></div>
+          <div class="card stat-card"><div class="s-ico">🤖</div><div class="s-val">${k.ai_cost_per_free_user.cost_per_user_xaf != null ? k.ai_cost_per_free_user.cost_per_user_xaf + " F" : "—"}</div><div class="s-lbl">Coût IA / utilisateur gratuit (${k.ai_cost_per_free_user.interactions_month} interactions · ${k.ai_cost_per_free_user.free_users} gratuits)</div></div>
+        </div>`;
+      }).catch((e) => {
+        const el = $("#adm-kpis", main);
+        if (el) el.innerHTML = `<p class="muted" style="font-size:.85rem;">KPI indisponibles (exécute la migration 013 dans Supabase) : ${esc(e.message)}</p>`;
+      });
     } else if (activeTab === "users") {
       body.innerHTML = `<div class="card table-scroll"><table class="data">
         <tr><th>Email</th><th>${t("prof.name")}</th><th>${t("dash.level")}</th><th>XP</th><th>Admin</th><th></th></tr>
@@ -5192,6 +5285,12 @@ async function pageAdmin(main) {
           <div id="m-pays"></div>
         </div>
         <div class="card mt-2">
+          <b>🔎 Vérifications de paiement (chantier 2 — auto ou manuel)</b>
+          <small class="muted" style="display:block;">Chaque référence soumise est contrôlée automatiquement par l'Edge Function verify-payment (MTN MoMo) si les secrets sont configurés ; sinon tu tranches ici. La validation finale de l'accès Premium reste dans 🧾 Paiements.</small>
+          <div class="flex mt-2"><button class="btn btn-soft btn-sm" id="m-load-checks">🔄 Charger les vérifications</button></div>
+          <div id="m-checks"></div>
+        </div>
+        <div class="card mt-2">
           <b>👥 Abonnements</b>
           <div class="flex mt-2"><button class="btn btn-soft btn-sm" id="m-load-subs">🔄 Charger les abonnements</button></div>
           <div id="m-subs"></div>
@@ -5254,6 +5353,33 @@ async function pageAdmin(main) {
         } catch (e) { $("#m-pays", body).innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
       };
       $("#m-load-pays", body).addEventListener("click", loadPayments);
+
+      /* Chantier 2 : file des vérifications automatiques/manuelles de références */
+      const loadChecks = async () => {
+        $("#m-checks", body).innerHTML = `<div class="skeleton"></div>`;
+        try {
+          const checks = await APP_STATE.backend.adminListPaymentChecks();
+          const arrC = Array.isArray(checks) ? checks : [];
+          const badge = { pending: "pending", auto_verified: "confirmed", manual_verified: "confirmed", auto_rejected: "rejected", manual_rejected: "rejected" };
+          $("#m-checks", body).innerHTML = arrC.length ? `<div class="table-scroll"><table class="data money-table">
+            <tr><th>Date</th><th>Référence</th><th>Opérateur</th><th>Statut</th><th>Détail</th><th></th></tr>
+            ${arrC.map((c) => `<tr><td>${fmtDate(c.created_at)}</td><td>${esc(c.reference)}</td><td>${esc(c.provider)}</td>
+              <td><span class="sub-status st-${badge[c.status] || "pending"}">${esc(c.status)}</span></td>
+              <td><small class="muted">${c.details && c.details.provider_status ? esc(String(c.details.provider_status)) : "—"}</small></td>
+              <td>${c.status === "pending" ? `<span class="flex" style="gap:4px;"><button class="btn btn-primary btn-sm" data-chk-ok="${c.id}">✓ Vu/OK</button><button class="btn btn-ghost btn-sm" data-chk-ko="${c.id}">✕ KO</button></span>` : ""}</td></tr>`).join("")}
+          </table></div>` : `<p class="muted" style="font-size:.85rem;">Aucune vérification enregistrée (exécute la migration 013).</p>`;
+          $all("[data-chk-ok]", body).forEach((b) => b.addEventListener("click", async () => {
+            try { await APP_STATE.backend.adminResolvePaymentCheck(b.dataset.chkOk, "manual_verified"); toast("✓ Vérification enregistrée", "success"); loadChecks(); }
+            catch (e) { toast(e.message, "error"); }
+          }));
+          $all("[data-chk-ko]", body).forEach((b) => b.addEventListener("click", async () => {
+            try { await APP_STATE.backend.adminResolvePaymentCheck(b.dataset.chkKo, "manual_rejected"); toast("Rejet enregistré", "success"); loadChecks(); }
+            catch (e) { toast(e.message, "error"); }
+          }));
+        } catch (e) { $("#m-checks", body).innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
+      };
+      $("#m-load-checks", body).addEventListener("click", loadChecks);
+      loadChecks();
 
       const loadSubs = async () => {
         $("#m-subs", body).innerHTML = `<div class="skeleton"></div>`;
