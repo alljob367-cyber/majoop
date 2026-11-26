@@ -19,7 +19,7 @@
 --       données (tout reste dans Supabase, aucun traceur tiers) + RPC
 --       administrateur des 3 KPI prioritaires du rapport.
 --
---   §4  PROMOTION ADMINISTRATEUR — à exécuter avec TON adresse e-mail.
+--   §4  PROMOTION ADMINISTRATEUR — alljob367@gmail.com (automatique).
 --
 -- IDEMPOTENT : relançable sans risque. Exécuter dans Supabase → SQL Editor.
 -- ============================================================
@@ -264,13 +264,24 @@ values ('ai_cost_per_interaction', 0,
 on conflict (key) do nothing;
 
 -- ============================================================
--- §4 — PROMOTION ADMINISTRATEUR (à exécuter avec TON adresse e-mail)
--- L'adresse doit correspondre au compte avec lequel tu te connectes.
--- Exemple (décommenter et remplacer) :
---   update public.profiles set is_admin = true where email = 'TON-EMAIL@EXEMPLE.COM';
+-- §4 — PROMOTION ADMINISTRATEUR
+-- Administrateur officiel : alljob367@gmail.com
+-- (exécuté automatiquement ci-dessous si le compte existe déjà ;
+--  si le compte n'est pas encore créé, crée-le puis relance ce fichier —
+--  tout le reste de la migration est idempotent).
+-- ============================================================
+do $$
+begin
+  if exists (select 1 from public.profiles where email = 'alljob367@gmail.com') then
+    update public.profiles set is_admin = true where email = 'alljob367@gmail.com';
+    raise notice 'ADMIN : alljob367@gmail.com est promu administrateur.';
+  else
+    raise notice 'ADMIN : compte alljob367@gmail.com introuvable — crée le compte puis relance la section 4.';
+  end if;
+end $$;
+
 -- Vérification :
 --   select email, is_admin from public.profiles where is_admin;
--- ============================================================
 
 -- Contrôles finaux attendus :
 --   select public.get_lesson_content(<id d'une leçon non gratuite>) en tant
